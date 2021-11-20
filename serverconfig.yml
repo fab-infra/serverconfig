@@ -1,0 +1,14 @@
+---
+# Server configuration playbook
+
+- name: Base setup
+  hosts: all
+  roles:
+    - base
+  tags: base
+
+- name: Kubernetes setup
+  hosts: k8s
+  roles:
+    - k8s
+  tags: k8s

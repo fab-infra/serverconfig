@@ -1,0 +1,47 @@
+#!/bin/bash
+#
+# Bash Aliases Configuration
+#
+
+# Alias for detailed directory listing
+alias ll="ls -l --color=auto"
+
+# Alias for systemctl
+if [ -e "/bin/systemctl" ]; then
+	alias sctl="systemctl"
+fi
+
+# Alias for system log
+if command -v journalctl > /dev/null 2>&1; then
+	alias tm="journalctl -f"
+	alias lm="journalctl"
+elif [ -e "/var/log/messages" ]; then
+	alias tm="tail -f /var/log/messages"
+	alias lm="less /var/log/messages"
+fi
+
+# Alias for Apache error log
+if [ -e "/var/log/httpd/error_log" ]; then
+	alias tae="tail -f /var/log/httpd/error_log"
+	alias lae="less /var/log/httpd/error_log"
+elif [ -e "/var/log/apache2/error_log" ]; then
+	alias tae="tail -f /var/log/apache2/error_log"
+	alias lae="less /var/log/apache2/error_log"
+fi
+
+# Alias for Apache access log
+if [ -e "/var/log/httpd/access_log" ]; then
+	alias taa="tail -f /var/log/httpd/access_log"
+	alias laa="less /var/log/httpd/access_log"
+elif [ -e "/var/log/apache2/access_log" ]; then
+	alias taa="tail -f /var/log/apache2/access_log"
+	alias laa="less /var/log/apache2/access_log"
+fi
+
+# Alias for dangerous commands in production
+if [ "{{server_env}}" = "production" -a -t 1 ]; then
+	alias halt="echo This is a PRODUCTION server, please call /sbin/halt explicitly instead!"
+	alias poweroff="echo This is a PRODUCTION server, please call /sbin/poweroff explicitly instead!"
+	alias reboot="echo This is a PRODUCTION server, please call /sbin/reboot explicitly instead!"
+	alias shutdown="echo This is a PRODUCTION server, please call /sbin/shutdown explicitly instead!"
+fi

@@ -1,0 +1,8 @@
+version: "3.5"
+services:
+  setup:
+    image: serverconfig
+    build: .
+    hostname: localhost
+    volumes:
+      - '.:/serverconfig'

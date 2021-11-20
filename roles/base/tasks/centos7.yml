@@ -1,0 +1,41 @@
+---
+# Tasks for CentOS 7
+
+- name: Install EPEL and ELRepo repositories
+  yum:
+    name:
+      - epel-release
+      - elrepo-release
+    state: present
+
+- name: Install packages
+  yum:
+    name:
+      - bash-completion
+      - fail2ban
+      - firewalld
+      - git
+      - htop
+      - iftop
+      - iotop
+      - jq
+      - lsof
+      - netcat
+      - nscd
+      - ntp
+      - openvpn
+      - postfix
+      - psmisc
+      - python3-pip
+      - rclone
+      - rsync
+      - sudo
+      - tmux
+      - unzip
+      - vim-enhanced
+      - wget
+      - yum-cron
+      - yum-plugin-elrepo
+      - yum-utils
+      - zip
+    state: present

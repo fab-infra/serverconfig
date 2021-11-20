@@ -1,0 +1,2 @@
+k8s_master_host: k8s-master.fabinfra.net
+k8s_node_labels: server-role-infra=true server-role-web=true topology.kubernetes.io/region=RBX topology.kubernetes.io/zone=RBX5

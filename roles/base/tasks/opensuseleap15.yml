@@ -1,0 +1,33 @@
+---
+# Tasks for openSUSE Leap 15
+
+- name: Install packages
+  community.general.zypper:
+    name:
+      - bash-completion
+      - fail2ban
+      - firewalld
+      - git
+      - htop
+      - iftop
+      - iotop
+      - jq
+      - lsof
+      - netcat-openbsd
+      - nscd
+      - ntp
+      - openvpn
+      - postfix
+      - psmisc
+      - python3-pip
+      - rclone
+      - rsync
+      - sudo
+      - tmux
+      - unzip
+      - vim
+      - vim-data
+      - wget
+      - yast2-online-update-configuration
+      - zip
+    state: present

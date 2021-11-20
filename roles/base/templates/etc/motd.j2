@@ -1,0 +1,12 @@
+
+-------------------------------------------------------------------------------
+Hostname:       {{inventory_hostname}} ({{server_env}})
+Kernel:         {{ansible_kernel}}
+{% if ansible_default_ipv4.address is defined %}
+IPv4 address:   {{ansible_default_ipv4.address}}
+{% endif %}
+{% if ansible_default_ipv6.address is defined %}
+IPv6 address:   {{ansible_default_ipv6.address}}
+{% endif %}
+-------------------------------------------------------------------------------
+

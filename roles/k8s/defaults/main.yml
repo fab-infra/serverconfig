@@ -1,0 +1,9 @@
+---
+calico_version: "3.20.2"
+helm_version: "3.6.3"
+k8s_master_host: "{{inventory_hostname}}"
+k8s_node_name: "{{inventory_hostname_short}}"
+k8s_pod_cidr: "10.244.0.0/16"
+k8s_service_cidr: "10.96.0.0/12"
+k8s_version: "1.20.11"
+k8s_version_minor: "1.20"

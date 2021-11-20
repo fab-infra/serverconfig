@@ -1,0 +1,31 @@
+---
+# Tasks for Debian 11
+
+- name: Install packages
+  apt:
+    name:
+      - bash-completion
+      - fail2ban
+      - firewalld
+      - git
+      - htop
+      - iftop
+      - iotop
+      - jq
+      - lsof
+      - netcat
+      - nscd
+      - ntp
+      - openvpn
+      - postfix
+      - psmisc
+      - python3-pip
+      - rclone
+      - rsync
+      - sudo
+      - tmux
+      - unzip
+      - vim
+      - wget
+      - zip
+    state: present

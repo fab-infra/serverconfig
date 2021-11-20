@@ -1,0 +1,46 @@
+---
+# Main tasks
+
+- name: Setup CentOS 7
+  include_tasks: centos7.yml
+  when: ansible_distribution|lower == 'centos' and ansible_distribution_major_version == '7'
+
+- name: Setup Debian 11
+  include_tasks: debian11.yml
+  when: ansible_distribution|lower == 'debian' and ansible_distribution_major_version == '11'
+
+- name: Setup openSUSE Leap 15
+  include_tasks: opensuseleap15.yml
+  when: ansible_distribution|lower == 'opensuse leap' and ansible_distribution_major_version == '15'
+
+- name: Create sysadmin group
+  group:
+    name: sysadmin
+
+- name: Create admin user
+  user:
+    name: admin
+    group: users
+    groups: [sysadmin]
+    home: /home/users/admin
+    comment: "System Admin"
+
+- name: Configure authorized keys
+  authorized_key:
+    key: "{{item}}"
+    user: root
+  loop: "{{authorized_keys}}"
+
+- name: Process template directories
+  ansible.builtin.file:
+    path: /{{item.path}}
+    state: directory
+  with_filetree: ../templates
+  when: item.state == 'directory'
+
+- name: Process template files
+  template:
+    src: "{{item.src}}"
+    dest: "/{{item.path | splitext | first}}"
+  with_filetree: ../templates
+  when: item.state == 'file'

@@ -1,0 +1,8 @@
+ansible_user: root
+init_dir: /etc/init.d
+lib_dir: /usr/lib64
+logrotate_dir: /etc/logrotate.d
+permissions_dir: /etc/permissions.d
+profile_dir: /etc/profile.d
+server_env: development
+systemd_dir: /etc/systemd
