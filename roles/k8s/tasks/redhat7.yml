@@ -1,5 +1,5 @@
 ---
-# Tasks for CentOS 7
+# Tasks for RedHat 7
 
 - name: Install Libcontainers repository
   yum_repository:
@@ -38,3 +38,10 @@
       - wireguard-tools
     disable_excludes: kubernetes
     state: present
+
+- name: Configure kubelet
+  lineinfile:
+    path: /etc/sysconfig/kubelet
+    regexp: "^KUBELET_EXTRA_ARGS="
+    line: "KUBELET_EXTRA_ARGS=\"--container-runtime=remote --container-runtime-endpoint=unix:///var/run/crio/crio.sock --runtime-request-timeout=15m --cgroup-driver=systemd -v=2 --cni-bin-dir=/usr/libexec/cni --hostname-override={{k8s_node_name}}\""
+    create: true

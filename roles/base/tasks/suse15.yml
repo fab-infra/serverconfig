@@ -1,5 +1,5 @@
 ---
-# Tasks for openSUSE Leap 15
+# Tasks for SUSE 15
 
 - name: Install packages
   community.general.zypper:
@@ -16,6 +16,7 @@
       - netcat-openbsd
       - nscd
       - ntp
+      - openssh-server
       - openvpn
       - postfix
       - psmisc

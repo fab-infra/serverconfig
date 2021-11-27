@@ -1,0 +1,61 @@
+---
+# Tasks for RedHat 7
+
+- name: Install EPEL and ELRepo repositories
+  yum:
+    name:
+      - https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+      - https://www.elrepo.org/elrepo-release-7.el7.elrepo.noarch.rpm
+    state: present
+
+- name: Install packages
+  yum:
+    name:
+      - bash-completion
+      - fail2ban
+      - firewalld
+      - git
+      - htop
+      - iftop
+      - iotop
+      - jq
+      - lsof
+      - netcat
+      - nscd
+      - ntp
+      - openssh-server
+      - openvpn
+      - postfix
+      - psmisc
+      - python3-pip
+      - rclone
+      - rsync
+      - sudo
+      - tmux
+      - unzip
+      - vim-enhanced
+      - wget
+      - yum-cron
+      - yum-plugin-elrepo
+      - yum-utils
+      - zip
+    state: present
+
+- name: Configure yum-cron (update_cmd)
+  lineinfile:
+    path: /etc/yum/yum-cron.conf
+    regexp: "^update_cmd ="
+    line: "update_cmd = security"
+
+- name: Configure yum-cron (apply_updates)
+  lineinfile:
+    path: /etc/yum/yum-cron.conf
+    regexp: "^apply_updates ="
+    line: "apply_updates = yes"
+
+- name: Enable yum-cron service
+  service:
+    name: yum-cron
+    enabled: true
+    state: started
+  when: auto_update_enabled

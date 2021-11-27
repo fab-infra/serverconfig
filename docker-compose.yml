@@ -1,8 +1,34 @@
 version: "3.5"
 services:
-  setup:
-    image: serverconfig
-    build: .
+  # Ansible on Debian 10
+  debian10:
+    image: serverconfig:debian10
+    build:
+      context: .
+      args:
+        BASE_IMAGE: python:3.8-buster
+    hostname: localhost
+    volumes:
+      - '.:/serverconfig'
+
+  # Ansible on Debian 11
+  debian11:
+    image: serverconfig:debian11
+    build:
+      context: .
+      args:
+        BASE_IMAGE: python:3.8-bullseye
+    hostname: localhost
+    volumes:
+      - '.:/serverconfig'
+
+  # Ansible on CentOS 7
+  centos7:
+    image: serverconfig:centos7
+    build:
+      context: .
+      args:
+        BASE_IMAGE: quay.io/centos7/python-38-centos7
     hostname: localhost
     volumes:
       - '.:/serverconfig'

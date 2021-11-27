@@ -5,6 +5,7 @@
   hosts: all
   roles:
     - base
+    - grafana-agent
   tags: base
 
 - name: Kubernetes setup

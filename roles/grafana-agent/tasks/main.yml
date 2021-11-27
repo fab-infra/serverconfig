@@ -1,0 +1,26 @@
+---
+# Main tasks
+
+- name: Install Grafana Agent RPM package
+  yum:
+    name: "{{grafana_agent_url}}/v{{grafana_agent_version}}/grafana-agent-{{grafana_agent_version}}-1.amd64.rpm"
+    state: present
+  when: ansible_os_family|lower == 'redhat'
+
+- name: Install Grafana Agent DEB package
+  apt:
+    deb: "{{grafana_agent_url}}/v{{grafana_agent_version}}/grafana-agent-{{grafana_agent_version}}-1.amd64.deb"
+    state: present
+  when: ansible_os_family|lower == 'debian'
+
+- name: Configure Grafana Agent
+  template:
+    src: grafana-agent.yaml.j2
+    dest: /etc/grafana-agent.yaml
+
+- name: Start Grafana Agent service
+  service:
+    name: grafana-agent
+    enabled: true
+    state: started
+  when: grafana_agent_enabled and grafana_cloud_api_key|length > 0

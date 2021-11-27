@@ -16,6 +16,7 @@
       - netcat
       - nscd
       - ntp
+      - openssh-server
       - openvpn
       - postfix
       - psmisc

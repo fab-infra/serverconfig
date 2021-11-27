@@ -1,0 +1,4 @@
+---
+auto_update_enabled: false
+grafana_agent_enabled: false
+server_env: test

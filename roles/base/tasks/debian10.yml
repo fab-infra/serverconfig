@@ -1,15 +1,13 @@
 ---
-# Tasks for CentOS 7
+# Tasks for Debian 10
 
-- name: Install EPEL and ELRepo repositories
-  yum:
-    name:
-      - epel-release
-      - elrepo-release
-    state: present
+- name: Install backports repository
+  apt_repository:
+    repo: deb http://deb.debian.org/debian buster-backports main
+    filename: backports
 
 - name: Install packages
-  yum:
+  apt:
     name:
       - bash-completion
       - fail2ban
@@ -23,6 +21,7 @@
       - netcat
       - nscd
       - ntp
+      - openssh-server
       - openvpn
       - postfix
       - psmisc
@@ -32,10 +31,7 @@
       - sudo
       - tmux
       - unzip
-      - vim-enhanced
+      - vim
       - wget
-      - yum-cron
-      - yum-plugin-elrepo
-      - yum-utils
       - zip
     state: present

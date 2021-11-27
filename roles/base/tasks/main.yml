@@ -1,17 +1,21 @@
 ---
 # Main tasks
 
-- name: Setup CentOS 7
-  include_tasks: centos7.yml
-  when: ansible_distribution|lower == 'centos' and ansible_distribution_major_version == '7'
+- name: Setup RedHat 7
+  include_tasks: redhat7.yml
+  when: ansible_os_family|lower == 'redhat' and ansible_distribution_major_version == '7'
+
+- name: Setup Debian 10
+  include_tasks: debian10.yml
+  when: ansible_os_family|lower == 'debian' and ansible_distribution_major_version == '10'
 
 - name: Setup Debian 11
   include_tasks: debian11.yml
-  when: ansible_distribution|lower == 'debian' and ansible_distribution_major_version == '11'
+  when: ansible_os_family|lower == 'debian' and ansible_distribution_major_version == '11'
 
-- name: Setup openSUSE Leap 15
-  include_tasks: opensuseleap15.yml
-  when: ansible_distribution|lower == 'opensuse leap' and ansible_distribution_major_version == '15'
+- name: Setup SUSE 15
+  include_tasks: suse15.yml
+  when: ansible_os_family|lower == 'suse' and ansible_distribution_major_version == '15'
 
 - name: Create sysadmin group
   group:
@@ -25,11 +29,33 @@
     home: /home/users/admin
     comment: "System Admin"
 
-- name: Configure authorized keys
+- name: Configure SSH server (Banner)
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "^#?Banner\\s"
+    line: "Banner /etc/ssh/banner.txt"
+
+- name: Configure SSH server (PermitRootLogin)
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "^#?PermitRootLogin\\s"
+    line: "PermitRootLogin without-password"
+
+- name: Configure SSH authorized keys
   authorized_key:
     key: "{{item}}"
     user: root
-  loop: "{{authorized_keys}}"
+  loop: "{{root_authorized_keys}}"
+
+- name: Configure sysctl (max_map_count)
+  sysctl:
+    name: vm.max_map_count
+    value: "{{sysctl_vm_max_map_count}}"
+
+- name: Configure sysctl (swappiness)
+  sysctl:
+    name: vm.swappiness
+    value: "{{sysctl_vm_swappiness}}"
 
 - name: Process template directories
   ansible.builtin.file:

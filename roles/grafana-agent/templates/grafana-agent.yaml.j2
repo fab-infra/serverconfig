@@ -1,0 +1,47 @@
+integrations:
+  node_exporter:
+    enabled: true
+  prometheus_remote_write:
+  - basic_auth:
+      password: {{grafana_cloud_api_key}}
+      username: {{grafana_cloud_prometheus_username}}
+    url: {{grafana_cloud_prometheus_url}}
+loki:
+  configs:
+  - clients:
+    - basic_auth:
+        password: {{grafana_cloud_api_key}}
+        username: {{grafana_cloud_loki_username}}
+      url: {{grafana_cloud_loki_url}}
+    name: integrations
+    positions:
+      filename: /tmp/positions.yaml
+    target_config:
+      sync_period: 10s
+    scrape_configs:
+      - job_name: journal
+        journal:
+          labels:
+            job: journal
+        relabel_configs:
+          - source_labels: ['__journal__hostname']
+            target_label: 'nodename'
+          - source_labels: ['__journal__systemd_unit']
+            target_label: 'unit'
+          - source_labels: ['__journal_priority_keyword']
+            target_label: 'priority'
+          - source_labels: ['__journal_syslog_identifier']
+            target_label: 'ident'
+prometheus:
+  configs:
+  - name: integrations
+    remote_write:
+    - basic_auth:
+        password: {{grafana_cloud_api_key}}
+        username: {{grafana_cloud_prometheus_username}}
+      url: {{grafana_cloud_prometheus_url}}
+  global:
+    scrape_interval: 60s
+  wal_directory: /tmp/grafana-agent-wal
+server:
+  http_listen_port: 12345
