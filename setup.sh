@@ -15,6 +15,7 @@ fi
 
 # Run playbook
 pushd "$SCRIPT_DIR" >/dev/null 2>&1
+export ANSIBLE_VAULT_PASSWORD_FILE="$SCRIPT_DIR/vault.password"
 ansible-playbook -i "inventory" -c "local" -l "$TARGET_HOST" "${@:2}" "serverconfig.yml"
 RET=$?
 popd >/dev/null 2>&1
