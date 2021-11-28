@@ -1,0 +1,15 @@
+# Fail2Ban configuration file
+# Local settings
+
+[DEFAULT]
+
+ignoreip           = 127.0.0.1 10.8.0.0/16 home.crespel.me
+bantime            = 30m
+banaction          = firewallcmd-multiport
+banaction_allports = firewallcmd-allports
+
+
+[sshd]
+
+enabled  = true
+bantime  = 24h

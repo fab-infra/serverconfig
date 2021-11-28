@@ -41,12 +41,34 @@
     mode: 0755
   when: calico_version_check.rc != 0 or calico_version_check.stdout != ("v" + calico_version)
 
+- name: Create Calico CLI config directory
+  file:
+    path: /etc/calico
+    state: directory
+
+- name: Configure Calico CLI
+  copy:
+    dest: /etc/calico/calicoctl.cfg
+    content: |
+      apiVersion: projectcalico.org/v3
+      kind: CalicoAPIConfig
+      metadata:
+      spec:
+        datastoreType: "kubernetes"
+        kubeconfig: "/root/.kube/config"
+
+- name: Check if NetworkManager config directory exists
+  stat:
+    path: /etc/NetworkManager/conf.d
+  register: nm_config_dir
+
 - name: Exclude Calico from NetworkManager
   copy:
     dest: /etc/NetworkManager/conf.d/calico.conf
     content: |
       [keyfile]
       unmanaged-devices=interface-name:cali*;interface-name:tunl*;interface-name:vxlan.calico
+  when: nm_config_dir.stat.exists == true
 
 - name: Create containers storage directory
   file:
@@ -69,6 +91,7 @@
 - name: Load br_netfilter kernel module
   modprobe:
     name: br_netfilter
+  when: "ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest"
 
 - name: Configure sysctl
   sysctl:
@@ -92,10 +115,10 @@
 
 - name: Check if kubelet config exists
   stat:
-    path: "/var/lib/kubelet/config.yaml"
+    path: /var/lib/kubelet/config.yaml
   register: kubelet_config_file
 
-- name: Init cluster
+- name: Init cluster as master
   shell: "kubeadm init --node-name={{k8s_node_name}} --cri-socket=/var/run/crio/crio.sock --pod-network-cidr={{k8s_pod_cidr}} --service-cidr={{k8s_service_cidr}} --control-plane-endpoint={{k8s_master_host}}:{{k8s_master_port}} --upload-certs"
   when: kubelet_config_file.stat.exists == false and k8s_node_role == 'master'
 
@@ -106,3 +129,29 @@
 - name: Join cluster as worker
   shell: "kubeadm join --node-name={{k8s_node_name}} --cri-socket=/var/run/crio/crio.sock --token {{k8s_join_token}} {{k8s_master_host}}:{{k8s_master_port}} --discovery-token-ca-cert-hash sha256:{{k8s_cert_hash}}"
   when: kubelet_config_file.stat.exists == false and k8s_node_role == 'worker' and k8s_join_token|length > 0 and k8s_cert_hash|length > 0
+
+- name: Check if kubectl admin config exists
+  stat:
+    path: /etc/kubernetes/admin.conf
+  register: kubectl_config_file
+
+- name: Create kubectl config directory for root
+  file:
+    path: /root/.kube
+    state: directory
+  when: kubectl_config_file.stat.exists == true
+
+- name: Copy kubectl config for root
+  copy:
+    dest: /root/.kube/config
+    src: /etc/kubernetes/admin.conf
+    remote_src: true
+  when: kubectl_config_file.stat.exists == true
+
+- name: Allow control plane to schedule pods
+  shell: "kubectl taint nodes {{k8s_node_name}} node-role.kubernetes.io/master-"
+  when: kubectl_config_file.stat.exists == true and (k8s_node_role == 'master' or k8s_node_role == 'controlplane')
+
+- name: Configure node labels
+  shell: "kubectl label nodes {{k8s_node_name}} {{k8s_node_labels}}"
+  when: kubectl_config_file.stat.exists == true
