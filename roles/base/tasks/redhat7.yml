@@ -58,4 +58,4 @@
     name: yum-cron
     enabled: true
     state: started
-  when: auto_update_enabled
+  when: "auto_update_enabled and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"

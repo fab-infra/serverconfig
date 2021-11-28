@@ -23,4 +23,4 @@
     name: grafana-agent
     enabled: true
     state: started
-  when: grafana_agent_enabled and grafana_cloud_api_key|length > 0
+  when: "grafana_agent_enabled and grafana_cloud_api_key|length > 0 and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"

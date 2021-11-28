@@ -41,6 +41,13 @@
     mode: 0755
   when: calico_version_check.rc != 0 or calico_version_check.stdout != ("v" + calico_version)
 
+- name: Exclude Calico from NetworkManager
+  copy:
+    dest: /etc/NetworkManager/conf.d/calico.conf
+    content: |
+      [keyfile]
+      unmanaged-devices=interface-name:cali*;interface-name:tunl*;interface-name:vxlan.calico
+
 - name: Create containers storage directory
   file:
     path: "{{containers_storage_dir}}"
@@ -58,3 +65,44 @@
     path: /etc/containers/storage.conf
     regexp: "^graphroot = "
     line: "graphroot = {{containers_storage_dir}}/graph"
+
+- name: Load br_netfilter kernel module
+  modprobe:
+    name: br_netfilter
+
+- name: Configure sysctl
+  sysctl:
+    name: "{{item}}"
+    value: "1"
+  with_items:
+    - net.ipv4.ip_forward
+    - net.bridge.bridge-nf-call-iptables
+    - net.bridge.bridge-nf-call-ip6tables
+  when: "ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest"
+
+- name: Enable services
+  service:
+    name: "{{item}}"
+    enabled: true
+    state: started
+  with_items:
+    - crio
+    - kubelet
+  when: "ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest"
+
+- name: Check if kubelet config exists
+  stat:
+    path: "/var/lib/kubelet/config.yaml"
+  register: kubelet_config_file
+
+- name: Init cluster
+  shell: "kubeadm init --node-name={{k8s_node_name}} --cri-socket=/var/run/crio/crio.sock --pod-network-cidr={{k8s_pod_cidr}} --service-cidr={{k8s_service_cidr}} --control-plane-endpoint={{k8s_master_host}}:{{k8s_master_port}} --upload-certs"
+  when: kubelet_config_file.stat.exists == false and k8s_node_role == 'master'
+
+- name: Join cluster as control plane
+  shell: "kubeadm join --node-name={{k8s_node_name}} --cri-socket=/var/run/crio/crio.sock --token {{k8s_join_token}} {{k8s_master_host}}:{{k8s_master_port}} --discovery-token-ca-cert-hash sha256:{{k8s_cert_hash}} --control-plane --certificate-key {{k8s_cert_key}}"
+  when: kubelet_config_file.stat.exists == false and k8s_node_role == 'controlplane' and k8s_join_token|length > 0 and k8s_cert_hash|length > 0 and k8s_cert_key|length > 0
+
+- name: Join cluster as worker
+  shell: "kubeadm join --node-name={{k8s_node_name}} --cri-socket=/var/run/crio/crio.sock --token {{k8s_join_token}} {{k8s_master_host}}:{{k8s_master_port}} --discovery-token-ca-cert-hash sha256:{{k8s_cert_hash}}"
+  when: kubelet_config_file.stat.exists == false and k8s_node_role == 'worker' and k8s_join_token|length > 0 and k8s_cert_hash|length > 0

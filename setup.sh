@@ -6,6 +6,7 @@
 # Script variables
 SCRIPT_DIR=`dirname "$0"`
 TARGET_HOST="${1:-$(hostname -f)}"
+VAULT_PASSWORD_FILE="$SCRIPT_DIR/vault.password"
 
 # Check env
 if ! command -v ansible-playbook >/dev/null 2>&1; then
@@ -13,9 +14,14 @@ if ! command -v ansible-playbook >/dev/null 2>&1; then
 	exit 1
 fi
 
+# Load vault password
+if [ -e "$VAULT_PASSWORD_FILE" ]; then
+	chmod a-x "$VAULT_PASSWORD_FILE"
+	export ANSIBLE_VAULT_PASSWORD_FILE="$VAULT_PASSWORD_FILE"
+fi
+
 # Run playbook
 pushd "$SCRIPT_DIR" >/dev/null 2>&1
-export ANSIBLE_VAULT_PASSWORD_FILE="$SCRIPT_DIR/vault.password"
 ansible-playbook -i "inventory" -c "local" -l "$TARGET_HOST" "${@:2}" "serverconfig.yml"
 RET=$?
 popd >/dev/null 2>&1

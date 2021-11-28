@@ -23,10 +23,12 @@
   apt_repository:
     repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
     filename: kubernetes
+
 - name: Install packages
   apt:
     name:
       - cri-o
+      - cri-tools
       - kubeadm={{k8s_version}}-00
       - kubectl={{k8s_version}}-00
       - kubelet={{k8s_version}}-00
@@ -38,5 +40,5 @@
   lineinfile:
     path: /etc/default/kubelet
     regexp: "^KUBELET_EXTRA_ARGS="
-    line: "KUBELET_EXTRA_ARGS=\"--container-runtime=remote --container-runtime-endpoint=unix:///var/run/crio/crio.sock --runtime-request-timeout=15m --cgroup-driver=systemd -v=2 --cni-bin-dir=/opt/cni/bin --hostname-override={{k8s_node_name}}\""
+    line: "KUBELET_EXTRA_ARGS=\"--runtime-request-timeout=15m --cgroup-driver=systemd -v=2 --cni-bin-dir=/opt/cni/bin,/usr/libexec/cni,/usr/lib/cni --hostname-override={{k8s_node_name}}\""
     create: true

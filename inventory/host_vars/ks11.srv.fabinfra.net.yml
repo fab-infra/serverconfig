@@ -1,3 +1,4 @@
 ---
 k8s_master_host: k8s-master.fabinfra.net
-k8s_node_labels: server-role-jka=true topology.kubernetes.io/region=GRA topology.kubernetes.io/zone=GRA1
+k8s_node_labels: kubernetes-host= server-role-jka=true topology.kubernetes.io/region=GRA topology.kubernetes.io/zone=GRA1
+k8s_node_role: worker
