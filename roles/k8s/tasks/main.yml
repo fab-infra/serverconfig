@@ -1,6 +1,8 @@
 ---
 # Main tasks
 
+### Distro setup
+
 - name: Setup RedHat 7
   include_tasks: redhat7.yml
   when: ansible_os_family|lower == 'redhat' and ansible_distribution_major_version == '7'
@@ -13,20 +15,8 @@
   include_tasks: debian11.yml
   when: ansible_os_family|lower == 'debian' and ansible_distribution_major_version == '11'
 
-- name: Check Helm version
-  shell: helm version --template {% raw %}{{.Version}}{% endraw %}
-  register: helm_version_check
-  ignore_errors: true
-  changed_when: false
 
-- name: Install Helm
-  unarchive:
-    remote_src: true
-    src: https://get.helm.sh/helm-v{{helm_version}}-linux-amd64.tar.gz
-    dest: /usr/local/bin
-    extra_opts: ["--strip-components=1", "linux-amd64/helm"]
-    creates: /usr/local/bin/helm
-  when: helm_version_check.rc != 0 or helm_version_check.stdout != ("v" + helm_version)
+### Calico
 
 - name: Check Calico CLI version
   shell: calicoctl version | grep 'Client Version:' | egrep -o 'v[0-9.]+'
@@ -70,6 +60,45 @@
       unmanaged-devices=interface-name:cali*;interface-name:tunl*;interface-name:vxlan.calico
   when: nm_config_dir.stat.exists == true
 
+
+### cert-manager
+
+- name: Check cert-manager CLI version
+  shell: cmctl version --client --short | grep 'Client Version:' | egrep -o 'v[0-9.]+'
+  register: certmanager_version_check
+  ignore_errors: true
+  changed_when: false
+
+- name: Install cert-manager CLI
+  unarchive:
+    remote_src: true
+    src: https://github.com/jetstack/cert-manager/releases/download/v{{certmanager_version}}/cmctl-linux-amd64.tar.gz
+    dest: /usr/local/bin
+    extra_opts: ["cmctl"]
+    creates: /usr/local/bin/cmctl
+  when: certmanager_version_check.rc != 0 or certmanager_version_check.stdout != ("v" + certmanager_version)
+
+
+### Helm
+
+- name: Check Helm version
+  shell: helm version --template {% raw %}{{.Version}}{% endraw %}
+  register: helm_version_check
+  ignore_errors: true
+  changed_when: false
+
+- name: Install Helm
+  unarchive:
+    remote_src: true
+    src: https://get.helm.sh/helm-v{{helm_version}}-linux-amd64.tar.gz
+    dest: /usr/local/bin
+    extra_opts: ["--strip-components=1", "linux-amd64/helm"]
+    creates: /usr/local/bin/helm
+  when: helm_version_check.rc != 0 or helm_version_check.stdout != ("v" + helm_version)
+
+
+### Storage
+
 - name: Create containers storage directory
   file:
     path: "{{containers_storage_dir}}"
@@ -87,6 +116,9 @@
     path: /etc/containers/storage.conf
     regexp: "^graphroot = "
     line: "graphroot = {{containers_storage_dir}}/graph"
+
+
+### System
 
 - name: Load br_netfilter kernel module
   modprobe:
@@ -112,6 +144,9 @@
     - crio
     - kubelet
   when: "ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest"
+
+
+### kubeadm & kubelet
 
 - name: Check if kubelet config exists
   stat:

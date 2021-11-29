@@ -30,6 +30,7 @@
       - rsync
       - sudo
       - tmux
+      - unattended-upgrades
       - unzip
       - vim
       - wget
