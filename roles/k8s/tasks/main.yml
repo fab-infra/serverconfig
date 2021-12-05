@@ -196,5 +196,5 @@
   when: kubectl_config_file.stat.exists == true and (k8s_node_role == 'master' or k8s_node_role == 'controlplane')
 
 - name: Configure node labels
-  shell: "kubectl label nodes {{k8s_node_name}} {{k8s_node_labels}}"
+  shell: "kubectl label --overwrite nodes {{k8s_node_name}} {{k8s_node_labels}}"
   when: kubectl_config_file.stat.exists == true
