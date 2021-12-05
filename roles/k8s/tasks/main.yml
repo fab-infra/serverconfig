@@ -135,6 +135,13 @@
     - net.bridge.bridge-nf-call-ip6tables
   when: "ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest"
 
+- name: Disable firewalld
+  service:
+    name: firewalld
+    enabled: false
+    state: stopped
+  when: "ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest"
+
 - name: Enable services
   service:
     name: "{{item}}"

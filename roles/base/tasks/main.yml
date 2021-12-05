@@ -29,6 +29,13 @@
     home: /home/users/admin
     comment: "System Admin"
 
+- name: Configure resolv.conf (search)
+  lineinfile:
+    path: /etc/resolv.conf
+    regexp: "^search"
+    line: "search {{dns_search}}"
+  when: "ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest"
+
 - name: Configure SSH server (Banner)
   lineinfile:
     path: /etc/ssh/sshd_config
@@ -60,7 +67,7 @@
   when: "ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest"
 
 - name: Process template directories
-  ansible.builtin.file:
+  file:
     path: /{{item.path}}
     state: directory
   with_filetree: ../templates
