@@ -17,10 +17,12 @@
   template:
     src: grafana-agent.yaml.j2
     dest: /etc/grafana-agent.yaml
+  register: grafana_agent_config
+  when: grafana_cloud_api_key|length > 0
 
 - name: Start Grafana Agent service
   service:
     name: grafana-agent
     enabled: true
-    state: started
-  when: "grafana_agent_enabled and grafana_cloud_api_key|length > 0 and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+    state: restarted
+  when: "grafana_agent_enabled and grafana_agent_config.changed and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
