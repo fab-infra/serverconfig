@@ -192,6 +192,7 @@
 
 - name: Allow control plane to schedule pods
   shell: "kubectl taint nodes {{k8s_node_name}} node-role.kubernetes.io/master-"
+  ignore_errors: true
   when: kubectl_config_file.stat.exists == true and (k8s_node_role == 'master' or k8s_node_role == 'controlplane')
 
 - name: Configure node labels
