@@ -1,0 +1,35 @@
+# Server config
+mode server
+port {{openvpn_port}}
+proto tcp-server
+dev tun
+
+# Client config
+max-clients 10
+client-to-client
+
+# IP addressing config
+server 10.8.2.0 255.255.255.0
+ifconfig-pool-persist ipp.txt 0
+
+# Protocol config
+keepalive 10 120
+comp-lzo
+
+# Log config
+verb 4
+mute 10
+
+# Certificate config
+<ca>
+{{openvpn_ca}}
+</ca>
+<cert>
+{{openvpn_cert}}
+</cert>
+<key>
+{{openvpn_key}}
+</key>
+<dh>
+{{openvpn_dh}}
+</dh>

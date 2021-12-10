@@ -1,0 +1,8 @@
+---
+# Tasks for SUSE 15
+
+- name: Install packages
+  community.general.zypper:
+    name:
+      - openvpn
+    state: present

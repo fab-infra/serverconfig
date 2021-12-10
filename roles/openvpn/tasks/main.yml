@@ -1,0 +1,53 @@
+---
+# Main tasks
+
+- name: Setup RedHat 7
+  include_tasks: redhat7.yml
+  when: ansible_os_family|lower == 'redhat' and ansible_distribution_major_version == '7'
+
+- name: Setup Debian 10
+  include_tasks: debian10.yml
+  when: ansible_os_family|lower == 'debian' and ansible_distribution_major_version == '10'
+
+- name: Setup Debian 11
+  include_tasks: debian11.yml
+  when: ansible_os_family|lower == 'debian' and ansible_distribution_major_version == '11'
+
+- name: Setup SUSE 15
+  include_tasks: suse15.yml
+  when: ansible_os_family|lower == 'suse' and ansible_distribution_major_version == '15'
+
+- name: Configure OpenVPN (client.conf)
+  template:
+    src: client.conf.j2
+    dest: /etc/openvpn/client.conf
+  register: openvpn_client_config
+  when: openvpn_client_enabled
+
+- name: Configure OpenVPN (server.conf)
+  template:
+    src: server.conf.j2
+    dest: /etc/openvpn/server.conf
+  register: openvpn_server_config
+  when: openvpn_server_enabled
+
+- name: Configure OpenVPN (ipp.txt)
+  template:
+    src: ipp.txt.j2
+    dest: /etc/openvpn/ipp.txt
+  register: openvpn_ipp_config
+  when: openvpn_server_enabled
+
+- name: Start OpenVPN client service
+  service:
+    name: openvpn@client
+    enabled: true
+    state: restarted
+  when: "openvpn_client_enabled and openvpn_client_config.changed and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+
+- name: Start OpenVPN server service
+  service:
+    name: openvpn@server
+    enabled: true
+    state: restarted
+  when: "openvpn_server_enabled and (openvpn_server_config.changed or openvpn_ipp_config.changed) and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"

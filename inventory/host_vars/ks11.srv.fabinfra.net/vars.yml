@@ -5,3 +5,4 @@ cloud_zone: GRA1
 k8s_master_host: k8s-master.fabinfra.net
 k8s_node_labels: kubernetes-host= {{cloud_provider}}-host= server-role-ftp=true server-role-jka=true server-role-proxy=true server-role-vpn=true topology.kubernetes.io/region={{cloud_region}} topology.kubernetes.io/zone={{cloud_zone}}
 k8s_node_role: worker
+openvpn_server_enabled: true

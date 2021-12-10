@@ -1,0 +1,27 @@
+# Client config
+client
+remote {{openvpn_host}}
+port {{openvpn_port}}
+proto tcp-client
+dev tun
+
+# Protocol config
+ping 10
+comp-lzo
+resolv-retry infinite
+
+# Log config
+verb 4
+mute 10
+
+# Certificate config
+ns-cert-type server
+<ca>
+{{openvpn_ca}}
+</ca>
+<cert>
+{{openvpn_cert}}
+</cert>
+<key>
+{{openvpn_key}}
+</key>

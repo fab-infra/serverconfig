@@ -1,0 +1,8 @@
+---
+# Tasks for Debian 10
+
+- name: Install packages
+  apt:
+    name:
+      - openvpn
+    state: present

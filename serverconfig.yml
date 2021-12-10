@@ -3,13 +3,30 @@
 
 - name: Base setup
   hosts: all
-  roles:
-    - base
-    - grafana-agent
-  tags: base
+  tasks:
+    - name: Include role
+      include_role:
+        name: "{{roleName}}"
+        apply:
+          tags: "{{roleName}}"
+      tags: always
+      loop_control:
+        loop_var: "roleName"
+      with_items:
+        - base
+        - grafana-agent
+        - openvpn
 
 - name: Kubernetes setup
   hosts: k8s
-  roles:
-    - k8s
-  tags: k8s
+  tasks:
+    - name: Include role
+      include_role:
+        name: "{{roleName}}"
+        apply:
+          tags: "{{roleName}}"
+      tags: always
+      loop_control:
+        loop_var: "roleName"
+      with_items:
+        - k8s
