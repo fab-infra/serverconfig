@@ -138,6 +138,10 @@
     state: stopped
   when: "ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest"
 
+- name: Disable SELinux
+  selinux:
+    state: disabled
+
 - name: Enable services
   service:
     name: "{{item}}"
