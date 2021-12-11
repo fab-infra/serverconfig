@@ -1,8 +1,8 @@
 ---
-# Tasks for SUSE 15
+# Tasks for RedHat
 
 - name: Install packages
-  community.general.zypper:
+  yum:
     name:
       - openvpn
     state: present

@@ -1,8 +1,8 @@
 ---
-# Tasks for RedHat 7
+# Tasks for SUSE
 
 - name: Install packages
-  yum:
+  community.general.zypper:
     name:
       - openvpn
     state: present

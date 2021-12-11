@@ -1,11 +1,11 @@
 ---
-# Tasks for RedHat 7
+# Tasks for RedHat
 
 - name: Install EPEL and ELRepo repositories
   yum:
     name:
-      - https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-      - https://www.elrepo.org/elrepo-release-7.el7.elrepo.noarch.rpm
+      - https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ansible_distribution_major_version}}.noarch.rpm
+      - https://www.elrepo.org/elrepo-release-{{ansible_distribution_major_version}}.el{{ansible_distribution_major_version}}.elrepo.noarch.rpm
     state: present
 
 - name: Install packages
@@ -24,7 +24,6 @@
       - nscd
       - ntp
       - openssh-server
-      - openvpn
       - postfix
       - psmisc
       - python3-pip

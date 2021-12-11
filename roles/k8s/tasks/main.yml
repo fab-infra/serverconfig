@@ -3,17 +3,13 @@
 
 ### Distro setup
 
-- name: Setup RedHat 7
-  include_tasks: redhat7.yml
-  when: ansible_os_family|lower == 'redhat' and ansible_distribution_major_version == '7'
+- name: Setup RedHat
+  include_tasks: redhat.yml
+  when: ansible_os_family|lower == 'redhat'
 
-- name: Setup Debian 10
-  include_tasks: debian10.yml
-  when: ansible_os_family|lower == 'debian' and ansible_distribution_major_version == '10'
-
-- name: Setup Debian 11
-  include_tasks: debian11.yml
-  when: ansible_os_family|lower == 'debian' and ansible_distribution_major_version == '11'
+- name: Setup Debian
+  include_tasks: debian.yml
+  when: ansible_os_family|lower == 'debian'
 
 
 ### Calico

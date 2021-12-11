@@ -1,5 +1,5 @@
 ---
-# Tasks for SUSE 15
+# Tasks for SUSE
 
 - name: Install packages
   community.general.zypper:
@@ -17,7 +17,6 @@
       - nscd
       - ntp
       - openssh-server
-      - openvpn
       - postfix
       - psmisc
       - python3-pip

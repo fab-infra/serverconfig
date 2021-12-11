@@ -1,5 +1,5 @@
 ---
-# Tasks for Debian 10
+# Tasks for Debian
 
 - name: Install packages
   apt:

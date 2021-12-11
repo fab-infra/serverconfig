@@ -1,10 +1,11 @@
 ---
-# Tasks for Debian 10
+# Tasks for Debian
 
 - name: Install backports repository
   apt_repository:
     repo: deb http://deb.debian.org/debian buster-backports main
     filename: backports
+  when: ansible_distribution_major_version == '10'
 
 - name: Install packages
   apt:
@@ -22,7 +23,6 @@
       - nscd
       - ntp
       - openssh-server
-      - openvpn
       - postfix
       - psmisc
       - python3-pip

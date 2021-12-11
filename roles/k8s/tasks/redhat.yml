@@ -1,19 +1,19 @@
 ---
-# Tasks for RedHat 7
+# Tasks for RedHat
 
 - name: Install Libcontainers repository
   yum_repository:
     name: devel_kubic_libcontainers_stable
     description: devel_kubic_libcontainers_stable
-    baseurl: https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/CentOS_7/
-    gpgkey: https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/CentOS_7/repodata/repomd.xml.key
+    baseurl: https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/CentOS_{{ansible_distribution_major_version}}/
+    gpgkey: https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/CentOS_{{ansible_distribution_major_version}}/repodata/repomd.xml.key
 
 - name: Install Libcontainers CRI-O repository
   yum_repository:
     name: devel_kubic_libcontainers_stable_cri-o_{{k8s_version_minor}}
     description: devel_kubic_libcontainers_stable_cri-o_{{k8s_version_minor}}
-    baseurl: https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/{{k8s_version_minor}}/CentOS_7/
-    gpgkey: https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/{{k8s_version_minor}}/CentOS_7/repodata/repomd.xml.key
+    baseurl: https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/{{k8s_version_minor}}/CentOS_{{ansible_distribution_major_version}}/
+    gpgkey: https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/{{k8s_version_minor}}/CentOS_{{ansible_distribution_major_version}}/repodata/repomd.xml.key
 
 - name: Install Kubernetes repository
   yum_repository:
