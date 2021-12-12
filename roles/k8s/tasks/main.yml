@@ -154,6 +154,18 @@
 
 ### kubeadm & kubelet
 
+- name: Create kubelet directory
+  file:
+    path: /var/lib/kubelet
+    mode: 0700
+    state: directory
+
+- name: Configure registry authentication
+  copy:
+    dest: /var/lib/kubelet/config.json
+    content: "{\"auths\": {{vault_k8s_registry_auths | to_json}}}"
+    mode: 0600
+
 - name: Check if kubelet config exists
   stat:
     path: /var/lib/kubelet/config.yaml
