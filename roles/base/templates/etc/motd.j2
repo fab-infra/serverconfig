@@ -3,7 +3,7 @@
 Hostname:       {{inventory_hostname}} ({{server_env}})
 Kernel:         {{ansible_kernel}}
 Distribution:   {{ansible_distribution}} {{ansible_distribution_version}}
-Hardware:       {{ansible_processor_count}} CPU / {{(ansible_memtotal_mb/1024) | round(1)}} GB RAM
+Hardware:       {{ansible_processor_vcpus}} vCPUs / {{(ansible_memtotal_mb/1024) | round(1)}} GB RAM
 {% if ansible_default_ipv4.address is defined %}
 IPv4 address:   {{ansible_default_ipv4.address}}
 {% endif %}

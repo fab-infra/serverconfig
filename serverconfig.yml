@@ -1,7 +1,7 @@
 ---
 # Server configuration playbook
 
-- name: Base setup
+- name: Common setup
   hosts: all
   tasks:
     - name: Include role
