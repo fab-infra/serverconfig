@@ -6,4 +6,5 @@
     name:
       - fail2ban
       - firewalld
+      - python3-firewall
     state: present
