@@ -1,3 +1,2 @@
 ---
-dns_search: home.crespel.me srv.fabinfra.net fabinfra.net
 grafana_agent_enabled: false
