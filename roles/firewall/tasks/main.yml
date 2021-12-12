@@ -74,7 +74,11 @@
   service:
     name: firewalld
     enabled: true
-    state: reloaded
+    state: started
+  when: "firewall_enabled == true and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+
+- name: Reload firewalld config
+  shell: firewall-cmd --reload
   when: "firewall_enabled == true and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
 
 - name: Stop fail2ban service
