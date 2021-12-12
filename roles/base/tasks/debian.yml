@@ -36,3 +36,17 @@
       - wget
       - zip
     state: present
+
+- name: Disable unattended-upgrades
+  copy:
+    dest: /etc/apt/apt.conf.d/20auto-upgrades
+    src: /usr/share/unattended-upgrades/20auto-upgrades-disabled
+    remote_src: true
+  when: auto_update_enabled == false
+
+- name: Enable unattended-upgrades
+  copy:
+    dest: /etc/apt/apt.conf.d/20auto-upgrades
+    src: /usr/share/unattended-upgrades/20auto-upgrades
+    remote_src: true
+  when: auto_update_enabled == true

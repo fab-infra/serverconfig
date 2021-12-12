@@ -52,9 +52,16 @@
     regexp: "^apply_updates ="
     line: "apply_updates = yes"
 
+- name: Disable yum-cron service
+  service:
+    name: yum-cron
+    enabled: false
+    state: stopped
+  when: "auto_update_enabled == false and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+
 - name: Enable yum-cron service
   service:
     name: yum-cron
     enabled: true
     state: started
-  when: "auto_update_enabled and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+  when: "auto_update_enabled == true and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
