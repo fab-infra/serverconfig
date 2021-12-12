@@ -138,9 +138,15 @@
     state: stopped
   when: "ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest"
 
+- name: Check if SELinux config exists
+  stat:
+    path: /etc/selinux/config
+  register: selinux_config_file
+
 - name: Disable SELinux
   selinux:
     state: disabled
+  when: selinux_config_file.stat.exists == true
 
 - name: Enable services
   service:

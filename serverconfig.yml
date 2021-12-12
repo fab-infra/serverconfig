@@ -19,6 +19,7 @@
 
 - name: Kubernetes setup
   hosts: k8s
+  gather_facts: no
   tasks:
     - name: Include role
       include_role:
