@@ -1,3 +1,4 @@
 ---
+ansible_python_interpreter: auto
 ansible_user: root
 server_env: development
