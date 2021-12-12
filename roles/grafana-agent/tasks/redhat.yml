@@ -1,0 +1,20 @@
+---
+# Tasks for RedHat
+
+- name: Install Grafana Agent RPM package (x86_64)
+  yum:
+    name: "{{grafana_agent_url}}/v{{grafana_agent_version}}/grafana-agent-{{grafana_agent_version}}-1.amd64.rpm"
+    state: present
+  when: ansible_architecture == 'x86_64'
+
+- name: Install Grafana Agent RPM package (aarch64)
+  yum:
+    name: "{{grafana_agent_url}}/v{{grafana_agent_version}}/grafana-agent-{{grafana_agent_version}}-1.arm64.rpm"
+    state: present
+  when: ansible_architecture == 'aarch64'
+
+- name: Install Grafana Agent RPM package (armv7l)
+  yum:
+    name: "{{grafana_agent_url}}/v{{grafana_agent_version}}/grafana-agent-{{grafana_agent_version}}-1.armv7.rpm"
+    state: present
+  when: ansible_architecture == 'armv7l'

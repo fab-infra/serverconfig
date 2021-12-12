@@ -1,16 +1,12 @@
 ---
 # Main tasks
 
-- name: Install Grafana Agent RPM package
-  yum:
-    name: "{{grafana_agent_url}}/v{{grafana_agent_version}}/grafana-agent-{{grafana_agent_version}}-1.amd64.rpm"
-    state: present
+- name: Setup RedHat
+  include_tasks: redhat.yml
   when: ansible_os_family|lower == 'redhat'
 
-- name: Install Grafana Agent DEB package
-  apt:
-    deb: "{{grafana_agent_url}}/v{{grafana_agent_version}}/grafana-agent-{{grafana_agent_version}}-1.amd64.deb"
-    state: present
+- name: Setup Debian
+  include_tasks: debian.yml
   when: ansible_os_family|lower == 'debian'
 
 - name: Configure Grafana Agent
@@ -20,9 +16,16 @@
   register: grafana_agent_config
   when: grafana_cloud_api_key|length > 0
 
+- name: Stop Grafana Agent service
+  service:
+    name: grafana-agent
+    enabled: false
+    state: stopped
+  when: "grafana_agent_enabled == false and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+
 - name: Start Grafana Agent service
   service:
     name: grafana-agent
     enabled: true
     state: restarted
-  when: "grafana_agent_enabled and grafana_agent_config.changed and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+  when: "grafana_agent_enabled == true and grafana_agent_config.changed and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
