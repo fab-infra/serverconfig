@@ -4,7 +4,7 @@
 - name: Install keys
   apt_key:
     url: "{{item}}"
-  with_items:
+  loop:
     - https://packages.cloud.google.com/apt/doc/apt-key.gpg
     - https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/Debian_{{ansible_distribution_major_version}}/Release.key
     - https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/{{k8s_version_minor}}/Debian_{{ansible_distribution_major_version}}/Release.key

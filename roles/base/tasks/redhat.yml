@@ -12,8 +12,6 @@
   yum:
     name:
       - bash-completion
-      - fail2ban
-      - firewalld
       - git
       - htop
       - iftop

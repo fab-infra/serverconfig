@@ -1,0 +1,9 @@
+---
+# Tasks for Debian
+
+- name: Install packages
+  apt:
+    name:
+      - fail2ban
+      - firewalld
+    state: present

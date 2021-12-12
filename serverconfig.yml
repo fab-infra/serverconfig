@@ -12,8 +12,9 @@
       tags: always
       loop_control:
         loop_var: "roleName"
-      with_items:
+      loop:
         - base
+        - firewall
         - grafana-agent
         - openvpn
 
@@ -29,5 +30,5 @@
       tags: always
       loop_control:
         loop_var: "roleName"
-      with_items:
+      loop:
         - k8s

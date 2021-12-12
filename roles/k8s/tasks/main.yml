@@ -125,17 +125,10 @@
   sysctl:
     name: "{{item}}"
     value: "1"
-  with_items:
+  loop:
     - net.ipv4.ip_forward
     - net.bridge.bridge-nf-call-iptables
     - net.bridge.bridge-nf-call-ip6tables
-  when: "ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest"
-
-- name: Disable firewalld
-  service:
-    name: firewalld
-    enabled: false
-    state: stopped
   when: "ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest"
 
 - name: Check if SELinux config exists
@@ -153,7 +146,7 @@
     name: "{{item}}"
     enabled: true
     state: started
-  with_items:
+  loop:
     - crio
     - kubelet
   when: "ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest"

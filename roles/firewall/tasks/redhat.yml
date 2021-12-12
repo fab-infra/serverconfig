@@ -1,0 +1,9 @@
+---
+# Tasks for RedHat
+
+- name: Install packages
+  yum:
+    name:
+      - fail2ban
+      - firewalld
+    state: present

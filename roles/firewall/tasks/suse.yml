@@ -1,0 +1,9 @@
+---
+# Tasks for SUSE
+
+- name: Install packages
+  community.general.zypper:
+    name:
+      - fail2ban
+      - firewalld
+    state: present

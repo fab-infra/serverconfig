@@ -1,0 +1,92 @@
+---
+# Main tasks
+
+- name: Setup RedHat
+  include_tasks: redhat.yml
+  when: firewall_enabled and ansible_os_family|lower == 'redhat'
+
+- name: Setup Debian
+  include_tasks: debian.yml
+  when: firewall_enabled and ansible_os_family|lower == 'debian'
+
+- name: Setup SUSE
+  include_tasks: suse.yml
+  when: firewall_enabled and ansible_os_family|lower == 'suse'
+
+- name: Create VPN zone
+  firewalld:
+    zone: vpn
+    permanent: yes
+    state: present
+  when: firewall_enabled
+
+- name: Add interface to zone
+  firewalld:
+    zone: "{{item.zone}}"
+    interface: "{{item.interface}}"
+    permanent: yes
+    state: enabled
+  loop: "{{firewall_interfaces}}"
+  when: firewall_enabled
+
+- name: Add port to zone
+  firewalld:
+    zone: "{{item.zone}}"
+    port: "{{item.port}}"
+    permanent: yes
+    state: enabled
+  loop: "{{firewall_ports}}"
+  when: firewall_enabled
+
+- name: Add service to zone
+  firewalld:
+    zone: "{{item.zone}}"
+    service: "{{item.service}}"
+    permanent: yes
+    state: enabled
+  loop: "{{firewall_services}}"
+  when: firewall_enabled
+
+- name: Add source to zone
+  firewalld:
+    zone: "{{item.zone}}"
+    source: "{{item.source}}"
+    permanent: yes
+    state: enabled
+  loop: "{{firewall_sources}}"
+  when: firewall_enabled
+
+- name: Configure fail2ban
+  template:
+    src: jail.local.j2
+    dest: /etc/fail2ban/jail.local
+  when: firewall_enabled
+  register: fail2ban_config
+
+- name: Stop firewalld service
+  service:
+    name: firewalld
+    enabled: false
+    state: stopped
+  when: "firewall_enabled == false and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+
+- name: Reload firewalld service
+  service:
+    name: firewalld
+    enabled: true
+    state: reloaded
+  when: "firewall_enabled == true and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+
+- name: Stop fail2ban service
+  service:
+    name: fail2ban
+    enabled: false
+    state: stopped
+  when: "firewall_enabled == false and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+
+- name: Start fail2ban service
+  service:
+    name: fail2ban
+    enabled: true
+    state: restarted
+  when: "firewall_enabled == true and fail2ban_config.changed and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"

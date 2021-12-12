@@ -1,0 +1,12 @@
+---
+firewall_enabled: true
+firewall_interfaces:
+  - zone: vpn
+    interface: tun0
+firewall_ports: []
+firewall_services:
+  - zone: public
+    service: ssh
+  - zone: vpn
+    service: ssh
+firewall_sources: []
