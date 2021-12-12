@@ -34,16 +34,30 @@
   register: openvpn_ipp_config
   when: openvpn_server_enabled
 
+- name: Stop OpenVPN client service
+  service:
+    name: openvpn@client
+    enabled: false
+    state: stopped
+  when: "openvpn_client_enabled == false and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+
 - name: Start OpenVPN client service
   service:
     name: openvpn@client
     enabled: true
     state: restarted
-  when: "openvpn_client_enabled and openvpn_client_config.changed and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+  when: "openvpn_client_enabled == true and openvpn_client_config.changed and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+
+- name: Stop OpenVPN server service
+  service:
+    name: openvpn@server
+    enabled: false
+    state: stopped
+  when: "openvpn_server_enabled == false and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
 
 - name: Start OpenVPN server service
   service:
     name: openvpn@server
     enabled: true
     state: restarted
-  when: "openvpn_server_enabled and (openvpn_server_config.changed or openvpn_ipp_config.changed) and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+  when: "openvpn_server_enabled == true and (openvpn_server_config.changed or openvpn_ipp_config.changed) and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
