@@ -70,7 +70,7 @@
     state: stopped
   when: "firewall_enabled == false and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
 
-- name: Reload firewalld service
+- name: Start firewalld service
   service:
     name: firewalld
     enabled: true
