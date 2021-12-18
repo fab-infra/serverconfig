@@ -105,13 +105,13 @@
   lineinfile:
     path: /etc/containers/storage.conf
     regexp: "^runroot = "
-    line: "runroot = {{containers_storage_dir}}/run"
+    line: "runroot = \"{{containers_storage_dir}}/run\""
 
 - name: Configure containers storage (graphroot)
   lineinfile:
     path: /etc/containers/storage.conf
     regexp: "^graphroot = "
-    line: "graphroot = {{containers_storage_dir}}/graph"
+    line: "graphroot = \"{{containers_storage_dir}}/graph\""
 
 
 ### System
