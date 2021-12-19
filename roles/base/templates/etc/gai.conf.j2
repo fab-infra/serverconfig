@@ -1,0 +1,15 @@
+# Configuration for getaddrinfo(3).
+
+# Defaults
+precedence ::1/128       50
+precedence ::/0          40
+precedence 2002::/16     30
+precedence ::/96         20
+
+{% if gai_prefer_ipv4 %}
+# Prefer IPv4 over IPv6
+precedence ::ffff:0:0/96 100
+{% else %}
+# Prefer IPv6 over IPv4
+precedence ::ffff:0:0/96 10
+{% endif %}
