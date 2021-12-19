@@ -7,7 +7,6 @@ rb04.srv.fabinfra.net
 [k8s]
 localhost
 ks11.srv.fabinfra.net
-sy02.srv.fabinfra.net
 sy03.srv.fabinfra.net
 
 [prod]
