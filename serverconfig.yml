@@ -32,3 +32,18 @@
         loop_var: "roleName"
       loop:
         - k8s
+
+- name: Docker setup
+  hosts: "!k8s"
+  gather_facts: no
+  tasks:
+    - name: Include role
+      include_role:
+        name: "{{roleName}}"
+        apply:
+          tags: "{{roleName}}"
+      tags: always
+      loop_control:
+        loop_var: "roleName"
+      loop:
+        - docker

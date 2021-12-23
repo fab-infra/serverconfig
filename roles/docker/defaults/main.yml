@@ -1,0 +1,5 @@
+---
+ctop_version: "0.7.6"
+docker_compose_switch_version: "1.0.4"
+docker_compose_version: "2.2.2"
+docker_storage_dir: "/home/apps/docker"
