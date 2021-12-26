@@ -1,5 +1,16 @@
 version: "3.5"
 services:
+  # Ansible on CentOS 7
+  centos7:
+    image: serverconfig:centos7
+    build:
+      context: .
+      args:
+        BASE_IMAGE: quay.io/centos7/python-38-centos7
+    hostname: localhost
+    volumes:
+      - '.:/serverconfig'
+
   # Ansible on Debian 10
   debian10:
     image: serverconfig:debian10
@@ -22,13 +33,13 @@ services:
     volumes:
       - '.:/serverconfig'
 
-  # Ansible on CentOS 7
-  centos7:
-    image: serverconfig:centos7
+  # Ansible on Ubuntu 20.04
+  ubuntu2004:
+    image: serverconfig:ubuntu2004
     build:
       context: .
       args:
-        BASE_IMAGE: quay.io/centos7/python-38-centos7
+        BASE_IMAGE: ubuntu:20.04
     hostname: localhost
     volumes:
       - '.:/serverconfig'
