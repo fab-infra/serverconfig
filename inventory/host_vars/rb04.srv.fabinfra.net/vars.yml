@@ -1,4 +1,5 @@
 ---
+docker_daemon_enabled: false
 firewall_ports:
   - zone: vpn
     port: 8081/tcp
