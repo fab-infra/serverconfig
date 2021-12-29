@@ -2,6 +2,7 @@
 auto_update_enabled: true
 dns_search: srv.fabinfra.net fabinfra.net
 gai_prefer_ipv4: true
+mounts: []
 sysctl_vm_max_map_count: "262144"
 sysctl_vm_swappiness: "10"
 root_authorized_keys:

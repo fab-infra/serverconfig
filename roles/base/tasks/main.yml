@@ -13,6 +13,15 @@
   include_tasks: suse.yml
   when: ansible_os_family|lower == 'suse'
 
+- name: Configure mount points
+  mount:
+    path: "{{item.path}}"
+    src: "{{item.src}}"
+    fstype: "{{item.fstype}}"
+    opts: "{{item.opts | default(omit)}}"
+    state: mounted
+  loop: "{{mounts}}"
+
 - name: Create sysadmin group
   group:
     name: sysadmin
