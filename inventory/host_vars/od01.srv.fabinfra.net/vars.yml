@@ -1,2 +1,5 @@
 ---
+firewall_sources:
+  - zone: trusted
+    source: 192.168.0.0/16
 openvpn_client_enabled: true
