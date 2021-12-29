@@ -13,6 +13,12 @@
   include_tasks: suse.yml
   when: firewall_enabled and ansible_os_family|lower == 'suse'
 
+- name: Configure firewalld (IndividualCalls)
+  lineinfile:
+    path: /etc/firewalld/firewalld.conf
+    regexp: "^IndividualCalls="
+    line: "IndividualCalls={{'yes' if firewall_individual_calls else 'no'}}"
+
 - name: Create VPN zone
   firewalld:
     zone: vpn

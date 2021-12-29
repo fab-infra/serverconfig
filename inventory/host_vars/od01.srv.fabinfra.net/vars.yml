@@ -1,5 +1,5 @@
 ---
-firewall_enabled: false
+firewall_individual_calls: true
 firewall_sources:
   - zone: trusted
     source: 192.168.0.0/16

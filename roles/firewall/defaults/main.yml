@@ -1,5 +1,6 @@
 ---
 firewall_enabled: true
+firewall_individual_calls: false
 firewall_interfaces:
   - zone: vpn
     interface: tun0
