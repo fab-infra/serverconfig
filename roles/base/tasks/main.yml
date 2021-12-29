@@ -34,6 +34,20 @@
     home: /home/users/admin
     comment: "System Admin"
 
+- name: Check if NetworkManager config directory exists
+  stat:
+    path: /etc/NetworkManager/conf.d
+  register: nm_config_dir
+
+- name: Configure NetworkManager DNS resolver
+  copy:
+    dest: /etc/NetworkManager/conf.d/dns.conf
+    content: |
+      [main]
+      dns=default
+  register: nm_dns_config
+  when: nm_config_dir.stat.exists == true
+
 - name: Configure resolv.conf (search)
   lineinfile:
     path: /etc/resolv.conf
