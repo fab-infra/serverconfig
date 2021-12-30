@@ -47,3 +47,18 @@
         loop_var: "roleName"
       loop:
         - docker
+
+- name: Media Center setup
+  hosts: mediacenter
+  gather_facts: no
+  tasks:
+    - name: Include role
+      include_role:
+        name: "{{roleName}}"
+        apply:
+          tags: "{{roleName}}"
+      tags: always
+      loop_control:
+        loop_var: "roleName"
+      loop:
+        - mediacenter

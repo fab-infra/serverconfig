@@ -9,6 +9,9 @@ localhost
 ks11.srv.fabinfra.net
 sy03.srv.fabinfra.net
 
+[mediacenter]
+od01.srv.fabinfra.net
+
 [prod]
 ks11.srv.fabinfra.net
 sy02.srv.fabinfra.net
