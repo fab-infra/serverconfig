@@ -12,6 +12,7 @@
   yum:
     name:
       - bash-completion
+      - curl
       - git
       - htop
       - iftop
