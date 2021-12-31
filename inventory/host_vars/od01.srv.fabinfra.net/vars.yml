@@ -3,4 +3,17 @@ firewall_individual_calls: true
 firewall_sources:
   - zone: trusted
     source: 192.168.0.0/16
+mounts:
+  - path: /media/FAB-500GB
+    src: UUID=B4D48115D480DB4E
+    fstype: ntfs
+    opts: defaults,auto,users,rw,nofail,umask=000,x-systemd.device-timeout=30
+  - path: /media/FAB-1TB
+    src: UUID=EE7EB0C67EB0893B
+    fstype: ntfs
+    opts: defaults,auto,users,rw,nofail,umask=000,x-systemd.device-timeout=30
+  - path: /media/FAB-2TB
+    src: UUID=B2FC78EDFC78ACEB
+    fstype: ntfs
+    opts: defaults,auto,users,rw,nofail,umask=000,x-systemd.device-timeout=30
 openvpn_client_enabled: true
