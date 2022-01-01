@@ -15,4 +15,4 @@ RUN pip install --no-cache-dir ansible
 WORKDIR /serverconfig
 
 # Launch setup
-ENTRYPOINT ["./setup.sh"]
+ENTRYPOINT ["./setup.sh", "localhost"]

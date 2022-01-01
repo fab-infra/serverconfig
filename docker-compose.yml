@@ -1,6 +1,7 @@
 version: "3.5"
 services:
   # Ansible on CentOS 7
+  # docker-compose run --rm centos7 [args ...]
   centos7:
     image: serverconfig:centos7
     build:
@@ -12,6 +13,7 @@ services:
       - '.:/serverconfig'
 
   # Ansible on Debian 10
+  # docker-compose run --rm debian10 [args ...]
   debian10:
     image: serverconfig:debian10
     build:
@@ -23,6 +25,7 @@ services:
       - '.:/serverconfig'
 
   # Ansible on Debian 11
+  # docker-compose run --rm debian11 [args ...]
   debian11:
     image: serverconfig:debian11
     build:
@@ -34,6 +37,7 @@ services:
       - '.:/serverconfig'
 
   # Ansible on Ubuntu 20.04
+  # docker-compose run --rm ubuntu2004 [args ...]
   ubuntu2004:
     image: serverconfig:ubuntu2004
     build:
@@ -41,5 +45,19 @@ services:
       args:
         BASE_IMAGE: ubuntu:20.04
     hostname: localhost
+    volumes:
+      - '.:/serverconfig'
+
+  # Ansible Vault utility
+  # docker-compose run --rm vault <action> [args ...]
+  vault:
+    image: serverconfig:centos7
+    build:
+      context: .
+      args:
+        BASE_IMAGE: quay.io/centos7/python-38-centos7
+    entrypoint: ['ansible-vault']
+    environment:
+      - ANSIBLE_VAULT_PASSWORD_FILE=vault.password
     volumes:
       - '.:/serverconfig'
