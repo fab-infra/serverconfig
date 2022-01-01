@@ -13,6 +13,9 @@
   template:
     src: grafana-agent.yaml.j2
     dest: /etc/grafana-agent.yaml
+    mode: 0640
+    owner: grafana-agent
+    group: grafana-agent
   register: grafana_agent_config
   when: grafana_cloud_api_key|length > 0
 

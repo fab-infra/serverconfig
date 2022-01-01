@@ -17,6 +17,7 @@
   template:
     src: client.conf.j2
     dest: /etc/openvpn/client.conf
+    mode: 0600
   register: openvpn_client_config
   when: openvpn_client_enabled
 
@@ -24,6 +25,7 @@
   template:
     src: server.conf.j2
     dest: /etc/openvpn/server.conf
+    mode: 0600
   register: openvpn_server_config
   when: openvpn_server_enabled
 
