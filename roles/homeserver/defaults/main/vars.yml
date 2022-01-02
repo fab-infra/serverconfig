@@ -1,0 +1,19 @@
+---
+dnscrypt_proxy_enabled: true
+homebridge_enabled: true
+homeserver_admin_password: "{{vault_homeserver_admin_password}}"
+homeserver_admin_user: "admin"
+homeserver_root_dir: "/home/apps"
+jeedom_enabled: true
+minidlna_enabled: true
+minidlna_media_dirs: "/media"
+samba_enabled: true
+samba_shares: ""
+sickchill_downloads_dir: "./downloads"
+sickchill_enabled: true
+sickchill_tv_dir: "./tv"
+squid_enabled: true
+transmission_downloads_dir: "./downloads"
+transmission_enabled: true
+tvheadend_enabled: true
+tvheadend_recordings_dir: "./recordings"

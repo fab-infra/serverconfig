@@ -1,0 +1,39 @@
+---
+# Main tasks
+
+- name: Install AF9015 DVB USB tuner firmware
+  get_url:
+    url: https://github.com/OpenELEC/dvb-firmware/raw/master/firmware/dvb-usb-af9015.fw
+    dest: /lib/firmware/dvb-usb-af9015.fw
+    mode: 0644
+
+- name: Create root directory
+  file:
+    path: "{{homeserver_root_dir}}"
+    state: directory
+
+- name: Create www directory
+  file:
+    path: "{{homeserver_root_dir}}/www"
+    state: directory
+
+- name: Configure environment
+  template:
+    src: env.j2
+    dest: "{{homeserver_root_dir}}/.env"
+    mode: 0600
+
+- name: Configure Docker Compose
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{homeserver_root_dir}}/docker-compose.yml"
+
+- name: Configure home page
+  template:
+    src: index.php.j2
+    dest: "{{homeserver_root_dir}}/www/index.php"
+
+- name: Start containers
+  shell:
+    cmd: docker-compose up -d --remove-orphans
+    chdir: "{{homeserver_root_dir}}"

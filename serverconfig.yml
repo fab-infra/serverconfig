@@ -48,8 +48,8 @@
       loop:
         - docker
 
-- name: Media Center setup
-  hosts: mediacenter
+- name: Home server setup
+  hosts: homeserver
   gather_facts: no
   tasks:
     - name: Include role
@@ -61,4 +61,4 @@
       loop_control:
         loop_var: "roleName"
       loop:
-        - mediacenter
+        - homeserver

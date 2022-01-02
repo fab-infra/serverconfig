@@ -1,8 +1,0 @@
----
-# Main tasks
-
-- name: Install AF9015 DVB USB tuner firmware
-  get_url:
-    url: https://github.com/OpenELEC/dvb-firmware/raw/master/firmware/dvb-usb-af9015.fw
-    dest: /lib/firmware/dvb-usb-af9015.fw
-    mode: 0644

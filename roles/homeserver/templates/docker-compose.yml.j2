@@ -1,0 +1,186 @@
+services:
+  # Apache HTTPD + PHP
+  # https://github.com/fab-infra/docker-php-apache
+  apache:
+    image: ghcr.io/fab-infra/php-apache:7.4-opensuse15
+    restart: always
+    hostname: apache
+    ports:
+      - 80:8080
+    environment:
+      - DEFAULT_DOCROOT=/srv/www/sd/www/htdocs
+    volumes:
+      - ./www:/srv/www/sd/www/htdocs
+
+{% if dnscrypt_proxy_enabled %}
+  # DNSCrypt proxy
+  # https://github.com/fab-infra/docker-dnscrypt-proxy
+  dnscrypt-proxy:
+    image: ghcr.io/fab-infra/dnscrypt-proxy:2.1-opensuse15
+    restart: always
+    hostname: dnscrypt-proxy
+    ports:
+      - 53:5053/tcp
+      - 53:5053/udp
+
+{% endif %}
+{% if homebridge_enabled %}
+  # Homebridge
+  # https://github.com/oznu/docker-homebridge
+  homebridge:
+    image: oznu/homebridge:latest
+    restart: always
+    network_mode: host
+    environment:
+      - HOMEBRIDGE_CONFIG_UI=1
+      - HOMEBRIDGE_CONFIG_UI_PORT=8581
+      - PGID=1000
+      - PUID=1000
+      - TZ=Europe/Paris
+    volumes:
+      - homebridge:/homebridge
+
+{% endif %}
+{% if jeedom_enabled %}
+  # Jeedom home automation
+  # https://doc.jeedom.com/fr_FR/installation/docker
+  jeedom:
+    image: jeedom/jeedom:V4-stable
+    restart: always
+    hostname: jeedom
+    privileged: true
+    ports:
+      - 8080:80
+    volumes:
+      - jeedom-cache:/tmp/jeedom/cache
+      - jeedom-db:/var/lib/mysql
+      - jeedom-www:/var/www/html
+
+{% endif %}
+{% if minidlna_enabled %}
+  # MiniDLNA
+  # https://github.com/fab-infra/docker-minidlna
+  minidlna:
+    image: ghcr.io/fab-infra/minidlna:1.3-opensuse15
+    restart: always
+    network_mode: host
+    environment:
+      - MINIDLNA_MEDIA_DIRS={{minidlna_media_dirs}}
+    volumes:
+      - minidlna-db:/var/cache/minidlna
+      - /media:/media
+
+{% endif %}
+{% if samba_enabled %}
+  # Samba file sharing
+  # https://github.com/fab-infra/docker-samba
+  samba:
+    image: ghcr.io/fab-infra/samba:4.13-opensuse15
+    restart: always
+    hostname: samba
+    ports:
+      - 139:139
+      - 445:445
+    environment:
+      - SMB_USER=${ADMIN_USER}
+      - SMB_PASSWORD=${ADMIN_PASSWORD}
+      - SMB_SHARES={{samba_shares}}
+    volumes:
+      - /media:/media
+
+{% endif %}
+{% if sickchill_enabled %}
+  # SickChill
+  # https://docs.linuxserver.io/images/docker-sickchill
+  sickchill:
+    image: lscr.io/linuxserver/sickchill:latest
+    restart: always
+    hostname: sickchill
+    ports:
+      - 8081:8081
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Paris
+    volumes:
+      - sickchill-config:/config
+      - {{sickchill_downloads_dir}}:/downloads
+      - {{sickchill_tv_dir}}:/tv
+
+{% endif %}
+{% if squid_enabled %}
+  # Squid proxy
+  # https://github.com/fab-infra/docker-squid
+  squid:
+    image: ghcr.io/fab-infra/squid:4.17-opensuse15
+    restart: always
+    hostname: squid
+    ports:
+      - 3128:3128
+
+{% endif %}
+{% if transmission_enabled %}
+  # Transmission
+  # https://docs.linuxserver.io/images/docker-transmission
+  transmission:
+    image: lscr.io/linuxserver/transmission:latest
+    restart: always
+    hostname: transmission
+    ports:
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Paris
+      - TRANSMISSION_WEB_HOME=/flood-for-transmission/
+      - USER=${ADMIN_USER}
+      - PASS=${ADMIN_PASSWORD}
+    volumes:
+      - transmission-config:/config
+      - {{transmission_downloads_dir}}:/downloads
+
+{% endif %}
+{% if tvheadend_enabled %}
+  # Tvheadend
+  # https://docs.linuxserver.io/images/docker-tvheadend
+  tvheadend:
+    image: lscr.io/linuxserver/tvheadend:latest
+    restart: always
+    hostname: tvheadend
+    ports:
+      - 9981:9981
+      - 9982:9982
+    environment:
+      - PGID=1000
+      - PUID=1000
+      - TZ=Europe/Paris
+    volumes:
+      - tvheadend-config:/config
+      - {{tvheadend_recordings_dir}}:/recordings
+    devices:
+      - /dev/dvb:/dev/dvb
+{% endif %}
+
+volumes:
+{% if homebridge_enabled %}
+  homebridge:
+{% endif %}
+{% if jeedom_enabled %}
+  jeedom-cache:
+  jeedom-db:
+  jeedom-www:
+{% endif %}
+{% if minidlna_enabled %}
+  minidlna-db:
+{% endif %}
+{% if sickchill_enabled %}
+  sickchill-config:
+{% endif %}
+{% if transmission_enabled %}
+  transmission-config:
+{% endif %}
+{% if tvheadend_enabled %}
+  tvheadend-config:
+{% endif %}
