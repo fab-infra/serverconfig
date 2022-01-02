@@ -1,0 +1,9 @@
+---
+# Tasks for Debian
+
+- name: Install packages
+  apt:
+    name:
+      - cec-utils
+      - wakeonlan
+    state: present

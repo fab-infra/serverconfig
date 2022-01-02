@@ -1,6 +1,10 @@
 ---
 # Main tasks
 
+- name: Setup Debian
+  include_tasks: debian.yml
+  when: ansible_os_family|lower == 'debian'
+
 - name: Install AF9015 DVB USB tuner firmware
   get_url:
     url: https://github.com/OpenELEC/dvb-firmware/raw/master/firmware/dvb-usb-af9015.fw
