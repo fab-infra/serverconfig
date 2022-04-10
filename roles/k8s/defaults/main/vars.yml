@@ -1,9 +1,9 @@
 ---
 calico_version: "3.21.4"
-certmanager_version: "1.6.1"
+certmanager_version: "1.8.0"
 containers_storage_dir: "/home/apps/containers/storage"
 etcd_version: "3.4.13"
-helm_version: "3.6.3"
+helm_version: "3.8.1"
 k8s_cert_hash: ""
 k8s_cert_key: ""
 k8s_master_host: "{{inventory_hostname}}"
