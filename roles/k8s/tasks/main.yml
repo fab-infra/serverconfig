@@ -25,6 +25,7 @@
     url: https://github.com/projectcalico/calicoctl/releases/download/v{{calico_version}}/calicoctl
     dest: /usr/local/bin/calicoctl
     mode: 0755
+    checksum: "{{calico_cli_checksum}}"
   when: calico_version_check.rc != 0 or calico_version_check.stdout != ("v" + calico_version)
 
 - name: Create Calico CLI config directory
@@ -65,12 +66,21 @@
   ignore_errors: true
   changed_when: false
 
+- name: Download cert-manager CLI
+  get_url:
+    url: https://github.com/jetstack/cert-manager/releases/download/v{{certmanager_version}}/cmctl-linux-amd64.tar.gz
+    dest: /tmp/cmctl-v{{certmanager_version}}-linux-amd64.tar.gz
+    checksum: "{{certmanager_cli_checksum}}"
+  when: certmanager_version_check.rc != 0 or certmanager_version_check.stdout != ("v" + certmanager_version)
+
 - name: Install cert-manager CLI
-  unarchive:
-    remote_src: true
-    src: https://github.com/jetstack/cert-manager/releases/download/v{{certmanager_version}}/cmctl-linux-amd64.tar.gz
-    dest: /usr/local/bin
-    extra_opts: ["cmctl"]
+  shell: tar -x -C /usr/local/bin -f /tmp/cmctl-v{{certmanager_version}}-linux-amd64.tar.gz ./cmctl
+  when: certmanager_version_check.rc != 0 or certmanager_version_check.stdout != ("v" + certmanager_version)
+
+- name: Delete cert-manager CLI temporary file
+  file:
+    path: /tmp/cmctl-v{{certmanager_version}}-linux-amd64.tar.gz
+    state: absent
   when: certmanager_version_check.rc != 0 or certmanager_version_check.stdout != ("v" + certmanager_version)
 
 
@@ -82,12 +92,21 @@
   ignore_errors: true
   changed_when: false
 
+- name: Download etcd CLI
+  get_url:
+    url: https://github.com/etcd-io/etcd/releases/download/v{{etcd_version}}/etcd-v{{etcd_version}}-linux-amd64.tar.gz
+    dest: /tmp/etcd-v{{etcd_version}}-linux-amd64.tar.gz
+    checksum: "{{etcd_cli_checksum}}"
+  when: etcd_version_check.rc != 0 or etcd_version_check.stdout != etcd_version
+
 - name: Install etcd CLI
-  unarchive:
-    remote_src: true
-    src: https://github.com/etcd-io/etcd/releases/download/v{{etcd_version}}/etcd-v{{etcd_version}}-linux-amd64.tar.gz
-    dest: /usr/local/bin
-    extra_opts: ["--strip-components=1", "etcd-v{{etcd_version}}-linux-amd64/etcdctl"]
+  shell: tar -x -C /usr/local/bin -f /tmp/etcd-v{{etcd_version}}-linux-amd64.tar.gz --strip-components=1 etcd-v{{etcd_version}}-linux-amd64/etcdctl
+  when: etcd_version_check.rc != 0 or etcd_version_check.stdout != etcd_version
+
+- name: Delete etcd CLI temporary file
+  file:
+    path: /tmp/etcd-v{{etcd_version}}-linux-amd64.tar.gz
+    state: absent
   when: etcd_version_check.rc != 0 or etcd_version_check.stdout != etcd_version
 
 
@@ -99,12 +118,21 @@
   ignore_errors: true
   changed_when: false
 
+- name: Download Helm
+  get_url:
+    url: https://get.helm.sh/helm-v{{helm_version}}-linux-amd64.tar.gz
+    dest: /tmp/helm-v{{helm_version}}-linux-amd64.tar.gz
+    checksum: "{{helm_checksum}}"
+  when: helm_version_check.rc != 0 or helm_version_check.stdout != ("v" + helm_version)
+
 - name: Install Helm
-  unarchive:
-    remote_src: true
-    src: https://get.helm.sh/helm-v{{helm_version}}-linux-amd64.tar.gz
-    dest: /usr/local/bin
-    extra_opts: ["--strip-components=1", "linux-amd64/helm"]
+  shell: tar -x -C /usr/local/bin -f /tmp/helm-v{{helm_version}}-linux-amd64.tar.gz --strip-components=1 linux-amd64/helm
+  when: helm_version_check.rc != 0 or helm_version_check.stdout != ("v" + helm_version)
+
+- name: Delete Helm temporary file
+  file:
+    path: /tmp/helm-v{{helm_version}}-linux-amd64.tar.gz
+    state: absent
   when: helm_version_check.rc != 0 or helm_version_check.stdout != ("v" + helm_version)
 
 
