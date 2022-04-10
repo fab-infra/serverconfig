@@ -1,5 +1,5 @@
 ---
-calico_version: "3.20.2"
+calico_version: "3.21.4"
 certmanager_version: "1.6.1"
 containers_storage_dir: "/home/apps/containers/storage"
 etcd_version: "3.4.13"
