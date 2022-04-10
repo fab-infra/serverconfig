@@ -71,7 +71,6 @@
     src: https://github.com/jetstack/cert-manager/releases/download/v{{certmanager_version}}/cmctl-linux-amd64.tar.gz
     dest: /usr/local/bin
     extra_opts: ["cmctl"]
-    creates: /usr/local/bin/cmctl
   when: certmanager_version_check.rc != 0 or certmanager_version_check.stdout != ("v" + certmanager_version)
 
 
@@ -89,7 +88,6 @@
     src: https://github.com/etcd-io/etcd/releases/download/v{{etcd_version}}/etcd-v{{etcd_version}}-linux-amd64.tar.gz
     dest: /usr/local/bin
     extra_opts: ["--strip-components=1", "etcd-v{{etcd_version}}-linux-amd64/etcdctl"]
-    creates: /usr/local/bin/etcdctl
   when: etcd_version_check.rc != 0 or etcd_version_check.stdout != etcd_version
 
 
@@ -107,7 +105,6 @@
     src: https://get.helm.sh/helm-v{{helm_version}}-linux-amd64.tar.gz
     dest: /usr/local/bin
     extra_opts: ["--strip-components=1", "linux-amd64/helm"]
-    creates: /usr/local/bin/helm
   when: helm_version_check.rc != 0 or helm_version_check.stdout != ("v" + helm_version)
 
 
