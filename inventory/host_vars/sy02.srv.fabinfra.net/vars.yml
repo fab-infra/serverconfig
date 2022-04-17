@@ -1,5 +1,0 @@
----
-cloud_provider: ovh
-cloud_region: RBX
-cloud_zone: RBX5
-openvpn_client_enabled: true
