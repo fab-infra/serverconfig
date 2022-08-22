@@ -18,6 +18,7 @@
     path: /etc/firewalld/firewalld.conf
     regexp: "^IndividualCalls="
     line: "IndividualCalls={{'yes' if firewall_individual_calls else 'no'}}"
+  when: firewall_enabled
 
 - name: Create VPN zone
   firewalld:
@@ -75,6 +76,7 @@
     enabled: false
     state: stopped
   when: "firewall_enabled == false and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+  ignore_errors: true
 
 - name: Start firewalld service
   service:
@@ -93,6 +95,7 @@
     enabled: false
     state: stopped
   when: "firewall_enabled == false and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+  ignore_errors: true
 
 - name: Start fail2ban service
   service:
