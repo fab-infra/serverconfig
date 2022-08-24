@@ -1,0 +1,28 @@
+---
+# Main tasks
+
+- name: Setup Debian
+  include_tasks: debian.yml
+  when: kodi_enabled and ansible_os_family|lower == 'debian'
+
+- name: Configure service
+  template:
+    src: kodi.service.j2
+    dest: /etc/systemd/system/kodi.service
+  when: kodi_enabled
+  register: kodi_service
+
+- name: Stop Kodi service
+  service:
+    name: kodi
+    enabled: false
+    state: stopped
+  when: "kodi_enabled == false and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+  ignore_errors: true
+
+- name: Start Kodi service
+  service:
+    name: kodi
+    enabled: true
+    state: restarted
+  when: "kodi_enabled == true and kodi_service.changed and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"

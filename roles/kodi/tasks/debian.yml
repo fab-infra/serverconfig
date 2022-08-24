@@ -1,0 +1,11 @@
+---
+# Tasks for Debian
+
+- name: Install packages
+  apt:
+    name:
+      - kodi
+      - kodi-game-libretro
+      - kodi-peripheral-joystick
+      - kodi-pvr-tvheadend-hts
+    state: present

@@ -7,6 +7,9 @@ rb04.srv.fabinfra.net
 [homeserver]
 od01.srv.fabinfra.net
 
+[mediacenter]
+rb04.srv.fabinfra.net
+
 [k8s]
 localhost
 ks11.srv.fabinfra.net

@@ -62,3 +62,18 @@
         loop_var: "roleName"
       loop:
         - homeserver
+
+- name: Media center setup
+  hosts: mediacenter
+  gather_facts: no
+  tasks:
+    - name: Include role
+      include_role:
+        name: "{{roleName}}"
+        apply:
+          tags: "{{roleName}}"
+      tags: always
+      loop_control:
+        loop_var: "roleName"
+      loop:
+        - kodi
