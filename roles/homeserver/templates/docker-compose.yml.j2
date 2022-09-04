@@ -25,6 +25,20 @@ services:
       - 53:5053/udp
 
 {% endif %}
+{% if homeassistant_enabled %}
+  # Home Assistant
+  # https://www.home-assistant.io/installation/
+  homeassistant:
+    image: ghcr.io/home-assistant/home-assistant:stable
+    restart: always
+    network_mode: host
+    privileged: true
+    environment:
+      - TZ=Europe/Paris
+    volumes:
+      - homeassistant-config:/config
+
+{% endif %}
 {% if homebridge_enabled %}
   # Homebridge
   # https://github.com/oznu/docker-homebridge
@@ -165,6 +179,9 @@ services:
 {% endif %}
 
 volumes:
+{% if homeassistant_enabled %}
+  homeassistant-config:
+{% endif %}
 {% if homebridge_enabled %}
   homebridge:
 {% endif %}

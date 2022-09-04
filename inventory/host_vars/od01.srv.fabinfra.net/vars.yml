@@ -6,6 +6,8 @@ firewall_ports:
   - zone: vpn
     port: 8081/tcp
   - zone: vpn
+    port: 8123/tcp
+  - zone: vpn
     port: 8581/tcp
   - zone: vpn
     port: 9080/tcp

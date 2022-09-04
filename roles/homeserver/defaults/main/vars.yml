@@ -1,5 +1,6 @@
 ---
 dnscrypt_proxy_enabled: true
+homeassistant_enabled: true
 homebridge_enabled: true
 homeserver_admin_password: "{{vault_homeserver_admin_password}}"
 homeserver_admin_user: "admin"
