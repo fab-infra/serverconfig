@@ -1,0 +1,17 @@
+name: Test
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [centos7, debian10, debian11, ubuntu2004]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Run tests
+        run: |
+          echo ${{ secrets.vault_password }} > vault.password
+          ./test.sh ${{ matrix.os }}
