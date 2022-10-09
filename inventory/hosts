@@ -1,6 +1,4 @@
 [home]
-fab-laptop.home.crespel.me
-fab-work.home.crespel.me
 od01.srv.fabinfra.net
 rb04.srv.fabinfra.net
 
@@ -21,7 +19,3 @@ sy03.srv.fabinfra.net
 
 [test]
 localhost
-
-[workstation]
-fab-laptop.home.crespel.me
-fab-work.home.crespel.me
