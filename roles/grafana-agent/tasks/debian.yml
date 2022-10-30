@@ -18,3 +18,9 @@
     deb: "{{grafana_agent_url}}/v{{grafana_agent_version}}/grafana-agent-{{grafana_agent_version}}-1.armv7.deb"
     state: present
   when: ansible_architecture == 'armv7l'
+
+- name: Configure Grafana Agent service
+  lineinfile:
+    path: /etc/default/grafana-agent
+    regexp: "^CUSTOM_ARGS="
+    line: "CUSTOM_ARGS=\"-server.http.address=127.0.0.1:19090 -server.grpc.address=127.0.0.1:19091\""
