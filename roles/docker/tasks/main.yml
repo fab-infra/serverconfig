@@ -50,21 +50,21 @@
 
 - name: Install Docker Compose v2 (x86_64)
   get_url:
-    url: https://github.com/docker/compose/releases/download/v2.2.2/docker-compose-linux-x86_64
+    url: https://github.com/docker/compose/releases/download/v{{docker_compose_version}}/docker-compose-linux-x86_64
     dest: /usr/local/libexec/docker/cli-plugins/docker-compose
     mode: 0755
   when: ansible_architecture == 'x86_64'
 
 - name: Install Docker Compose v2 (aarch64)
   get_url:
-    url: https://github.com/docker/compose/releases/download/v2.2.2/docker-compose-linux-aarch64
+    url: https://github.com/docker/compose/releases/download/v{{docker_compose_version}}/docker-compose-linux-aarch64
     dest: /usr/local/libexec/docker/cli-plugins/docker-compose
     mode: 0755
   when: ansible_architecture == 'aarch64'
 
 - name: Install Docker Compose v2 (armv7l)
   get_url:
-    url: https://github.com/docker/compose/releases/download/v2.2.2/docker-compose-linux-armv7
+    url: https://github.com/docker/compose/releases/download/v{{docker_compose_version}}/docker-compose-linux-armv7
     dest: /usr/local/libexec/docker/cli-plugins/docker-compose
     mode: 0755
   when: ansible_architecture == 'armv7l'
@@ -85,21 +85,21 @@
 
 - name: Install ctop (x86_64)
   get_url:
-    url: https://github.com/bcicen/ctop/releases/download/{{ctop_version}}/ctop-{{ctop_version}}-linux-amd64
+    url: https://github.com/bcicen/ctop/releases/download/v{{ctop_version}}/ctop-{{ctop_version}}-linux-amd64
     dest: /usr/local/bin/ctop
     mode: 0755
   when: ansible_architecture == 'x86_64'
 
 - name: Install ctop (aarch64)
   get_url:
-    url: https://github.com/bcicen/ctop/releases/download/{{ctop_version}}/ctop-{{ctop_version}}-linux-arm64
+    url: https://github.com/bcicen/ctop/releases/download/v{{ctop_version}}/ctop-{{ctop_version}}-linux-arm64
     dest: /usr/local/bin/ctop
     mode: 0755
   when: ansible_architecture == 'aarch64'
 
 - name: Install ctop (armv7l)
   get_url:
-    url: https://github.com/bcicen/ctop/releases/download/{{ctop_version}}/ctop-{{ctop_version}}-linux-arm
+    url: https://github.com/bcicen/ctop/releases/download/v{{ctop_version}}/ctop-{{ctop_version}}-linux-arm
     dest: /usr/local/bin/ctop
     mode: 0755
   when: ansible_architecture == 'armv7l'
