@@ -74,7 +74,7 @@
   when: certmanager_version_check.rc != 0 or certmanager_version_check.stdout != ("v" + certmanager_version)
 
 - name: Install cert-manager CLI
-  shell: tar -x -C /usr/local/bin -f /tmp/cmctl-v{{certmanager_version}}-linux-amd64.tar.gz ./cmctl
+  shell: tar -x -C /usr/local/bin -f /tmp/cmctl-v{{certmanager_version}}-linux-amd64.tar.gz cmctl
   when: certmanager_version_check.rc != 0 or certmanager_version_check.stdout != ("v" + certmanager_version)
 
 - name: Delete cert-manager CLI temporary file
@@ -134,6 +134,32 @@
     path: /tmp/helm-v{{helm_version}}-linux-amd64.tar.gz
     state: absent
   when: helm_version_check.rc != 0 or helm_version_check.stdout != ("v" + helm_version)
+
+
+### k9s
+
+- name: Check k9s version
+  shell: k9s version -s | grep 'Version' | egrep -o '[0-9.]+'
+  register: k9s_version_check
+  ignore_errors: true
+  changed_when: false
+
+- name: Download k9s
+  get_url:
+    url: https://github.com/derailed/k9s/releases/download/v{{k9s_version}}/k9s_Linux_x86_64.tar.gz
+    dest: /tmp/k9s_Linux_x86_64.tar.gz
+    checksum: "{{k9s_checksum}}"
+  when: k9s_version_check.rc != 0 or k9s_version_check.stdout != k9s_version
+
+- name: Install k9s
+  shell: tar -x -C /usr/local/bin -f /tmp/k9s_Linux_x86_64.tar.gz k9s
+  when: k9s_version_check.rc != 0 or k9s_version_check.stdout != k9s_version
+
+- name: Delete k9s temporary file
+  file:
+    path: /tmp/k9s_Linux_x86_64.tar.gz
+    state: absent
+  when: k9s_version_check.rc != 0 or k9s_version_check.stdout != k9s_version
 
 
 ### Storage
