@@ -245,8 +245,13 @@
     mode: 0600
   when: kubectl_config_file.stat.exists == true
 
-- name: Allow control plane to schedule pods
+- name: Allow control plane to schedule pods (master taint)
   shell: "kubectl taint nodes {{k8s_node_name}} node-role.kubernetes.io/master-"
+  ignore_errors: true
+  when: kubectl_config_file.stat.exists == true and (k8s_node_role == 'master' or k8s_node_role == 'controlplane')
+
+- name: Allow control plane to schedule pods (control-plane taint)
+  shell: "kubectl taint nodes {{k8s_node_name}} node-role.kubernetes.io/control-plane-"
   ignore_errors: true
   when: kubectl_config_file.stat.exists == true and (k8s_node_role == 'master' or k8s_node_role == 'controlplane')
 
