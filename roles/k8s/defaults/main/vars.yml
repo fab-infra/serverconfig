@@ -1,6 +1,6 @@
 ---
-calico_version: "3.21.4"
-calico_cli_checksum: "sha256:3fb4f31bd72f0a570f6a6cf71d7b4c7641a0f142d2239fad32012058f0ec63bc"
+calico_version: "3.23.5"
+calico_cli_checksum: "sha256:4c777881709ddaabcf4b56dcbe683125d7ed5743c036fee9273c5295e522082f"
 certmanager_version: "1.10.1"
 certmanager_cli_checksum: "sha256:c0996ec98b87c8ee2854162da25238c4e74092c3ab156710619423f794eb1aa6"
 containers_storage_dir: "/home/apps/containers/storage"
