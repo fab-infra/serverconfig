@@ -19,6 +19,7 @@ The playbook can be tested in an isolated environment with [Docker](https://docs
 ./test.sh centos7
 ./test.sh debian10
 ./test.sh debian11
+./test.sh rocky8
 ./test.sh ubuntu2004
 ```
 
@@ -35,6 +36,7 @@ The following roles are available in this repository:
 - `grafana-agent`: Grafana Cloud agent setup
 - `homeserver`: services for home automation, file sharing and media center
 - `k8s`: Kubernetes master, control plane or worker node
+- `kodi`: Kodi media center
 - `openvpn`: OpenVPN server or client
 
 Role names can be used as tags to include/exclude some of them during execution, for example:

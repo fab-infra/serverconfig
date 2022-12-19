@@ -1,6 +1,11 @@
 ---
 # Tasks for RedHat
 
+- name: Install Grafana Agent RPM key
+  rpm_key:
+    key: https://rpm.grafana.com/gpg.key
+    state: present
+
 - name: Install Grafana Agent RPM package (x86_64)
   yum:
     name: "{{grafana_agent_url}}/v{{grafana_agent_version}}/grafana-agent-{{grafana_agent_version}}-1.amd64.rpm"

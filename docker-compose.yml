@@ -7,7 +7,7 @@ services:
     build:
       context: .
       args:
-        BASE_IMAGE: quay.io/centos7/python-38-centos7
+        BASE_IMAGE: centos:7
     hostname: localhost
     volumes:
       - '.:/serverconfig'
@@ -19,7 +19,7 @@ services:
     build:
       context: .
       args:
-        BASE_IMAGE: python:3.8-buster
+        BASE_IMAGE: debian:10
     hostname: localhost
     volumes:
       - '.:/serverconfig'
@@ -31,7 +31,19 @@ services:
     build:
       context: .
       args:
-        BASE_IMAGE: python:3.8-bullseye
+        BASE_IMAGE: debian:11
+    hostname: localhost
+    volumes:
+      - '.:/serverconfig'
+
+  # Ansible on Rocky Linux 8
+  # docker-compose run --rm rocky8 [args ...]
+  rocky8:
+    image: serverconfig:rocky8
+    build:
+      context: .
+      args:
+        BASE_IMAGE: rockylinux:8
     hostname: localhost
     volumes:
       - '.:/serverconfig'
@@ -55,7 +67,7 @@ services:
     build:
       context: .
       args:
-        BASE_IMAGE: quay.io/centos7/python-38-centos7
+        BASE_IMAGE: centos:7
     entrypoint: ['ansible-vault']
     environment:
       - ANSIBLE_VAULT_PASSWORD_FILE=vault.password

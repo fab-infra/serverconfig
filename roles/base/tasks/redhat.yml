@@ -1,6 +1,14 @@
 ---
 # Tasks for RedHat
 
+- name: Install EPEL and ELRepo keys
+  rpm_key:
+    key: "{{item}}"
+    state: present
+  loop:
+    - https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ansible_distribution_major_version}}
+    - https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
+
 - name: Install EPEL and ELRepo repositories
   yum:
     name:
@@ -21,7 +29,6 @@
       - lsof
       - netcat
       - nscd
-      - ntp
       - openssh-server
       - postfix
       - psmisc
@@ -33,34 +40,72 @@
       - unzip
       - vim-enhanced
       - wget
-      - yum-cron
-      - yum-plugin-elrepo
       - yum-utils
       - zip
     state: present
 
-- name: Configure yum-cron (update_cmd)
-  lineinfile:
-    path: /etc/yum/yum-cron.conf
-    regexp: "^update_cmd ="
-    line: "update_cmd = security"
+- name: Install packages (EL7)
+  yum:
+    name: yum-plugin-elrepo
+    state: present
+  when: ansible_distribution_major_version == '7'
 
-- name: Configure yum-cron (apply_updates)
-  lineinfile:
-    path: /etc/yum/yum-cron.conf
-    regexp: "^apply_updates ="
-    line: "apply_updates = yes"
+- name: Install and configure yum-cron (EL7)
+  block:
+    - name: Install yum-cron
+      yum:
+        name: yum-cron
+        state: present
+    - name: Configure yum-cron (update_cmd)
+      lineinfile:
+        path: /etc/yum/yum-cron.conf
+        regexp: "^update_cmd ="
+        line: "update_cmd = security"
+    - name: Configure yum-cron (apply_updates)
+      lineinfile:
+        path: /etc/yum/yum-cron.conf
+        regexp: "^apply_updates ="
+        line: "apply_updates = yes"
+    - name: Disable yum-cron service
+      service:
+        name: yum-cron
+        enabled: false
+        state: stopped
+      when: "auto_update_enabled == false and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+    - name: Enable yum-cron service
+      service:
+        name: yum-cron
+        enabled: true
+        state: started
+      when: "auto_update_enabled == true and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+  when: ansible_distribution_major_version == '7'
 
-- name: Disable yum-cron service
-  service:
-    name: yum-cron
-    enabled: false
-    state: stopped
-  when: "auto_update_enabled == false and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
-
-- name: Enable yum-cron service
-  service:
-    name: yum-cron
-    enabled: true
-    state: started
-  when: "auto_update_enabled == true and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+- name: Install and configure dnf-automatic (EL8)
+  block:
+    - name: Install dnf-automatic
+      yum:
+        name: dnf-automatic
+        state: present
+    - name: Configure dnf-automatic (upgrade_type)
+      lineinfile:
+        path: /etc/dnf/automatic.conf
+        regexp: "^upgrade_type ="
+        line: "upgrade_type = security"
+    - name: Configure dnf-automatic (apply_updates)
+      lineinfile:
+        path: /etc/dnf/automatic.conf
+        regexp: "^apply_updates ="
+        line: "apply_updates = yes"
+    - name: Disable dnf-automatic timer
+      service:
+        name: dnf-automatic.timer
+        enabled: false
+        state: stopped
+      when: "auto_update_enabled == false and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+    - name: Enable dnf-automatic timer
+      service:
+        name: dnf-automatic.timer
+        enabled: true
+        state: started
+      when: "auto_update_enabled == true and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+  when: ansible_distribution_major_version == '8'
