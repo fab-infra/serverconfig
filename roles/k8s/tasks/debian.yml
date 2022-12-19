@@ -50,5 +50,5 @@
   lineinfile:
     path: /etc/default/kubelet
     regexp: "^KUBELET_EXTRA_ARGS="
-    line: "KUBELET_EXTRA_ARGS=\"--runtime-request-timeout=15m --cgroup-driver=systemd -v=2 --cni-bin-dir=/opt/cni/bin,/usr/libexec/cni,/usr/lib/cni --hostname-override={{k8s_node_name}}\""
+    line: "KUBELET_EXTRA_ARGS=\"--runtime-request-timeout=15m --cgroup-driver=systemd -v=2 --hostname-override={{k8s_node_name}}\""
     create: true

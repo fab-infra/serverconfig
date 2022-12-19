@@ -241,15 +241,15 @@
   register: kubelet_config_file
 
 - name: Init cluster as master
-  shell: "kubeadm init --node-name={{k8s_node_name}} --cri-socket=/var/run/crio/crio.sock --pod-network-cidr={{k8s_pod_cidr}} --service-cidr={{k8s_service_cidr}} --control-plane-endpoint={{k8s_master_host}}:{{k8s_master_port}} --upload-certs"
+  shell: "kubeadm init --node-name={{k8s_node_name}} --cri-socket=unix:///var/run/crio/crio.sock --pod-network-cidr={{k8s_pod_cidr}} --service-cidr={{k8s_service_cidr}} --control-plane-endpoint={{k8s_master_host}}:{{k8s_master_port}} --upload-certs"
   when: kubelet_config_file.stat.exists == false and k8s_node_role == 'master'
 
 - name: Join cluster as control plane
-  shell: "kubeadm join --node-name={{k8s_node_name}} --cri-socket=/var/run/crio/crio.sock --token {{k8s_join_token}} {{k8s_master_host}}:{{k8s_master_port}} --discovery-token-ca-cert-hash sha256:{{k8s_cert_hash}} --control-plane --certificate-key {{k8s_cert_key}}"
+  shell: "kubeadm join --node-name={{k8s_node_name}} --cri-socket=unix:///var/run/crio/crio.sock --token {{k8s_join_token}} {{k8s_master_host}}:{{k8s_master_port}} --discovery-token-ca-cert-hash sha256:{{k8s_cert_hash}} --control-plane --certificate-key {{k8s_cert_key}}"
   when: kubelet_config_file.stat.exists == false and k8s_node_role == 'controlplane' and k8s_join_token|length > 0 and k8s_cert_hash|length > 0 and k8s_cert_key|length > 0
 
 - name: Join cluster as worker
-  shell: "kubeadm join --node-name={{k8s_node_name}} --cri-socket=/var/run/crio/crio.sock --token {{k8s_join_token}} {{k8s_master_host}}:{{k8s_master_port}} --discovery-token-ca-cert-hash sha256:{{k8s_cert_hash}}"
+  shell: "kubeadm join --node-name={{k8s_node_name}} --cri-socket=unix:///var/run/crio/crio.sock --token {{k8s_join_token}} {{k8s_master_host}}:{{k8s_master_port}} --discovery-token-ca-cert-hash sha256:{{k8s_cert_hash}}"
   when: kubelet_config_file.stat.exists == false and k8s_node_role == 'worker' and k8s_join_token|length > 0 and k8s_cert_hash|length > 0
 
 - name: Check if kubectl admin config exists
