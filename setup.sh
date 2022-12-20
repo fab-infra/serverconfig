@@ -10,6 +10,10 @@ VAULT_PASSWORD_FILE="$SCRIPT_DIR/vault.password"
 # Check env
 if ! command -v ansible-playbook >/dev/null 2>&1; then
 	echo "ERROR: ansible-playbook command not found, please make sure Ansible is installed"
+	echo
+	echo "You may try the following commands:"
+	echo "  python3 -m pip install --upgrade pip"
+	echo "  python3 -m pip install ansible"
 	exit 1
 fi
 
