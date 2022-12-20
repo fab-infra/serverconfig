@@ -20,11 +20,27 @@
     line: "IndividualCalls={{'yes' if firewall_individual_calls else 'no'}}"
   when: firewall_enabled
 
-- name: Create VPN zone
+- name: Stop firewalld service
+  service:
+    name: firewalld
+    enabled: false
+    state: stopped
+  when: "firewall_enabled == false and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+  ignore_errors: true
+
+- name: Start firewalld service
+  service:
+    name: firewalld
+    enabled: true
+    state: started
+  when: "firewall_enabled == true and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+
+- name: Add zone
   firewalld:
-    zone: vpn
+    zone: "{{item}}"
     permanent: yes
     state: present
+  loop: "{{firewall_zones}}"
   when: firewall_enabled
 
 - name: Add interface to zone
@@ -63,31 +79,16 @@
   loop: "{{firewall_sources}}"
   when: firewall_enabled
 
+- name: Reload firewalld config
+  shell: firewall-cmd --reload
+  when: "firewall_enabled == true and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+
 - name: Configure fail2ban
   template:
     src: jail.local.j2
     dest: /etc/fail2ban/jail.local
   when: firewall_enabled
   register: fail2ban_config
-
-- name: Stop firewalld service
-  service:
-    name: firewalld
-    enabled: false
-    state: stopped
-  when: "firewall_enabled == false and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
-  ignore_errors: true
-
-- name: Start firewalld service
-  service:
-    name: firewalld
-    enabled: true
-    state: started
-  when: "firewall_enabled == true and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
-
-- name: Reload firewalld config
-  shell: firewall-cmd --reload
-  when: "firewall_enabled == true and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
 
 - name: Stop fail2ban service
   service:

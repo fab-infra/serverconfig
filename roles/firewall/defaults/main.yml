@@ -11,3 +11,5 @@ firewall_services:
   - zone: vpn
     service: ssh
 firewall_sources: []
+firewall_zones:
+  - vpn
