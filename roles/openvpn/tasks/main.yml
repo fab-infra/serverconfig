@@ -42,6 +42,7 @@
     enabled: false
     state: stopped
   when: "openvpn_client_enabled == false and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+  ignore_errors: true
 
 - name: Start OpenVPN client service
   service:
@@ -56,6 +57,7 @@
     enabled: false
     state: stopped
   when: "openvpn_server_enabled == false and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+  ignore_errors: true
 
 - name: Start OpenVPN server service
   service:
