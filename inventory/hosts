@@ -11,10 +11,12 @@ rb04.srv.fabinfra.net
 [k8s]
 localhost
 ks11.srv.fabinfra.net
+ks13.srv.fabinfra.net
 sy03.srv.fabinfra.net
 
 [prod]
 ks11.srv.fabinfra.net
+ks13.srv.fabinfra.net
 sy03.srv.fabinfra.net
 
 [test]
