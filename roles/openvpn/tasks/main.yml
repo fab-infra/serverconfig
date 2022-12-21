@@ -16,7 +16,7 @@
 - name: Configure OpenVPN (client.conf)
   template:
     src: client.conf.j2
-    dest: /etc/openvpn/client.conf
+    dest: /etc/openvpn/client/client.conf
     mode: 0600
   register: openvpn_client_config
   when: openvpn_client_enabled
@@ -24,7 +24,7 @@
 - name: Configure OpenVPN (server.conf)
   template:
     src: server.conf.j2
-    dest: /etc/openvpn/server.conf
+    dest: /etc/openvpn/server/server.conf
     mode: 0600
   register: openvpn_server_config
   when: openvpn_server_enabled
@@ -32,13 +32,13 @@
 - name: Configure OpenVPN (ipp.txt)
   template:
     src: ipp.txt.j2
-    dest: /etc/openvpn/ipp.txt
+    dest: /etc/openvpn/server/ipp.txt
   register: openvpn_ipp_config
   when: openvpn_server_enabled
 
 - name: Stop OpenVPN client service
   service:
-    name: openvpn@client
+    name: openvpn-client@client
     enabled: false
     state: stopped
   when: "openvpn_client_enabled == false and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
@@ -46,14 +46,14 @@
 
 - name: Start OpenVPN client service
   service:
-    name: openvpn@client
+    name: openvpn-client@client
     enabled: true
     state: restarted
   when: "openvpn_client_enabled == true and openvpn_client_config.changed and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
 
 - name: Stop OpenVPN server service
   service:
-    name: openvpn@server
+    name: openvpn-server@server
     enabled: false
     state: stopped
   when: "openvpn_server_enabled == false and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
@@ -61,7 +61,7 @@
 
 - name: Start OpenVPN server service
   service:
-    name: openvpn@server
+    name: openvpn-server@server
     enabled: true
     state: restarted
   when: "openvpn_server_enabled == true and (openvpn_server_config.changed or openvpn_ipp_config.changed) and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
