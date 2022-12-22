@@ -1,4 +1,5 @@
 ---
-auto_update_enabled: false
-grafana_agent_enabled: false
+dns_search: ""
 server_env: test
+skip_services: true
+skip_sysctl: true

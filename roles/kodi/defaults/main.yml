@@ -2,3 +2,4 @@
 kodi_enabled: false
 kodi_group: kodi
 kodi_user: kodi
+skip_services: false

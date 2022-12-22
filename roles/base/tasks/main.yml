@@ -53,7 +53,7 @@
     path: /etc/resolv.conf
     regexp: "^search"
     line: "search {{dns_search}}"
-  when: "ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest"
+  when: "dns_search | length > 0"
 
 - name: Configure SSH server (Banner)
   lineinfile:
@@ -77,13 +77,13 @@
   sysctl:
     name: vm.max_map_count
     value: "{{sysctl_vm_max_map_count}}"
-  when: "ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest"
+  when: "skip_sysctl == false"
 
 - name: Configure sysctl (swappiness)
   sysctl:
     name: vm.swappiness
     value: "{{sysctl_vm_swappiness}}"
-  when: "ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest"
+  when: "skip_sysctl == false"
 
 - name: Process template directories
   file:

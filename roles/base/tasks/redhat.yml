@@ -71,14 +71,14 @@
         name: yum-cron
         enabled: false
         state: stopped
-      when: "auto_update_enabled == false and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+      when: "auto_update_enabled == false and skip_services == false"
       ignore_errors: true
     - name: Enable yum-cron service
       service:
         name: yum-cron
         enabled: true
         state: started
-      when: "auto_update_enabled == true and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+      when: "auto_update_enabled == true and skip_services == false"
   when: ansible_distribution_major_version == '7'
 
 - name: Install and configure dnf-automatic (EL8)
@@ -102,12 +102,12 @@
         name: dnf-automatic.timer
         enabled: false
         state: stopped
-      when: "auto_update_enabled == false and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+      when: "auto_update_enabled == false and skip_services == false"
       ignore_errors: true
     - name: Enable dnf-automatic timer
       service:
         name: dnf-automatic.timer
         enabled: true
         state: started
-      when: "auto_update_enabled == true and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+      when: "auto_update_enabled == true and skip_services == false"
   when: ansible_distribution_major_version == '8'

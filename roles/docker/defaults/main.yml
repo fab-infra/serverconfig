@@ -4,3 +4,4 @@ docker_compose_switch_version: "1.0.5"
 docker_compose_version: "2.12.2"
 docker_daemon_enabled: true
 docker_storage_dir: "/home/apps/docker"
+skip_services: false

@@ -185,11 +185,6 @@
 
 ### System
 
-- name: Load br_netfilter kernel module
-  modprobe:
-    name: br_netfilter
-  when: "ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest"
-
 - name: Configure sysctl
   sysctl:
     name: "{{item}}"
@@ -198,7 +193,7 @@
     - net.ipv4.ip_forward
     - net.bridge.bridge-nf-call-iptables
     - net.bridge.bridge-nf-call-ip6tables
-  when: "ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest"
+  when: "skip_sysctl == false"
 
 - name: Check if SELinux config exists
   stat:
@@ -218,7 +213,7 @@
   loop:
     - crio
     - kubelet
-  when: "ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest"
+  when: "skip_services == false"
 
 
 ### kubeadm & kubelet

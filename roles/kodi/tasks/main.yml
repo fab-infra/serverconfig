@@ -17,7 +17,7 @@
     name: kodi
     enabled: false
     state: stopped
-  when: "kodi_enabled == false and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+  when: "kodi_enabled == false and skip_services == false"
   ignore_errors: true
 
 - name: Start Kodi service
@@ -25,4 +25,4 @@
     name: kodi
     enabled: true
     state: restarted
-  when: "kodi_enabled == true and kodi_service.changed and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+  when: "kodi_enabled == true and kodi_service.changed and skip_services == false"

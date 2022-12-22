@@ -55,3 +55,4 @@ openvpn_ca: |
 openvpn_cert: "{{vault_openvpn_cert}}"
 openvpn_key: "{{vault_openvpn_key}}"
 openvpn_dh: "{{vault_openvpn_dh}}"
+skip_services: false

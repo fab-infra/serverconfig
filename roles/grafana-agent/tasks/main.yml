@@ -24,11 +24,11 @@
     name: grafana-agent
     enabled: false
     state: stopped
-  when: "grafana_agent_enabled == false and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+  when: "grafana_agent_enabled == false and skip_services == false"
 
 - name: Start Grafana Agent service
   service:
     name: grafana-agent
     enabled: true
     state: restarted
-  when: "grafana_agent_enabled == true and grafana_agent_config.changed and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+  when: "grafana_agent_enabled == true and grafana_agent_config.changed and skip_services == false"

@@ -41,7 +41,7 @@
     name: openvpn-client@client
     enabled: false
     state: stopped
-  when: "openvpn_client_enabled == false and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+  when: "openvpn_client_enabled == false and skip_services == false"
   ignore_errors: true
 
 - name: Start OpenVPN client service
@@ -49,14 +49,14 @@
     name: openvpn-client@client
     enabled: true
     state: restarted
-  when: "openvpn_client_enabled == true and openvpn_client_config.changed and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+  when: "openvpn_client_enabled == true and openvpn_client_config.changed and skip_services == false"
 
 - name: Stop OpenVPN server service
   service:
     name: openvpn-server@server
     enabled: false
     state: stopped
-  when: "openvpn_server_enabled == false and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+  when: "openvpn_server_enabled == false and skip_services == false"
   ignore_errors: true
 
 - name: Start OpenVPN server service
@@ -64,4 +64,4 @@
     name: openvpn-server@server
     enabled: true
     state: restarted
-  when: "openvpn_server_enabled == true and (openvpn_server_config.changed or openvpn_ipp_config.changed) and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+  when: "openvpn_server_enabled == true and (openvpn_server_config.changed or openvpn_ipp_config.changed) and skip_services == false"

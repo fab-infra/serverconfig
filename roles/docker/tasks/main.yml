@@ -31,14 +31,14 @@
     name: docker
     enabled: false
     state: stopped
-  when: "docker_daemon_enabled == false and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+  when: "docker_daemon_enabled == false and skip_services == false"
 
 - name: Start Docker daemon
   service:
     name: docker
     enabled: true
     state: restarted
-  when: "docker_daemon_enabled == true and docker_daemon_config.changed and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+  when: "docker_daemon_enabled == true and docker_daemon_config.changed and skip_services == false"
 
 - name: Create Docker CLI plugins directory
   file:

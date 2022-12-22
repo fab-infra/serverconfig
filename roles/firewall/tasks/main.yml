@@ -25,7 +25,7 @@
     name: firewalld
     enabled: false
     state: stopped
-  when: "firewall_enabled == false and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+  when: "firewall_enabled == false and skip_services == false"
   ignore_errors: true
 
 - name: Start firewalld service
@@ -33,7 +33,7 @@
     name: firewalld
     enabled: true
     state: started
-  when: "firewall_enabled == true and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+  when: "firewall_enabled == true and skip_services == false"
 
 - name: Add zone
   firewalld:
@@ -81,7 +81,7 @@
 
 - name: Reload firewalld config
   shell: firewall-cmd --reload
-  when: "firewall_enabled == true and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+  when: "firewall_enabled == true and skip_services == false"
 
 - name: Configure fail2ban
   template:
@@ -95,7 +95,7 @@
     name: fail2ban
     enabled: false
     state: stopped
-  when: "firewall_enabled == false and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+  when: "firewall_enabled == false and skip_services == false"
   ignore_errors: true
 
 - name: Start fail2ban service
@@ -103,4 +103,4 @@
     name: fail2ban
     enabled: true
     state: restarted
-  when: "firewall_enabled == true and fail2ban_config.changed and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+  when: "firewall_enabled == true and fail2ban_config.changed and skip_services == false"
