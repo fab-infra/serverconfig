@@ -72,6 +72,7 @@
         enabled: false
         state: stopped
       when: "auto_update_enabled == false and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+      ignore_errors: true
     - name: Enable yum-cron service
       service:
         name: yum-cron
@@ -102,6 +103,7 @@
         enabled: false
         state: stopped
       when: "auto_update_enabled == false and (ansible_virtualization_tech_guest is not defined or 'container' not in ansible_virtualization_tech_guest)"
+      ignore_errors: true
     - name: Enable dnf-automatic timer
       service:
         name: dnf-automatic.timer
