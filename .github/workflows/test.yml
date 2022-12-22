@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Display facts
+        run: ansible -m setup localhost
       - name: Run tests
         run: |
           echo ${{ secrets.vault_password }} > vault.password
