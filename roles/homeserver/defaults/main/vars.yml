@@ -1,4 +1,5 @@
 ---
+cec_server_enabled: true
 dnscrypt_proxy_enabled: true
 homeassistant_enabled: true
 homebridge_enabled: true
