@@ -33,6 +33,7 @@ firewall_services:
 firewall_sources:
   - zone: trusted
     source: 192.168.0.0/16
+minidlna_enabled: false
 minidlna_media_dirs: A,/media/FAB-500GB/Musique et sons/Musique:V,/media/FAB-2TB/Videos/Films:V,/media/FAB-2TB/Videos/Series
 mounts:
   - path: /media/FAB-500GB
