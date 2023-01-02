@@ -295,4 +295,8 @@
 
 - name: Configure node labels
   shell: "kubectl label --overwrite nodes {{k8s_node_name}} {{k8s_node_labels}}"
-  when: kubectl_config_file.stat.exists == true
+  when: kubectl_config_file.stat.exists == true and k8s_node_labels|length > 0
+
+- name: Configure node taints
+  shell: "kubectl taint --overwrite nodes {{k8s_node_name}} {{k8s_node_taints}}"
+  when: kubectl_config_file.stat.exists == true and k8s_node_taints|length > 0
