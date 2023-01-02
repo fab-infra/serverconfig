@@ -162,7 +162,7 @@
   when: k9s_version_check.rc != 0 or k9s_version_check.stdout != k9s_version
 
 
-### Storage
+### Container tools
 
 - name: Create containers storage directory
   file:
@@ -182,8 +182,25 @@
     regexp: "^graphroot = "
     line: "graphroot = \"{{containers_storage_dir}}/graph\""
 
+- name: Configure containers policy
+  copy:
+    dest: /etc/containers/policy.json
+    content: "{\"default\":[{\"type\":\"insecureAcceptAnything\"}]}"
+  when: "skip_modprobe == false"
+
 
 ### System
+
+- name: Load br_netfilter kernel module
+  modprobe:
+    name: br_netfilter
+  when: "skip_modprobe == false"
+
+- name: Configure br_netfilter kernel module
+  copy:
+    dest: /etc/modules-load.d/br_netfilter.conf
+    content: "br_netfilter"
+  when: "skip_modprobe == false"
 
 - name: Configure sysctl
   sysctl:

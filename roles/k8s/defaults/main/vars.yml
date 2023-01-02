@@ -23,5 +23,6 @@ k8s_version: "1.24.9"
 k8s_version_minor: "1.24"
 k9s_checksum: "sha256:f774bb75045e361e17a4f267491c5ec66f41db7bffd996859ffb1465420af249"
 k9s_version: "0.26.7"
+skip_modprobe: false
 skip_services: false
 skip_sysctl: false

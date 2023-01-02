@@ -1,5 +1,6 @@
 ---
 dns_search: ""
 server_env: test
+skip_modprobe: true
 skip_services: true
 skip_sysctl: true
