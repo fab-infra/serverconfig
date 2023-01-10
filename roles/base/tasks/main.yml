@@ -73,13 +73,19 @@
     user: root
   loop: "{{root_authorized_keys}}"
 
-- name: Configure sysctl (max_map_count)
+- name: Configure sysctl (fs.inotify.max_user_instances)
+  sysctl:
+    name: fs.inotify.max_user_instances
+    value: "{{sysctl_fs_inotify_max_user_instances}}"
+  when: "skip_sysctl == false"
+
+- name: Configure sysctl (vm.max_map_count)
   sysctl:
     name: vm.max_map_count
     value: "{{sysctl_vm_max_map_count}}"
   when: "skip_sysctl == false"
 
-- name: Configure sysctl (swappiness)
+- name: Configure sysctl (vm.swappiness)
   sysctl:
     name: vm.swappiness
     value: "{{sysctl_vm_swappiness}}"

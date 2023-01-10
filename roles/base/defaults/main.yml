@@ -5,6 +5,7 @@ gai_prefer_ipv4: true
 mounts: []
 skip_services: false
 skip_sysctl: false
+sysctl_fs_inotify_max_user_instances: "8192"
 sysctl_vm_max_map_count: "262144"
 sysctl_vm_swappiness: "10"
 root_authorized_keys:
