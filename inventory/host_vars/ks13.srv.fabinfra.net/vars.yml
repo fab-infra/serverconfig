@@ -3,6 +3,6 @@ cloud_provider: ovh
 cloud_region: RBX
 cloud_zone: RBX5
 k8s_master_host: k8s-master.fabinfra.net
-k8s_node_labels: kubernetes-host= {{cloud_provider}}-host= domain-crespel-me=true domain-jediholo-net=true server-role-infra=true server-role-web=true topology.kubernetes.io/region={{cloud_region}} topology.kubernetes.io/zone={{cloud_zone}}
+k8s_node_labels: kubernetes-host= {{cloud_provider}}-host= domain-crespel-me=true domain-jediholo-net=true server-role-ftp=true server-role-infra=true server-role-jka=true server-role-vpn=true server-role-web=true topology.kubernetes.io/region={{cloud_region}} topology.kubernetes.io/zone={{cloud_zone}}
 k8s_node_role: controlplane
-openvpn_client_enabled: true
+openvpn_server_enabled: true
