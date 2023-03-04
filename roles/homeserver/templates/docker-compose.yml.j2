@@ -161,9 +161,9 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/Paris
-      - TRANSMISSION_WEB_HOME=/flood-for-transmission/
       - USER=${ADMIN_USER}
       - PASS=${ADMIN_PASSWORD}
+      - DOCKER_MODS=linuxserver/mods:transmission-floodui
     volumes:
       - transmission-config:/config
       - {{transmission_downloads_dir}}:/downloads
