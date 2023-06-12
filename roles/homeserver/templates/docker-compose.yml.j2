@@ -53,9 +53,9 @@ services:
 {% endif %}
 {% if homebridge_enabled %}
   # Homebridge
-  # https://github.com/oznu/docker-homebridge
+  # https://github.com/homebridge/docker-homebridge
   homebridge:
-    image: oznu/homebridge:latest
+    image: homebridge/homebridge:latest
     restart: unless-stopped
     network_mode: host
     environment:
