@@ -1,14 +1,46 @@
 integrations:
-  node_exporter:
-    enabled: true
-    relabel_configs:
-    - replacement: {{ansible_hostname}}
-      target_label: instance
   prometheus_remote_write:
   - basic_auth:
       password: {{grafana_cloud_api_key}}
       username: {{grafana_cloud_prometheus_username}}
     url: {{grafana_cloud_prometheus_url}}
+  agent:
+    enabled: true
+    relabel_configs:
+    - action: replace
+      source_labels:
+      - agent_hostname
+      target_label: instance
+    - action: replace
+      target_label: job
+      replacement: "integrations/agent-check"
+    metric_relabel_configs:
+    - action: keep
+      regex: (prometheus_target_.*|prometheus_sd_discovered_targets|agent_build.*|agent_wal_samples_appended_total|process_start_time_seconds)
+      source_labels:
+      - __name__
+  node_exporter:
+    enabled: true
+    # disable unused collectors
+    disable_collectors:
+      - ipvs #high cardinality on kubelet
+      - btrfs
+      - infiniband
+      - xfs
+      - zfs
+    # exclude dynamic interfaces
+    netclass_ignored_devices: "^(veth.*|cali.*|[a-f0-9]{15})$"
+    netdev_device_exclude: "^(veth.*|cali.*|[a-f0-9]{15})$"
+    # disable tmpfs
+    filesystem_fs_types_exclude: "^(autofs|binfmt_misc|bpf|cgroup2?|configfs|debugfs|devpts|devtmpfs|tmpfs|fusectl|hugetlbfs|iso9660|mqueue|nsfs|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|selinuxfs|squashfs|sysfs|tracefs)$"
+    # drop extensive scrape statistics
+    metric_relabel_configs:
+    - action: drop
+      regex: node_scrape_collector_.+
+      source_labels: [__name__]
+    relabel_configs:
+    - replacement: {{ansible_hostname}}
+      target_label: instance
 logs:
   configs:
   - clients:
@@ -22,21 +54,19 @@ logs:
     scrape_configs:
     - job_name: integrations/node_exporter_journal_scrape
       journal:
+        max_age: 24h
         labels:
           instance: {{ansible_hostname}}
           job: integrations/node_exporter
-        max_age: 24h
       relabel_configs:
-      - source_labels: ["__journal__systemd_unit"]
-        target_label: unit
-      - source_labels: ["__journal__boot_id"]
-        target_label: boot_id
-      - source_labels: ["__journal__transport"]
-        target_label: transport
-      - source_labels: ["__journal_priority_keyword"]
-        target_label: level
-    target_config:
-      sync_period: 10s
+      - source_labels: ['__journal__systemd_unit']
+        target_label: 'unit'
+      - source_labels: ['__journal__boot_id']
+        target_label: 'boot_id'
+      - source_labels: ['__journal__transport']
+        target_label: 'transport'
+      - source_labels: ['__journal_priority_keyword']
+        target_label: 'level'
 metrics:
   configs:
   - name: integrations
