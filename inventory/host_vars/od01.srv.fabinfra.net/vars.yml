@@ -33,6 +33,7 @@ firewall_services:
 firewall_sources:
   - zone: trusted
     source: 192.168.0.0/16
+homeassistant_enabled: false
 minidlna_enabled: false
 minidlna_media_dirs: A,/media/FAB-500GB/Musique et sons/Musique:V,/media/FAB-2TB/Videos/Films:V,/media/FAB-2TB/Videos/Series
 mounts:
@@ -52,5 +53,6 @@ openvpn_client_enabled: true
 samba_shares: FAB-500GB:/media/FAB-500GB,FAB-1TB:/media/FAB-1TB,FAB-2TB:/media/FAB-2TB
 sickchill_downloads_dir: /media/FAB-2TB/Downloads
 sickchill_tv_dir: /media/FAB-2TB/Videos/Series
+squid_enabled: false
 transmission_downloads_dir: /media/FAB-2TB/Downloads
 tvheadend_recordings_dir: /media/FAB-500GB/Videos/TV
