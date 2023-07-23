@@ -1,23 +1,19 @@
 ---
 # Tasks for Debian
 
-- name: Install Grafana Agent DEB package (x86_64)
-  apt:
-    deb: "{{grafana_agent_url}}/v{{grafana_agent_version}}/grafana-agent-{{grafana_agent_version}}-1.amd64.deb"
-    state: present
-  when: ansible_architecture == 'x86_64'
+- name: Install Grafana repository key
+  apt_key:
+    url: https://apt.grafana.com/gpg.key
 
-- name: Install Grafana Agent DEB package (aarch64)
-  apt:
-    deb: "{{grafana_agent_url}}/v{{grafana_agent_version}}/grafana-agent-{{grafana_agent_version}}-1.arm64.deb"
-    state: present
-  when: ansible_architecture == 'aarch64'
+- name: Install Grafana repository
+  apt_repository:
+    repo: deb https://apt.grafana.com stable main
+    filename: grafana
 
-- name: Install Grafana Agent DEB package (armv7l)
+- name: Install Grafana Agent
   apt:
-    deb: "{{grafana_agent_url}}/v{{grafana_agent_version}}/grafana-agent-{{grafana_agent_version}}-1.armv7.deb"
+    name: grafana-agent={{grafana_agent_version}}-1
     state: present
-  when: ansible_architecture == 'armv7l'
 
 - name: Configure Grafana Agent service
   lineinfile:
