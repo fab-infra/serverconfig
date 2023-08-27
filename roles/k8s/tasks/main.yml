@@ -162,6 +162,40 @@
   when: k9s_version_check.rc != 0 or k9s_version_check.stdout != k9s_version
 
 
+### kubectx
+
+- name: Check kubectx version
+  shell: kubectx --version
+  register: kubectx_version_check
+  ignore_errors: true
+  changed_when: false
+
+- name: Install kubectx
+  get_url:
+    url: https://github.com/ahmetb/kubectx/releases/download/v{{kubectx_version}}/kubectx
+    dest: /usr/local/bin/kubectx
+    mode: 0755
+    checksum: "{{kubectx_checksum}}"
+  when: kubectx_version_check.rc != 0 or kubectx_version_check.stdout != kubectx_version
+
+
+### kubens
+
+- name: Check kubens version
+  shell: kubens --version
+  register: kubens_version_check
+  ignore_errors: true
+  changed_when: false
+
+- name: Install kubens
+  get_url:
+    url: https://github.com/ahmetb/kubectx/releases/download/v{{kubens_version}}/kubens
+    dest: /usr/local/bin/kubens
+    mode: 0755
+    checksum: "{{kubens_checksum}}"
+  when: kubens_version_check.rc != 0 or kubens_version_check.stdout != kubens_version
+
+
 ### Container tools
 
 - name: Create containers storage directory

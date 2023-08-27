@@ -24,6 +24,10 @@ k8s_version: "1.27.4"
 k8s_version_minor: "1.27"
 k9s_checksum: "sha256:e507831ebd5f9b8c0380f212669f352c6e34cb760c916b498babae8be83c4392"
 k9s_version: "0.27.4"
+kubectx_version: "0.9.5"
+kubectx_checksum: "sha256:e887e4e2b3dd4c94d0ecdb84270fb4fac2e65c4d5b0ee461e688fb8089fd4900"
+kubens_version: "0.9.5"
+kubens_checksum: "sha256:509c97c0882e688ae8fad8aa13524cc7c003e4883db447a905bdb47d64c13bdc"
 skip_modprobe: false
 skip_services: false
 skip_sysctl: false
