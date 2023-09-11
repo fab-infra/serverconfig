@@ -21,6 +21,7 @@ The playbook can be tested in an isolated environment with [Docker](https://docs
 ./test.sh debian11
 ./test.sh rocky8
 ./test.sh ubuntu2004
+./test.sh ubuntu2204
 ```
 
 Tests are run against a `localhost` host in the `test` group.

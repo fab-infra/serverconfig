@@ -60,6 +60,18 @@ services:
     volumes:
       - '.:/serverconfig'
 
+  # Ansible on Ubuntu 22.04
+  # docker-compose run --rm ubuntu2204 [args ...]
+  ubuntu2204:
+    image: serverconfig:ubuntu2204
+    build:
+      context: .
+      args:
+        BASE_IMAGE: ubuntu:22.04
+    hostname: localhost
+    volumes:
+      - '.:/serverconfig'
+
   # Ansible Vault utility
   # docker-compose run --rm vault <action> [args ...]
   vault:
