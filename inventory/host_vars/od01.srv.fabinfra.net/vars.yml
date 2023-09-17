@@ -1,38 +1,5 @@
 ---
-firewall_individual_calls: true
-firewall_ports:
-  - zone: vpn
-    port: 8080/tcp
-  - zone: vpn
-    port: 8081/tcp
-  - zone: vpn
-    port: 8123/tcp
-  - zone: vpn
-    port: 8581/tcp
-  - zone: vpn
-    port: 9080/tcp
-  - zone: vpn
-    port: 9090/tcp
-  - zone: vpn
-    port: 9091/tcp
-  - zone: vpn
-    port: 9981/tcp
-firewall_services:
-  - zone: public
-    service: http
-  - zone: public
-    service: https
-  - zone: public
-    service: ssh
-  - zone: vpn
-    service: http
-  - zone: vpn
-    service: https
-  - zone: vpn
-    service: ssh
-firewall_sources:
-  - zone: trusted
-    source: 192.168.0.0/16
+firewall_enabled: false
 homeassistant_enabled: false
 minidlna_enabled: false
 minidlna_media_dirs: A,/media/FAB-500GB/Musique et sons/Musique:V,/media/FAB-2TB/Videos/Films:V,/media/FAB-2TB/Videos/Series
