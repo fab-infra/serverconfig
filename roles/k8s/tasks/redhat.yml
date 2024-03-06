@@ -19,12 +19,14 @@
   yum_repository:
     name: kubernetes
     description: kubernetes
-    baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-$basearch
-    gpgkey: https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+    baseurl: https://pkgs.k8s.io/core:/stable:/v{{k8s_version_minor}}/rpm/
+    gpgkey: https://pkgs.k8s.io/core:/stable:/v{{k8s_version_minor}}/rpm/repodata/repomd.xml.key
     exclude:
+      - cri-tools
       - kubeadm
       - kubectl
       - kubelet
+      - kubernetes-cni
 
 - name: Install packages
   yum:
@@ -32,9 +34,9 @@
       - cri-o
       - cri-tools
       - kmod-wireguard
-      - kubeadm-{{k8s_version}}-0
-      - kubectl-{{k8s_version}}-0
-      - kubelet-{{k8s_version}}-0
+      - kubeadm-{{k8s_version}}
+      - kubectl-{{k8s_version}}
+      - kubelet-{{k8s_version}}
       - wireguard-tools
     disable_excludes: kubernetes
     state: present

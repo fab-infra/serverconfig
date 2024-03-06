@@ -15,7 +15,7 @@
   apt_key:
     url: "{{item}}"
   loop:
-    - https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    - https://pkgs.k8s.io/core:/stable:/v{{k8s_version_minor}}/deb/Release.key
     - https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/{{k8s_repo_distribution}}/Release.key
     - https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/{{k8s_version_minor}}/{{k8s_repo_distribution}}/Release.key
 
@@ -31,7 +31,7 @@
 
 - name: Install Kubernetes repository
   apt_repository:
-    repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+    repo: deb https://pkgs.k8s.io/core:/stable:/v{{k8s_version_minor}}/deb/ /
     filename: kubernetes
 
 - name: Install packages
@@ -39,9 +39,9 @@
     name:
       - cri-o
       - cri-tools
-      - kubeadm={{k8s_version}}-00
-      - kubectl={{k8s_version}}-00
-      - kubelet={{k8s_version}}-00
+      - kubeadm={{k8s_version}}-*
+      - kubectl={{k8s_version}}-*
+      - kubelet={{k8s_version}}-*
       - wireguard
       - wireguard-dkms
       - wireguard-tools
