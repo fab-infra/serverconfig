@@ -204,17 +204,10 @@
     mode: 0700
     state: directory
 
-- name: Configure containers storage (runroot)
-  lineinfile:
-    path: /etc/containers/storage.conf
-    regexp: "^runroot = "
-    line: "runroot = \"{{containers_storage_dir}}/run\""
-
-- name: Configure containers storage (graphroot)
-  lineinfile:
-    path: /etc/containers/storage.conf
-    regexp: "^graphroot = "
-    line: "graphroot = \"{{containers_storage_dir}}/graph\""
+- name: Configure containers storage
+  template:
+    src: crio.conf.j2
+    dest: "/etc/crio/crio.conf.d/99-custom.conf"
 
 - name: Configure containers policy
   copy:

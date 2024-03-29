@@ -1,42 +1,9 @@
 ---
 # Tasks for Debian
 
-- name: Install iptables (Debian 10)
-  apt:
-    name:
-      - iptables
-    default_release: buster-backports
-    state: present
-  when: ansible_distribution_major_version == '10'
-
-- name: Install iptables (Debian 11+)
-  apt:
-    name:
-      - iptables
-    state: present
-  when: ansible_distribution_major_version != '10'
-
-- name: Use iptables-legacy
-  shell: update-alternatives --set iptables /usr/sbin/iptables-legacy
-  when: ansible_distribution_major_version == '10'
-
-- name: Use ip6tables-legacy
-  shell: update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
-  when: ansible_distribution_major_version == '10'
-
-- name: Install packages (Debian 10)
-  apt:
-    name:
-      - fail2ban
-      - firewalld
-    default_release: buster-backports
-    state: present
-  when: ansible_distribution_major_version == '10'
-
-- name: Install packages (Debian 11+)
+- name: Install packages
   apt:
     name:
       - fail2ban
       - firewalld
     state: present
-  when: ansible_distribution_major_version != '10'

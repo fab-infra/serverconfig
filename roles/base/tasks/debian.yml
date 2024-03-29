@@ -1,17 +1,6 @@
 ---
 # Tasks for Debian
 
-- name: Install buster-backports repository key
-  apt_key:
-    url: https://ftp-master.debian.org/keys/archive-key-10.asc
-  when: ansible_distribution_major_version == '10'
-
-- name: Install buster-backports repository
-  apt_repository:
-    repo: deb http://deb.debian.org/debian buster-backports main contrib non-free
-    filename: backports
-  when: ansible_distribution_major_version == '10'
-
 - name: Install bullseye-backports repository key
   apt_key:
     url: https://ftp-master.debian.org/keys/archive-key-11.asc
@@ -34,7 +23,7 @@
       - iotop
       - jq
       - lsof
-      - netcat
+      - netcat-openbsd
       - nscd
       - ntp
       - openssh-server

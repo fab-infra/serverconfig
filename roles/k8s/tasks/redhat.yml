@@ -21,13 +21,17 @@
     baseurl: https://pkgs.k8s.io/addons:/cri-o:/stable:/v{{k8s_version_minor}}/rpm/
     gpgkey: https://pkgs.k8s.io/addons:/cri-o:/stable:/v{{k8s_version_minor}}/rpm/repodata/repomd.xml.key
 
+- name: Install WireGuard kernel module
+  yum:
+    name: kmod-wireguard
+    state: present
+  when: ansible_distribution_major_version == '8'
+
 - name: Install packages
   yum:
     name:
-      - containers-common
       - cri-o
       - cri-tools
-      - kmod-wireguard
       - kubeadm-{{k8s_version}}
       - kubectl-{{k8s_version}}
       - kubelet-{{k8s_version}}

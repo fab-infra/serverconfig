@@ -21,6 +21,7 @@
     name:
       - bash-completion
       - curl
+      - dnf-automatic
       - git
       - htop
       - iftop
@@ -42,72 +43,32 @@
       - wget
       - yum-utils
       - zip
+    skip_broken: true
     state: present
 
-- name: Install packages (EL7)
-  yum:
-    name: yum-plugin-elrepo
-    state: present
-  when: ansible_distribution_major_version == '7'
+- name: Configure dnf-automatic (upgrade_type)
+  lineinfile:
+    path: /etc/dnf/automatic.conf
+    regexp: "^upgrade_type ="
+    line: "upgrade_type = security"
 
-- name: Install and configure yum-cron (EL7)
-  block:
-    - name: Install yum-cron
-      yum:
-        name: yum-cron
-        state: present
-    - name: Configure yum-cron (update_cmd)
-      lineinfile:
-        path: /etc/yum/yum-cron.conf
-        regexp: "^update_cmd ="
-        line: "update_cmd = security"
-    - name: Configure yum-cron (apply_updates)
-      lineinfile:
-        path: /etc/yum/yum-cron.conf
-        regexp: "^apply_updates ="
-        line: "apply_updates = yes"
-    - name: Disable yum-cron service
-      service:
-        name: yum-cron
-        enabled: false
-        state: stopped
-      when: "auto_update_enabled == false and skip_services == false"
-      ignore_errors: true
-    - name: Enable yum-cron service
-      service:
-        name: yum-cron
-        enabled: true
-        state: started
-      when: "auto_update_enabled == true and skip_services == false"
-  when: ansible_distribution_major_version == '7'
+- name: Configure dnf-automatic (apply_updates)
+  lineinfile:
+    path: /etc/dnf/automatic.conf
+    regexp: "^apply_updates ="
+    line: "apply_updates = yes"
 
-- name: Install and configure dnf-automatic (EL8)
-  block:
-    - name: Install dnf-automatic
-      yum:
-        name: dnf-automatic
-        state: present
-    - name: Configure dnf-automatic (upgrade_type)
-      lineinfile:
-        path: /etc/dnf/automatic.conf
-        regexp: "^upgrade_type ="
-        line: "upgrade_type = security"
-    - name: Configure dnf-automatic (apply_updates)
-      lineinfile:
-        path: /etc/dnf/automatic.conf
-        regexp: "^apply_updates ="
-        line: "apply_updates = yes"
-    - name: Disable dnf-automatic timer
-      service:
-        name: dnf-automatic.timer
-        enabled: false
-        state: stopped
-      when: "auto_update_enabled == false and skip_services == false"
-      ignore_errors: true
-    - name: Enable dnf-automatic timer
-      service:
-        name: dnf-automatic.timer
-        enabled: true
-        state: started
-      when: "auto_update_enabled == true and skip_services == false"
-  when: ansible_distribution_major_version == '8'
+- name: Disable dnf-automatic timer
+  service:
+    name: dnf-automatic.timer
+    enabled: false
+    state: stopped
+  when: "auto_update_enabled == false and skip_services == false"
+  ignore_errors: true
+
+- name: Enable dnf-automatic timer
+  service:
+    name: dnf-automatic.timer
+    enabled: true
+    state: started
+  when: "auto_update_enabled == true and skip_services == false"
