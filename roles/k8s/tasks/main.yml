@@ -220,7 +220,6 @@
   copy:
     dest: /etc/containers/policy.json
     content: "{\"default\":[{\"type\":\"insecureAcceptAnything\"}]}"
-  when: "skip_modprobe == false"
 
 
 ### System
