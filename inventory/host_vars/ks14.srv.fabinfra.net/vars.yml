@@ -2,7 +2,27 @@
 cloud_provider: ovh
 cloud_region: eu-west-rbx
 cloud_zone: eu-west-rbx-a
+extra_groups:
+  - name: crespel.me
+    gid: 1004
+  - name: jediholo.net
+    gid: 1005
+  - name: jka
+    gid: 1100
+extra_users:
+  - name: crespel.me
+    uid: 1003
+    group: crespel.me
+    home: /home/domains/crespel.me
+  - name: jediholo.net
+    uid: 1004
+    group: jediholo.net
+    home: /home/domains/jediholo.net
+  - name: jka
+    uid: 1100
+    group: jka
+    home: /home/jka
 k8s_master_host: k8s-master.fabinfra.net
-k8s_node_labels: kubernetes-host= {{cloud_provider}}-host= topology.kubernetes.io/region={{cloud_region}} topology.kubernetes.io/zone={{cloud_zone}}
+k8s_node_labels: kubernetes-host= {{cloud_provider}}-host= server-role-ftp=true server-role-infra=true server-role-vpn=true server-role-web=true topology.kubernetes.io/region={{cloud_region}} topology.kubernetes.io/zone={{cloud_zone}}
 k8s_node_role: controlplane
 openvpn_server_enabled: true
