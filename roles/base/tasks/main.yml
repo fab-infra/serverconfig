@@ -34,6 +34,20 @@
     home: /home/users/admin
     comment: "System Admin"
 
+- name: Create extra groups
+  group:
+    name: "{{item.name}}"
+    gid: "{{item.gid}}"
+  loop: "{{extra_groups}}"
+
+- name: Create extra users
+  user:
+    name: "{{item.name}}"
+    uid: "{{item.uid}}"
+    group: "{{item.group}}"
+    home: "{{item.home}}"
+  loop: "{{extra_users}}"
+
 - name: Check if NetworkManager config directory exists
   stat:
     path: /etc/NetworkManager/conf.d
