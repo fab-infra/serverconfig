@@ -1,8 +1,0 @@
----
-cloud_provider: ovh
-cloud_region: eu-west-rbx
-cloud_zone: eu-west-rbx-a
-k8s_master_host: k8s-master.fabinfra.net
-k8s_node_labels: kubernetes-host= {{cloud_provider}}-host= server-role-web=true topology.kubernetes.io/region={{cloud_region}} topology.kubernetes.io/zone={{cloud_zone}}
-k8s_node_role: controlplane
-openvpn_server_enabled: true
