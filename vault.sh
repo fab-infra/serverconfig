@@ -5,11 +5,23 @@
 
 # Script variables
 SCRIPT_DIR=`dirname "$0"`
+VAULT_PASSWORD_FILE="$SCRIPT_DIR/vault.password"
 
-# Run container
-pushd "$SCRIPT_DIR" >/dev/null 2>&1
-docker-compose run --rm vault "$@"
-RET=$?
-popd >/dev/null 2>&1
+# Check env
+if ! command -v ansible-vault >/dev/null 2>&1; then
+	echo "ERROR: ansible-vault command not found, please make sure Ansible is installed"
+	echo
+	echo "You may try the following commands:"
+	echo "  python3 -m pip install --upgrade pip"
+	echo "  python3 -m pip install ansible"
+	exit 1
+fi
 
-exit $RET
+# Load vault password
+if [ -e "$VAULT_PASSWORD_FILE" ]; then
+	chmod a-x "$VAULT_PASSWORD_FILE"
+	export ANSIBLE_VAULT_PASSWORD_FILE=`realpath "$VAULT_PASSWORD_FILE"`
+fi
+
+# Run vault
+ansible-vault "$@"

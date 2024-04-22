@@ -59,17 +59,3 @@ services:
     hostname: localhost
     volumes:
       - '.:/serverconfig'
-
-  # Ansible Vault utility
-  # docker-compose run --rm vault <action> [args ...]
-  vault:
-    image: serverconfig:rocky8
-    build:
-      context: .
-      args:
-        BASE_IMAGE: rockylinux:8
-    entrypoint: ['ansible-vault']
-    environment:
-      - ANSIBLE_VAULT_PASSWORD_FILE=vault.password
-    volumes:
-      - '.:/serverconfig'
