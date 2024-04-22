@@ -1,7 +1,6 @@
-version: "3.5"
 services:
   # Ansible on Debian 11
-  # docker-compose run --rm debian11 [args ...]
+  # docker compose run --rm debian11 [args ...]
   debian11:
     image: serverconfig:debian11
     build:
@@ -13,7 +12,7 @@ services:
       - '.:/serverconfig'
 
   # Ansible on Debian 12
-  # docker-compose run --rm debian12 [args ...]
+  # docker compose run --rm debian12 [args ...]
   debian12:
     image: serverconfig:debian12
     build:
@@ -25,7 +24,7 @@ services:
       - '.:/serverconfig'
 
   # Ansible on Rocky Linux 8
-  # docker-compose run --rm rocky8 [args ...]
+  # docker compose run --rm rocky8 [args ...]
   rocky8:
     image: serverconfig:rocky8
     build:
@@ -37,7 +36,7 @@ services:
       - '.:/serverconfig'
 
   # Ansible on Rocky Linux 9
-  # docker-compose run --rm rocky9 [args ...]
+  # docker compose run --rm rocky9 [args ...]
   rocky9:
     image: serverconfig:rocky9
     build:
@@ -49,7 +48,7 @@ services:
       - '.:/serverconfig'
 
   # Ansible on Ubuntu 22.04
-  # docker-compose run --rm ubuntu2204 [args ...]
+  # docker compose run --rm ubuntu2204 [args ...]
   ubuntu2204:
     image: serverconfig:ubuntu2204
     build:

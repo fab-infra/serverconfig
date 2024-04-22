@@ -39,5 +39,5 @@
 
 - name: Start containers
   shell:
-    cmd: docker-compose up -d --remove-orphans
+    cmd: docker compose up -d --remove-orphans
     chdir: "{{homeserver_root_dir}}"
