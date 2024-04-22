@@ -1,0 +1,171 @@
+receivers:
+  hostmetrics:
+    # https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/hostmetricsreceiver
+    collection_interval: 30s
+    scrapers:
+      cpu:
+        metrics:
+          system.cpu.logical.count:
+            enabled: true
+          system.cpu.utilization:
+            enabled: true
+      disk:
+      filesystem:
+        exclude_fs_types:
+          fs_types: [autofs, binfmt_misc, bpf, cgroup2, configfs, debugfs, devpts, devtmpfs, fusectl, hugetlbfs, iso9660, mqueue, nsfs, overlay, proc, procfs, pstore, rpc_pipefs, securityfs, selinuxfs, squashfs, sysfs, tracefs]
+          match_type: strict
+        exclude_mount_points:
+          mount_points: [/dev/*, /proc/*, /sys/*, /run/k3s/containerd/*, /var/lib/docker/*, /var/lib/kubelet/*, /snap/*, /home/apps/containers/*, /home/apps/docker/*]
+          match_type: regexp
+        metrics:
+          system.filesystem.utilization:
+            enabled: true
+      load:
+      memory:
+        metrics:
+          system.memory.limit:
+            enabled: true
+          system.memory.utilization:
+            enabled: true
+      network:
+        exclude:
+          interfaces: ["cali.*", "veth.*"]
+          match_type: regexp
+      paging:
+        metrics:
+          system.paging.utilization:
+            enabled: true
+      processes:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 127.0.0.1:4317
+      http:
+        endpoint: 127.0.0.1:4318
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: opentelemetry-collector
+          scrape_interval: 30s
+          static_configs:
+            - targets: ["127.0.0.1:8888"]
+
+processors:
+  batch:
+  memory_limiter:
+    check_interval: 5s
+    limit_mib: 256
+    spike_limit_percentage: 25
+  resourcedetection:
+    # https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/resourcedetectionprocessor
+    detectors: ["system"]
+    override: false
+  transform/drop_unneeded_resource_attributes:
+    # https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/transformprocessor
+    error_mode: ignore
+    log_statements:
+      - context: resource
+        statements:
+          - delete_key(attributes, "os.description")
+          - delete_key(attributes, "os.type")
+          - delete_key(attributes, "process.command_args")
+          - delete_key(attributes, "process.executable.path")
+          - delete_key(attributes, "process.pid")
+          - delete_key(attributes, "process.runtime.description")
+          - delete_key(attributes, "process.runtime.name")
+          - delete_key(attributes, "process.runtime.version")
+    metric_statements:
+      - context: resource
+        statements:
+          - delete_key(attributes, "os.description")
+          - delete_key(attributes, "os.type")
+          - delete_key(attributes, "process.command_args")
+          - delete_key(attributes, "process.executable.path")
+          - delete_key(attributes, "process.pid")
+          - delete_key(attributes, "process.runtime.description")
+          - delete_key(attributes, "process.runtime.name")
+          - delete_key(attributes, "process.runtime.version")
+    trace_statements:
+      - context: resource
+        statements:
+          - delete_key(attributes, "os.description")
+          - delete_key(attributes, "os.type")
+          - delete_key(attributes, "process.command_args")
+          - delete_key(attributes, "process.executable.path")
+          - delete_key(attributes, "process.pid")
+          - delete_key(attributes, "process.runtime.description")
+          - delete_key(attributes, "process.runtime.name")
+          - delete_key(attributes, "process.runtime.version")
+  transform/add_resource_attributes_as_metric_attributes:
+    # https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/transformprocessor
+    error_mode: ignore
+    metric_statements:
+      - context: datapoint
+        statements:
+          - set(attributes["deployment.environment"], resource.attributes["deployment.environment"])
+          - set(attributes["service.version"], resource.attributes["service.version"])
+          - set(attributes["host.name"], resource.attributes["host.name"])
+  transform/add_loki_attribute_hints:
+    # https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/transformprocessor
+    log_statements:
+      - context: resource
+        statements:
+          - set(attributes["loki.resource.labels"], "host.name")
+
+exporters:
+  otlp/grafana_cloud_traces:
+    # https://github.com/open-telemetry/opentelemetry-collector/tree/main/exporter/otlpexporter
+    endpoint: "{{grafana_cloud_tempo_endpoint}}"
+    auth:
+      authenticator: basicauth/grafana_cloud_traces
+  loki/grafana_cloud_logs:
+    # https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/exporter/lokiexporter
+    endpoint: "{{grafana_cloud_loki_url}}"
+    auth:
+      authenticator: basicauth/grafana_cloud_logs
+  prometheusremotewrite/grafana_cloud_metrics:
+    # https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/exporter/prometheusremotewriteexporter
+    endpoint: "{{grafana_cloud_prometheus_url}}"
+    add_metric_suffixes: false
+    auth:
+      authenticator: basicauth/grafana_cloud_metrics
+
+extensions:
+  # https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/extension/basicauthextension
+  basicauth/grafana_cloud_traces:
+    client_auth:
+      username: "{{grafana_cloud_tempo_username}}"
+      password: "{{grafana_cloud_api_key}}"
+  basicauth/grafana_cloud_metrics:
+    client_auth:
+      username: "{{grafana_cloud_prometheus_username}}"
+      password: "{{grafana_cloud_api_key}}"
+  basicauth/grafana_cloud_logs:
+    client_auth:
+      username: "{{grafana_cloud_loki_username}}"
+      password: "{{grafana_cloud_api_key}}"
+  health_check:
+    endpoint: 127.0.0.1:13133
+
+service:
+  extensions:
+    - health_check
+    - basicauth/grafana_cloud_traces
+    - basicauth/grafana_cloud_metrics
+    - basicauth/grafana_cloud_logs
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, resourcedetection, transform/drop_unneeded_resource_attributes, batch]
+      exporters: [otlp/grafana_cloud_traces]
+    metrics:
+      receivers: [otlp, prometheus, hostmetrics]
+      processors: [memory_limiter, resourcedetection, transform/drop_unneeded_resource_attributes, transform/add_resource_attributes_as_metric_attributes, batch]
+      exporters: [prometheusremotewrite/grafana_cloud_metrics]
+    logs:
+      receivers: [otlp]
+      processors: [memory_limiter, resourcedetection, transform/drop_unneeded_resource_attributes, transform/add_loki_attribute_hints, batch]
+      exporters: [loki/grafana_cloud_logs]
+  telemetry:
+    metrics:
+      address: 127.0.0.1:8888

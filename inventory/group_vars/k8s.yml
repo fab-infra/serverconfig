@@ -1,2 +1,4 @@
 ---
 firewall_enabled: false
+grafana_agent_enabled: false
+otelcol_enabled: false

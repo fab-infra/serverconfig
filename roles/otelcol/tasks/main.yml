@@ -1,0 +1,33 @@
+---
+# Main tasks
+
+- name: Setup RedHat
+  include_tasks: redhat.yml
+  when: ansible_os_family|lower == 'redhat'
+
+- name: Setup Debian
+  include_tasks: debian.yml
+  when: ansible_os_family|lower == 'debian'
+
+- name: Configure OpenTelemetry Collector
+  template:
+    src: config.yaml.j2
+    dest: /etc/otelcol-contrib/config.yaml
+    mode: 0640
+    owner: otelcol-contrib
+    group: otelcol-contrib
+  register: otelcol_config
+
+- name: Stop OpenTelemetry Collector service
+  service:
+    name: otelcol-contrib
+    enabled: false
+    state: stopped
+  when: "otelcol_enabled == false and skip_services == false"
+
+- name: Start OpenTelemetry Collector service
+  service:
+    name: otelcol-contrib
+    enabled: true
+    state: restarted
+  when: "otelcol_enabled == true and otelcol_config.changed and skip_services == false"
