@@ -9,6 +9,11 @@
   include_tasks: debian.yml
   when: ansible_os_family|lower == 'debian'
 
+- name: Add OpenTelemetry Collector user to systemd-journal group
+  user:
+    name: otelcol-contrib
+    groups: [systemd-journal]
+
 - name: Configure OpenTelemetry Collector
   template:
     src: config.yaml.j2
