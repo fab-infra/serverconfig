@@ -59,11 +59,11 @@
   file:
     path: /etc/cron.daily/opensuse.org-online_update
     state: absent
-  when: auto_update_enabled == false
+  when: "auto_update_enabled == false"
 
 - name: Enable automatic online update
   file:
     path: /etc/cron.daily/opensuse.org-online_update
     src: /usr/lib/YaST2/bin/online_update
     state: link
-  when: auto_update_enabled == true
+  when: "auto_update_enabled == true"

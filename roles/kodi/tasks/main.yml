@@ -3,13 +3,13 @@
 
 - name: Setup Debian
   include_tasks: debian.yml
-  when: kodi_enabled and ansible_os_family|lower == 'debian'
+  when: "kodi_enabled == true and ansible_os_family|lower == 'debian'"
 
 - name: Configure service
   template:
     src: kodi.service.j2
     dest: /etc/systemd/system/kodi.service
-  when: kodi_enabled
+  when: "kodi_enabled == true"
   register: kodi_service
 
 - name: Stop Kodi service

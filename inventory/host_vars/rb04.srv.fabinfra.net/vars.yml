@@ -1,7 +1,6 @@
 ---
 docker_daemon_enabled: false
 firewall_enabled: false
-kodi_enabled: true
 kodi_group: pi
 kodi_user: pi
 openvpn_client_enabled: true

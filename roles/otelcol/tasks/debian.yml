@@ -5,16 +5,16 @@
   apt:
     deb: "{{otelcol_url}}/v{{otelcol_version}}/otelcol-contrib_{{otelcol_version}}_linux_amd64.deb"
     state: present
-  when: ansible_architecture == 'x86_64'
+  when: "ansible_architecture == 'x86_64'"
 
 - name: Install OpenTelemetry Collector (aarch64)
   apt:
     deb: "{{otelcol_url}}/v{{otelcol_version}}/otelcol-contrib_{{otelcol_version}}_linux_arm64.deb"
     state: present
-  when: ansible_architecture == 'aarch64'
+  when: "ansible_architecture == 'aarch64'"
 
 - name: Install OpenTelemetry Collector (armv7l)
   apt:
     deb: "{{otelcol_url}}/v{{otelcol_version}}/otelcol-contrib_{{otelcol_version}}_linux_armv7.deb"
     state: present
-  when: ansible_architecture == 'armv7l'
+  when: "ansible_architecture == 'armv7l'"

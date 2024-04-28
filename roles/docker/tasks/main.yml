@@ -3,11 +3,11 @@
 
 - name: Setup RedHat
   include_tasks: redhat.yml
-  when: ansible_os_family|lower == 'redhat'
+  when: "ansible_os_family|lower == 'redhat'"
 
 - name: Setup Debian
   include_tasks: debian.yml
-  when: ansible_os_family|lower == 'debian'
+  when: "ansible_os_family|lower == 'debian'"
 
 - name: Create Docker storage directory
   file:
@@ -32,6 +32,7 @@
     enabled: false
     state: stopped
   when: "docker_daemon_enabled == false and skip_services == false"
+  ignore_errors: true
 
 - name: Start Docker daemon
   service:
@@ -53,53 +54,53 @@
     url: https://github.com/docker/compose/releases/download/v{{docker_compose_version}}/docker-compose-linux-x86_64
     dest: /usr/local/libexec/docker/cli-plugins/docker-compose
     mode: 0755
-  when: ansible_architecture == 'x86_64'
+  when: "ansible_architecture == 'x86_64'"
 
 - name: Install Docker Compose v2 (aarch64)
   get_url:
     url: https://github.com/docker/compose/releases/download/v{{docker_compose_version}}/docker-compose-linux-aarch64
     dest: /usr/local/libexec/docker/cli-plugins/docker-compose
     mode: 0755
-  when: ansible_architecture == 'aarch64'
+  when: "ansible_architecture == 'aarch64'"
 
 - name: Install Docker Compose v2 (armv7l)
   get_url:
     url: https://github.com/docker/compose/releases/download/v{{docker_compose_version}}/docker-compose-linux-armv7
     dest: /usr/local/libexec/docker/cli-plugins/docker-compose
     mode: 0755
-  when: ansible_architecture == 'armv7l'
+  when: "ansible_architecture == 'armv7l'"
 
 - name: Install Docker Compose v1 switch (x86_64)
   get_url:
     url: https://github.com/docker/compose-switch/releases/download/v{{docker_compose_switch_version}}/docker-compose-linux-amd64
     dest: /usr/local/bin/docker-compose
     mode: 0755
-  when: ansible_architecture == 'x86_64'
+  when: "ansible_architecture == 'x86_64'"
 
 - name: Install Docker Compose v1 switch (aarch64)
   get_url:
     url: https://github.com/docker/compose-switch/releases/download/v{{docker_compose_switch_version}}/docker-compose-linux-arm64
     dest: /usr/local/bin/docker-compose
     mode: 0755
-  when: ansible_architecture == 'aarch64'
+  when: "ansible_architecture == 'aarch64'"
 
 - name: Install ctop (x86_64)
   get_url:
     url: https://github.com/bcicen/ctop/releases/download/v{{ctop_version}}/ctop-{{ctop_version}}-linux-amd64
     dest: /usr/local/bin/ctop
     mode: 0755
-  when: ansible_architecture == 'x86_64'
+  when: "ansible_architecture == 'x86_64'"
 
 - name: Install ctop (aarch64)
   get_url:
     url: https://github.com/bcicen/ctop/releases/download/v{{ctop_version}}/ctop-{{ctop_version}}-linux-arm64
     dest: /usr/local/bin/ctop
     mode: 0755
-  when: ansible_architecture == 'aarch64'
+  when: "ansible_architecture == 'aarch64'"
 
 - name: Install ctop (armv7l)
   get_url:
     url: https://github.com/bcicen/ctop/releases/download/v{{ctop_version}}/ctop-{{ctop_version}}-linux-arm
     dest: /usr/local/bin/ctop
     mode: 0755
-  when: ansible_architecture == 'armv7l'
+  when: "ansible_architecture == 'armv7l'"

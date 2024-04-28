@@ -1,5 +1,5 @@
 ---
-grafana_agent_enabled: true
+grafana_agent_enabled: false
 grafana_agent_version: "0.34.3"
 grafana_cloud_api_key: "{{vault_grafana_cloud_api_key}}"
 grafana_cloud_loki_url: "https://logs-prod-us-central1.grafana.net/loki/api/v1/push"

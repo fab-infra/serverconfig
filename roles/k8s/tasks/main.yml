@@ -5,11 +5,11 @@
 
 - name: Setup RedHat
   include_tasks: redhat.yml
-  when: ansible_os_family|lower == 'redhat'
+  when: "ansible_os_family|lower == 'redhat'"
 
 - name: Setup Debian
   include_tasks: debian.yml
-  when: ansible_os_family|lower == 'debian'
+  when: "ansible_os_family|lower == 'debian'"
 
 
 ### Calico
@@ -26,7 +26,7 @@
     dest: /usr/local/bin/calicoctl
     mode: 0755
     checksum: "{{calico_cli_checksum}}"
-  when: calico_version_check.rc != 0 or calico_version_check.stdout != ("v" + calico_version)
+  when: "calico_version_check.rc != 0 or calico_version_check.stdout != ('v' + calico_version)"
 
 - name: Create Calico CLI config directory
   file:
@@ -55,7 +55,7 @@
     content: |
       [keyfile]
       unmanaged-devices=interface-name:cali*;interface-name:tunl*;interface-name:vxlan.calico
-  when: nm_config_dir.stat.exists == true
+  when: "nm_config_dir.stat.exists == true"
 
 
 ### cert-manager
@@ -71,17 +71,17 @@
     url: https://github.com/jetstack/cert-manager/releases/download/v{{certmanager_version}}/cmctl-linux-amd64.tar.gz
     dest: /tmp/cmctl-v{{certmanager_version}}-linux-amd64.tar.gz
     checksum: "{{certmanager_cli_checksum}}"
-  when: certmanager_version_check.rc != 0 or certmanager_version_check.stdout != ("v" + certmanager_version)
+  when: "certmanager_version_check.rc != 0 or certmanager_version_check.stdout != ('v' + certmanager_version)"
 
 - name: Install cert-manager CLI
   shell: tar -x -C /usr/local/bin -f /tmp/cmctl-v{{certmanager_version}}-linux-amd64.tar.gz cmctl
-  when: certmanager_version_check.rc != 0 or certmanager_version_check.stdout != ("v" + certmanager_version)
+  when: "certmanager_version_check.rc != 0 or certmanager_version_check.stdout != ('v' + certmanager_version)"
 
 - name: Delete cert-manager CLI temporary file
   file:
     path: /tmp/cmctl-v{{certmanager_version}}-linux-amd64.tar.gz
     state: absent
-  when: certmanager_version_check.rc != 0 or certmanager_version_check.stdout != ("v" + certmanager_version)
+  when: "certmanager_version_check.rc != 0 or certmanager_version_check.stdout != ('v' + certmanager_version)"
 
 
 ### etcd
@@ -97,17 +97,17 @@
     url: https://github.com/etcd-io/etcd/releases/download/v{{etcd_version}}/etcd-v{{etcd_version}}-linux-amd64.tar.gz
     dest: /tmp/etcd-v{{etcd_version}}-linux-amd64.tar.gz
     checksum: "{{etcd_cli_checksum}}"
-  when: etcd_version_check.rc != 0 or etcd_version_check.stdout != etcd_version
+  when: "etcd_version_check.rc != 0 or etcd_version_check.stdout != etcd_version"
 
 - name: Install etcd CLI
   shell: tar -x -C /usr/local/bin -f /tmp/etcd-v{{etcd_version}}-linux-amd64.tar.gz --strip-components=1 etcd-v{{etcd_version}}-linux-amd64/etcdctl
-  when: etcd_version_check.rc != 0 or etcd_version_check.stdout != etcd_version
+  when: "etcd_version_check.rc != 0 or etcd_version_check.stdout != etcd_version"
 
 - name: Delete etcd CLI temporary file
   file:
     path: /tmp/etcd-v{{etcd_version}}-linux-amd64.tar.gz
     state: absent
-  when: etcd_version_check.rc != 0 or etcd_version_check.stdout != etcd_version
+  when: "etcd_version_check.rc != 0 or etcd_version_check.stdout != etcd_version"
 
 
 ### Helm
@@ -123,17 +123,17 @@
     url: https://get.helm.sh/helm-v{{helm_version}}-linux-amd64.tar.gz
     dest: /tmp/helm-v{{helm_version}}-linux-amd64.tar.gz
     checksum: "{{helm_checksum}}"
-  when: helm_version_check.rc != 0 or helm_version_check.stdout != ("v" + helm_version)
+  when: "helm_version_check.rc != 0 or helm_version_check.stdout != ('v' + helm_version)"
 
 - name: Install Helm
   shell: tar -x -C /usr/local/bin -f /tmp/helm-v{{helm_version}}-linux-amd64.tar.gz --strip-components=1 linux-amd64/helm
-  when: helm_version_check.rc != 0 or helm_version_check.stdout != ("v" + helm_version)
+  when: "helm_version_check.rc != 0 or helm_version_check.stdout != ('v' + helm_version)"
 
 - name: Delete Helm temporary file
   file:
     path: /tmp/helm-v{{helm_version}}-linux-amd64.tar.gz
     state: absent
-  when: helm_version_check.rc != 0 or helm_version_check.stdout != ("v" + helm_version)
+  when: "helm_version_check.rc != 0 or helm_version_check.stdout != ('v' + helm_version)"
 
 
 ### k9s
@@ -149,17 +149,17 @@
     url: https://github.com/derailed/k9s/releases/download/v{{k9s_version}}/k9s_Linux_amd64.tar.gz
     dest: /tmp/k9s_Linux_amd64.tar.gz
     checksum: "{{k9s_checksum}}"
-  when: k9s_version_check.rc != 0 or k9s_version_check.stdout != k9s_version
+  when: "k9s_version_check.rc != 0 or k9s_version_check.stdout != k9s_version"
 
 - name: Install k9s
   shell: tar -x -C /usr/local/bin -f /tmp/k9s_Linux_amd64.tar.gz k9s
-  when: k9s_version_check.rc != 0 or k9s_version_check.stdout != k9s_version
+  when: "k9s_version_check.rc != 0 or k9s_version_check.stdout != k9s_version"
 
 - name: Delete k9s temporary file
   file:
     path: /tmp/k9s_Linux_amd64.tar.gz
     state: absent
-  when: k9s_version_check.rc != 0 or k9s_version_check.stdout != k9s_version
+  when: "k9s_version_check.rc != 0 or k9s_version_check.stdout != k9s_version"
 
 
 ### kubectx
@@ -176,7 +176,7 @@
     dest: /usr/local/bin/kubectx
     mode: 0755
     checksum: "{{kubectx_checksum}}"
-  when: kubectx_version_check.rc != 0 or kubectx_version_check.stdout != kubectx_version
+  when: "kubectx_version_check.rc != 0 or kubectx_version_check.stdout != kubectx_version"
 
 
 ### kubens
@@ -193,7 +193,7 @@
     dest: /usr/local/bin/kubens
     mode: 0755
     checksum: "{{kubens_checksum}}"
-  when: kubens_version_check.rc != 0 or kubens_version_check.stdout != kubens_version
+  when: "kubens_version_check.rc != 0 or kubens_version_check.stdout != kubens_version"
 
 
 ### Container tools
@@ -246,7 +246,7 @@
 - name: Disable SELinux
   selinux:
     state: disabled
-  when: selinux_config_file.stat.exists == true
+  when: "selinux_config_file.stat.exists == true"
 
 - name: Enable services
   service:
@@ -280,15 +280,15 @@
 
 - name: Init cluster as master
   shell: "kubeadm init --node-name={{k8s_node_name}} --cri-socket=unix:///var/run/crio/crio.sock --pod-network-cidr={{k8s_pod_cidr}} --service-cidr={{k8s_service_cidr}} --control-plane-endpoint={{k8s_master_host}}:{{k8s_master_port}} --upload-certs"
-  when: kubelet_config_file.stat.exists == false and k8s_node_role == 'master'
+  when: "kubelet_config_file.stat.exists == false and k8s_node_role == 'master'"
 
 - name: Join cluster as control plane
   shell: "kubeadm join --node-name={{k8s_node_name}} --cri-socket=unix:///var/run/crio/crio.sock --token {{k8s_join_token}} {{k8s_master_host}}:{{k8s_master_port}} --discovery-token-ca-cert-hash sha256:{{k8s_cert_hash}} --control-plane --certificate-key {{k8s_cert_key}}"
-  when: kubelet_config_file.stat.exists == false and k8s_node_role == 'controlplane' and k8s_join_token|length > 0 and k8s_cert_hash|length > 0 and k8s_cert_key|length > 0
+  when: "kubelet_config_file.stat.exists == false and k8s_node_role == 'controlplane' and k8s_join_token|length > 0 and k8s_cert_hash|length > 0 and k8s_cert_key|length > 0"
 
 - name: Join cluster as worker
   shell: "kubeadm join --node-name={{k8s_node_name}} --cri-socket=unix:///var/run/crio/crio.sock --token {{k8s_join_token}} {{k8s_master_host}}:{{k8s_master_port}} --discovery-token-ca-cert-hash sha256:{{k8s_cert_hash}}"
-  when: kubelet_config_file.stat.exists == false and k8s_node_role == 'worker' and k8s_join_token|length > 0 and k8s_cert_hash|length > 0
+  when: "kubelet_config_file.stat.exists == false and k8s_node_role == 'worker' and k8s_join_token|length > 0 and k8s_cert_hash|length > 0"
 
 - name: Check if kubectl admin config exists
   stat:
@@ -299,7 +299,7 @@
   file:
     path: /root/.kube
     state: directory
-  when: kubectl_config_file.stat.exists == true
+  when: "kubectl_config_file.stat.exists == true"
 
 - name: Copy kubectl config for root
   copy:
@@ -307,22 +307,22 @@
     src: /etc/kubernetes/admin.conf
     remote_src: true
     mode: 0600
-  when: kubectl_config_file.stat.exists == true
+  when: "kubectl_config_file.stat.exists == true"
 
 - name: Allow control plane to schedule pods (master taint)
   shell: "kubectl taint nodes {{k8s_node_name}} node-role.kubernetes.io/master-"
   ignore_errors: true
-  when: kubectl_config_file.stat.exists == true and (k8s_node_role == 'master' or k8s_node_role == 'controlplane')
+  when: "kubectl_config_file.stat.exists == true and (k8s_node_role == 'master' or k8s_node_role == 'controlplane')"
 
 - name: Allow control plane to schedule pods (control-plane taint)
   shell: "kubectl taint nodes {{k8s_node_name}} node-role.kubernetes.io/control-plane-"
   ignore_errors: true
-  when: kubectl_config_file.stat.exists == true and (k8s_node_role == 'master' or k8s_node_role == 'controlplane')
+  when: "kubectl_config_file.stat.exists == true and (k8s_node_role == 'master' or k8s_node_role == 'controlplane')"
 
 - name: Configure node labels
   shell: "kubectl label --overwrite nodes {{k8s_node_name}} {{k8s_node_labels}}"
-  when: kubectl_config_file.stat.exists == true and k8s_node_labels|length > 0
+  when: "kubectl_config_file.stat.exists == true and k8s_node_labels|length > 0"
 
 - name: Configure node taints
   shell: "kubectl taint --overwrite nodes {{k8s_node_name}} {{k8s_node_taints}}"
-  when: kubectl_config_file.stat.exists == true and k8s_node_taints|length > 0
+  when: "kubectl_config_file.stat.exists == true and k8s_node_taints|length > 0"

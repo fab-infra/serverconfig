@@ -3,22 +3,22 @@
 
 - name: Setup RedHat
   include_tasks: redhat.yml
-  when: firewall_enabled and ansible_os_family|lower == 'redhat'
+  when: "firewall_enabled == true and ansible_os_family|lower == 'redhat'"
 
 - name: Setup Debian
   include_tasks: debian.yml
-  when: firewall_enabled and ansible_os_family|lower == 'debian'
+  when: "firewall_enabled == true and ansible_os_family|lower == 'debian'"
 
 - name: Setup SUSE
   include_tasks: suse.yml
-  when: firewall_enabled and ansible_os_family|lower == 'suse'
+  when: "firewall_enabled == true and ansible_os_family|lower == 'suse'"
 
 - name: Configure firewalld (IndividualCalls)
   lineinfile:
     path: /etc/firewalld/firewalld.conf
     regexp: "^IndividualCalls="
     line: "IndividualCalls={{'yes' if firewall_individual_calls else 'no'}}"
-  when: firewall_enabled
+  when: "firewall_enabled == true"
 
 - name: Stop firewalld service
   service:
@@ -41,7 +41,7 @@
     permanent: yes
     state: present
   loop: "{{firewall_zones}}"
-  when: firewall_enabled
+  when: "firewall_enabled == true"
 
 - name: Add interface to zone
   firewalld:
@@ -50,7 +50,7 @@
     permanent: yes
     state: enabled
   loop: "{{firewall_interfaces}}"
-  when: firewall_enabled
+  when: "firewall_enabled == true"
 
 - name: Add port to zone
   firewalld:
@@ -59,7 +59,7 @@
     permanent: yes
     state: enabled
   loop: "{{firewall_ports}}"
-  when: firewall_enabled
+  when: "firewall_enabled == true"
 
 - name: Add service to zone
   firewalld:
@@ -68,7 +68,7 @@
     permanent: yes
     state: enabled
   loop: "{{firewall_services}}"
-  when: firewall_enabled
+  when: "firewall_enabled == true"
 
 - name: Add source to zone
   firewalld:
@@ -77,7 +77,7 @@
     permanent: yes
     state: enabled
   loop: "{{firewall_sources}}"
-  when: firewall_enabled
+  when: "firewall_enabled == true"
 
 - name: Reload firewalld config
   shell: firewall-cmd --reload
@@ -87,7 +87,7 @@
   template:
     src: jail.local.j2
     dest: /etc/fail2ban/jail.local
-  when: firewall_enabled
+  when: "firewall_enabled == true"
   register: fail2ban_config
 
 - name: Stop fail2ban service

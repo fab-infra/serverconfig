@@ -1,5 +1,5 @@
 ---
-kodi_enabled: false
+kodi_enabled: true
 kodi_group: kodi
 kodi_user: kodi
 skip_services: false

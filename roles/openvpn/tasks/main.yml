@@ -3,15 +3,15 @@
 
 - name: Setup RedHat
   include_tasks: redhat.yml
-  when: ansible_os_family|lower == 'redhat'
+  when: "(openvpn_client_enabled == true or openvpn_server_enabled == true) and ansible_os_family|lower == 'redhat'"
 
 - name: Setup Debian
   include_tasks: debian.yml
-  when: ansible_os_family|lower == 'debian'
+  when: "(openvpn_client_enabled == true or openvpn_server_enabled == true) and ansible_os_family|lower == 'debian'"
 
 - name: Setup SUSE
   include_tasks: suse.yml
-  when: ansible_os_family|lower == 'suse'
+  when: "(openvpn_client_enabled == true or openvpn_server_enabled == true) and ansible_os_family|lower == 'suse'"
 
 - name: Configure OpenVPN (client.conf)
   template:
@@ -19,7 +19,7 @@
     dest: /etc/openvpn/client/client.conf
     mode: 0600
   register: openvpn_client_config
-  when: openvpn_client_enabled
+  when: "openvpn_client_enabled == true"
 
 - name: Configure OpenVPN (server.conf)
   template:
@@ -27,14 +27,14 @@
     dest: /etc/openvpn/server/server.conf
     mode: 0600
   register: openvpn_server_config
-  when: openvpn_server_enabled
+  when: "openvpn_server_enabled == true"
 
 - name: Configure OpenVPN (ipp.txt)
   template:
     src: ipp.txt.j2
     dest: /etc/openvpn/server/ipp.txt
   register: openvpn_ipp_config
-  when: openvpn_server_enabled
+  when: "openvpn_server_enabled == true"
 
 - name: Stop OpenVPN client service
   service:

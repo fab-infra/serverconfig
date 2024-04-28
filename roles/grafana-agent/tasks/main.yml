@@ -3,11 +3,11 @@
 
 - name: Setup RedHat
   include_tasks: redhat.yml
-  when: ansible_os_family|lower == 'redhat'
+  when: "grafana_agent_enabled == true and ansible_os_family|lower == 'redhat'"
 
 - name: Setup Debian
   include_tasks: debian.yml
-  when: ansible_os_family|lower == 'debian'
+  when: "grafana_agent_enabled == true and ansible_os_family|lower == 'debian'"
 
 - name: Configure Grafana Agent
   template:
@@ -17,7 +17,7 @@
     owner: grafana-agent
     group: grafana-agent
   register: grafana_agent_config
-  when: grafana_cloud_api_key|length > 0
+  when: "grafana_agent_enabled == true and grafana_cloud_api_key|length > 0"
 
 - name: Stop Grafana Agent service
   service:
@@ -25,6 +25,7 @@
     enabled: false
     state: stopped
   when: "grafana_agent_enabled == false and skip_services == false"
+  ignore_errors: true
 
 - name: Start Grafana Agent service
   service:

@@ -1,3 +1,2 @@
 ---
-grafana_agent_enabled: false
 otelcol_enabled: false

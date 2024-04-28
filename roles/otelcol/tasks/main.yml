@@ -3,16 +3,17 @@
 
 - name: Setup RedHat
   include_tasks: redhat.yml
-  when: ansible_os_family|lower == 'redhat'
+  when: "otelcol_enabled == true and ansible_os_family|lower == 'redhat'"
 
 - name: Setup Debian
   include_tasks: debian.yml
-  when: ansible_os_family|lower == 'debian'
+  when: "otelcol_enabled == true and ansible_os_family|lower == 'debian'"
 
 - name: Add OpenTelemetry Collector user to systemd-journal group
   user:
     name: otelcol-contrib
     groups: [systemd-journal]
+  when: "otelcol_enabled == true"
 
 - name: Configure OpenTelemetry Collector
   template:
@@ -22,6 +23,7 @@
     owner: otelcol-contrib
     group: otelcol-contrib
   register: otelcol_config
+  when: "otelcol_enabled == true"
 
 - name: Stop OpenTelemetry Collector service
   service:
@@ -29,6 +31,7 @@
     enabled: false
     state: stopped
   when: "otelcol_enabled == false and skip_services == false"
+  ignore_errors: true
 
 - name: Start OpenTelemetry Collector service
   service:
