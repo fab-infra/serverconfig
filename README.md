@@ -33,11 +33,11 @@ The following roles are available in this repository:
 - `base`: common packages and system configuration
 - `docker`: Docker daemon setup
 - `firewall`: firewall configuration
-- `grafana-agent`: Grafana Cloud agent setup
 - `homeserver`: services for home automation, file sharing and media center
 - `k8s`: Kubernetes master, control plane or worker node
 - `kodi`: Kodi media center
 - `openvpn`: OpenVPN server or client
+- `otelcol`: OpenTelemetry Collector
 
 Role names can be used as tags to include/exclude some of them during execution, for example:
 

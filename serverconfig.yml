@@ -16,7 +16,6 @@
         - base
         - firewall
         - openvpn
-        - grafana-agent
         - otelcol
         - docker
 
