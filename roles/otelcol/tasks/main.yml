@@ -9,23 +9,52 @@
   include_tasks: debian.yml
   when: "otelcol_enabled == true and ansible_os_family|lower == 'debian'"
 
-- name: Add OpenTelemetry Collector user to systemd-journal group
+- name: Create otelcol service override directory
+  file:
+    path: /etc/systemd/system/otelcol-contrib.service.d
+    state: directory
+  when: "otelcol_enabled == true"
+
+- name: Configure otelcol service
+  copy:
+    dest: /etc/systemd/system/otelcol-contrib.service.d/override.conf
+    content: |
+      [Service]
+      User={{otelcol_user}}
+      Group={{otelcol_group}}
+  register: otelcol_service
+  when: "otelcol_enabled == true"
+
+- name: Add otelcol user to systemd-journal group
   user:
-    name: otelcol-contrib
+    name: "{{otelcol_user}}"
     groups: [systemd-journal]
   when: "otelcol_enabled == true"
 
-- name: Configure OpenTelemetry Collector
+- name: Create otelcol storage directory
+  file:
+    path: "{{otelcol_storage_path}}"
+    owner: "{{otelcol_user}}"
+    group: "{{otelcol_group}}"
+    state: directory
+  when: "otelcol_enabled == true"
+
+- name: Configure otelcol
   template:
     src: config.yaml.j2
     dest: /etc/otelcol-contrib/config.yaml
     mode: 0640
-    owner: otelcol-contrib
-    group: otelcol-contrib
+    owner: "{{otelcol_user}}"
+    group: "{{otelcol_group}}"
   register: otelcol_config
   when: "otelcol_enabled == true"
 
-- name: Stop OpenTelemetry Collector service
+- name: Reload systemd
+  systemd:
+    daemon_reload: true
+  when: "otelcol_enabled == true and otelcol_service.changed and skip_services == false"
+
+- name: Stop otelcol service
   service:
     name: otelcol-contrib
     enabled: false
@@ -33,7 +62,7 @@
   when: "otelcol_enabled == false and skip_services == false"
   ignore_errors: true
 
-- name: Start OpenTelemetry Collector service
+- name: Start otelcol service
   service:
     name: otelcol-contrib
     enabled: true

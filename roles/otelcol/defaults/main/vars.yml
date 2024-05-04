@@ -1,7 +1,5 @@
 ---
-otelcol_enabled: true
-otelcol_url: "https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download"
-otelcol_version: "0.98.0"
+docker_storage_dir: "/home/apps/docker"
 grafana_cloud_api_key: "{{vault_grafana_cloud_api_key}}"
 grafana_cloud_loki_url: "https://logs-prod-us-central1.grafana.net/loki/api/v1/push"
 grafana_cloud_loki_username: "{{vault_grafana_cloud_loki_username}}"
@@ -9,4 +7,10 @@ grafana_cloud_prometheus_url: "https://prometheus-blocks-prod-us-central1.grafan
 grafana_cloud_prometheus_username: "{{vault_grafana_cloud_prometheus_username}}"
 grafana_cloud_tempo_endpoint: "tempo-us-central1.grafana.net:443"
 grafana_cloud_tempo_username: "{{vault_grafana_cloud_tempo_username}}"
+otelcol_enabled: true
+otelcol_group: otelcol-contrib
+otelcol_storage_path: "/var/lib/otelcol"
+otelcol_url: "https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download"
+otelcol_user: root
+otelcol_version: "0.98.0"
 skip_services: false
