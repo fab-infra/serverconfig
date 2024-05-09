@@ -13,14 +13,14 @@ services:
       - ./www:/srv/www/sd/www/htdocs
       - /media:/media
 
-{% if cec_server_enabled %}
+{% if cec_api_enabled %}
   # CEC REST API
-  # https://github.com/fcrespel/cec-server
-  cec-server:
-    image: ghcr.io/fcrespel/cec-server:master
+  # https://github.com/fcrespel/cec-api
+  cec-api:
+    image: ghcr.io/fcrespel/cec-api:master
     command: ["-a", "0.0.0.0", "-l", "DEBUG"]
     restart: unless-stopped
-    hostname: cec-server
+    hostname: cec-api
     devices:
       - /dev/aocec
 
@@ -96,6 +96,17 @@ services:
     volumes:
       - minidlna-db:/var/cache/minidlna
       - /media:/media
+
+{% endif %}
+{% if rf433_api_enabled %}
+  # RF433 REST API
+  # https://github.com/fcrespel/rf433-api
+  rf433-api:
+    image: ghcr.io/fcrespel/rf433-api:master
+    command: ["-a", "0.0.0.0", "-l", "DEBUG"]
+    restart: unless-stopped
+    hostname: rf433-api
+    privileged: true
 
 {% endif %}
 {% if samba_enabled %}

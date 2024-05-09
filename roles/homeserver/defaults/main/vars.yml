@@ -1,5 +1,5 @@
 ---
-cec_server_enabled: true
+cec_api_enabled: true
 dnscrypt_proxy_enabled: true
 homeassistant_enabled: true
 homebridge_enabled: true
@@ -9,6 +9,7 @@ homeserver_root_dir: "/home/apps"
 jeedom_enabled: true
 minidlna_enabled: true
 minidlna_media_dirs: "/media"
+rf433_api_enabled: true
 samba_enabled: true
 samba_shares: ""
 sickchill_downloads_dir: "./downloads"
