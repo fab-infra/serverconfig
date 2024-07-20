@@ -2,7 +2,7 @@ services:
   # Apache HTTPD + PHP
   # https://github.com/fab-infra/docker-php-apache
   apache:
-    image: ghcr.io/fab-infra/php-apache:7.4-opensuse15
+    image: ghcr.io/fab-infra/php-apache:8.2-opensuse15
     restart: unless-stopped
     hostname: apache
     ports:
@@ -113,7 +113,7 @@ services:
   # Samba file sharing
   # https://github.com/fab-infra/docker-samba
   samba:
-    image: ghcr.io/fab-infra/samba:4.15-opensuse15
+    image: ghcr.io/fab-infra/samba:4.19-opensuse15
     restart: unless-stopped
     hostname: samba
     ports:
@@ -150,7 +150,7 @@ services:
   # Squid proxy
   # https://github.com/fab-infra/docker-squid
   squid:
-    image: ghcr.io/fab-infra/squid:5.7-opensuse15
+    image: ghcr.io/fab-infra/squid:6.10-opensuse15
     restart: unless-stopped
     hostname: squid
     ports:
