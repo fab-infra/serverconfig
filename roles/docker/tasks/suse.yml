@@ -1,0 +1,10 @@
+---
+# Tasks for SUSE
+
+- name: Install packages
+  community.general.zypper:
+    name:
+      - docker
+      - docker-buildx
+      - docker-compose
+    state: present

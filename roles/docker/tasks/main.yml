@@ -9,6 +9,10 @@
   include_tasks: debian.yml
   when: "docker_daemon_enabled == true and ansible_os_family|lower == 'debian'"
 
+- name: Setup SUSE
+  include_tasks: suse.yml
+  when: "docker_daemon_enabled == true and ansible_os_family|lower == 'suse'"
+
 - name: Create Docker storage directory
   file:
     path: "{{docker_storage_dir}}"
