@@ -31,7 +31,7 @@
     name: admin
     group: users
     groups: [sysadmin]
-    home: /home/users/admin
+    home: /home/admin
     comment: "System Admin"
 
 - name: Create extra groups

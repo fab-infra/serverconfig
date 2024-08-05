@@ -16,7 +16,18 @@
       - https://www.elrepo.org/elrepo-release-{{ansible_distribution_major_version}}.el{{ansible_distribution_major_version}}.elrepo.noarch.rpm
     state: present
 
-- name: Install packages
+- name: Install extra keys
+  rpm_key:
+    key: "{{item}}"
+  loop: "{{extra_keys}}"
+  when: "extra_keys | length > 0"
+
+- name: Install extra repositories
+  yum_repository: "{{item}}"
+  loop: "{{extra_repos}}"
+  when: "extra_repos | length > 0"
+
+- name: Install base packages
   yum:
     name:
       - bash-completion
@@ -45,6 +56,12 @@
       - zip
     skip_broken: true
     state: present
+
+- name: Install extra packages
+  yum:
+    name: "{{extra_packages}}"
+    state: present
+  when: "extra_packages | length > 0"
 
 - name: Configure dnf-automatic (upgrade_type)
   lineinfile:

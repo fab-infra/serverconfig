@@ -12,7 +12,18 @@
     filename: backports
   when: "ansible_distribution_major_version == '11'"
 
-- name: Install packages
+- name: Install extra keys
+  apt_key:
+    url: "{{item}}"
+  loop: "{{extra_keys}}"
+  when: "extra_keys | length > 0"
+
+- name: Install extra repositories
+  apt_repository: "{{item}}"
+  loop: "{{extra_repos}}"
+  when: "extra_repos | length > 0"
+
+- name: Install base packages
   apt:
     name:
       - bash-completion
@@ -38,8 +49,15 @@
       - unzip
       - vim
       - wget
+      - yq
       - zip
     state: present
+
+- name: Install extra packages
+  apt:
+    name: "{{extra_packages}}"
+    state: present
+  when: "extra_packages | length > 0"
 
 - name: Disable unattended-upgrades
   copy:

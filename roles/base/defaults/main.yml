@@ -3,6 +3,9 @@ auto_update_enabled: true
 dns_search: srv.fabinfra.net fabinfra.net
 extra_groups: []
 extra_users: []
+extra_keys: []
+extra_repos: []
+extra_packages: []
 gai_prefer_ipv4: true
 mounts: []
 skip_services: false

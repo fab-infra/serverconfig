@@ -1,7 +1,18 @@
 ---
 # Tasks for SUSE
 
-- name: Install packages
+- name: Install extra keys
+  rpm_key:
+    key: "{{item}}"
+  loop: "{{extra_keys}}"
+  when: "extra_keys | length > 0"
+
+- name: Install extra repositories
+  community.general.zypper_repository: "{{item}}"
+  loop: "{{extra_repos}}"
+  when: "extra_repos | length > 0"
+  
+- name: Install base packages
   community.general.zypper:
     name:
       - bash-completion
@@ -28,8 +39,15 @@
       - vim-data
       - wget
       - yast2-online-update-configuration
+      - yq
       - zip
     state: present
+
+- name: Install extra packages
+  community.general.zypper:
+    name: "{{extra_packages}}"
+    state: present
+  when: "extra_packages | length > 0"
 
 - name: Configure automatic_online_update (AOU_ENABLE_CRONJOB)
   lineinfile:
