@@ -87,7 +87,7 @@
   template:
     src: jail.local.j2
     dest: /etc/fail2ban/jail.local
-  when: "firewall_enabled == true"
+  when: "firewall_enabled == true and fail2ban_enabled == true"
   register: fail2ban_config
 
 - name: Stop fail2ban service
@@ -95,7 +95,7 @@
     name: fail2ban
     enabled: false
     state: stopped
-  when: "firewall_enabled == false and skip_services == false"
+  when: "(firewall_enabled == false or fail2ban_enabled == false) and skip_services == false"
   ignore_errors: true
 
 - name: Start fail2ban service
@@ -103,4 +103,4 @@
     name: fail2ban
     enabled: true
     state: restarted
-  when: "firewall_enabled == true and fail2ban_config.changed and skip_services == false"
+  when: "firewall_enabled == true and fail2ban_enabled == true and fail2ban_config.changed and skip_services == false"

@@ -1,4 +1,5 @@
 ---
+fail2ban_enabled: true
 firewall_enabled: true
 firewall_individual_calls: false
 firewall_interfaces:
