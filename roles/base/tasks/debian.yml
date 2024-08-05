@@ -49,7 +49,6 @@
       - unzip
       - vim
       - wget
-      - yq
       - zip
     state: present
 

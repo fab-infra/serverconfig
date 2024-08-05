@@ -39,7 +39,6 @@
       - vim-data
       - wget
       - yast2-online-update-configuration
-      - yq
       - zip
     state: present
 
