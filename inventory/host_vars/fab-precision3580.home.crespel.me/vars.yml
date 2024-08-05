@@ -1,0 +1,78 @@
+extra_keys:
+  - https://dl.google.com/linux/linux_signing_key.pub
+  - https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+  - https://download.opensuse.org/repositories/home:/sohraun/{{ansible_distribution_version}}/repodata/repomd.xml.key
+  - https://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Leap_{{ansible_distribution_version}}/repodata/repomd.xml.key
+  - https://packages.microsoft.com/keys/microsoft.asc
+extra_repos:
+  - name: google-chrome
+    description: Google Chrome
+    repo: https://dl.google.com/linux/chrome/rpm/stable/x86_64
+  - name: google-cloud-cli
+    description: Google Cloud CLI
+    repo: https://packages.cloud.google.com/yum/repos/cloud-sdk-el9-x86_64
+  - name: home_sohraun
+    description: sohraun's Home Project
+    repo: https://download.opensuse.org/repositories/home:/sohraun/$releasever/
+  - name: packman
+    description: Packman
+    repo: https://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Leap_$releasever/
+    priority: 90
+  - name: vscode
+    description: Visual Studio Code
+    repo: https://packages.microsoft.com/yumrepos/vscode
+extra_packages:
+  - barrier
+  - code
+  - digikam
+  - dislocker
+  - dolphin-plugins
+  - ffmpeg-6
+  - fprintd-pam
+  - git
+  - google-chrome-stable
+  - google-cloud-cli
+  - gparted
+  - handbrake-gtk
+  - java-11-openjdk-devel
+  - java-17-openjdk-devel
+  - keepassxc
+  - kmymoney
+  - kodi
+  - kodi.binary-addons-pvr.hts
+  - kubectl
+  - libass9
+  - libfprint-2-tod1-broadcom
+  - maven
+  - nodejs20
+  - nextcloud-desktop
+  - nvidia-compute-utils-G06
+  - nvidia-drivers-G06
+  - nvidia-open-driver-G06-signed-kmp-default
+  - nvidia-utils-G06
+  - obs-studio
+  - okteta
+  - pipewire-pulseaudio
+  - shairport-sync
+  - v4l2loopback-kmp-default
+  - wireshark
+  - yakuake
+firewall_interfaces:
+  - zone: home
+    interface: eth0
+  - zone: vpn
+    interface: tun0
+firewall_ports:
+  - zone: home
+    port: 9080/tcp
+  - zone: home
+    port: 9090/tcp
+firewall_services:
+  - zone: home
+    service: airplay-server
+  - zone: home
+    service: synergy
+  - zone: public
+    service: ssh
+  - zone: vpn
+    service: ssh

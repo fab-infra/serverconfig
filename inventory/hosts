@@ -1,6 +1,7 @@
 [home]
 od01.srv.fabinfra.net
 rb04.srv.fabinfra.net
+fab-precision3580.home.crespel.me
 
 [homeserver]
 od01.srv.fabinfra.net
@@ -17,3 +18,6 @@ ks14.srv.fabinfra.net
 
 [test]
 localhost
+
+[workstation]
+fab-precision3580.home.crespel.me
