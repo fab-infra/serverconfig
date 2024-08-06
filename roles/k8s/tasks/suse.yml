@@ -1,0 +1,30 @@
+---
+# Tasks for SUSE
+
+- name: Install Kubic repository key
+  rpm_key:
+    key: https://download.opensuse.org/repositories/devel:/kubic/{{ansible_distribution_version}}/repodata/repomd.xml.key
+
+- name: Install Kubic repository
+  community.general.zypper_repository:
+    name: kubic
+    description: kubic
+    repo: https://download.opensuse.org/repositories/devel:/kubic/$releasever/
+
+- name: Install packages
+  community.general.zypper:
+    name:
+      - cri-o
+      - cri-tools
+      - kubernetes{{k8s_version_minor}}-client
+      - kubernetes{{k8s_version_minor}}-kubeadm
+      - kubernetes{{k8s_version_minor}}-kubelet
+      - wireguard-tools
+    state: present
+
+- name: Configure kubelet
+  lineinfile:
+    path: /etc/sysconfig/kubelet
+    regexp: "^KUBELET_EXTRA_ARGS="
+    line: "KUBELET_EXTRA_ARGS=\"--runtime-request-timeout=15m --cgroup-driver=systemd -v=2 --hostname-override={{k8s_node_name}}\""
+    create: true

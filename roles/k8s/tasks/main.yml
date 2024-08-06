@@ -11,6 +11,10 @@
   include_tasks: debian.yml
   when: "ansible_os_family|lower == 'debian'"
 
+- name: Setup SUSE
+  include_tasks: suse.yml
+  when: "ansible_os_family|lower == 'suse'"
+
 
 ### Calico
 
