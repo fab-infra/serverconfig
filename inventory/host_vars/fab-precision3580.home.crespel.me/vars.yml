@@ -34,6 +34,7 @@ extra_packages:
   - google-cloud-cli
   - gparted
   - handbrake-gtk
+  - helm
   - java-11-openjdk-devel
   - java-17-openjdk-devel
   - keepassxc
