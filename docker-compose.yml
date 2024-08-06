@@ -23,6 +23,18 @@ services:
     volumes:
       - '.:/serverconfig'
 
+  # Ansible on openSUSE Leap 15.6
+  # docker compose run --rm opensuse156 [args ...]
+  opensuse156:
+    image: serverconfig:opensuse156
+    build:
+      context: .
+      args:
+        BASE_IMAGE: opensuse/leap:15.6
+    hostname: localhost
+    volumes:
+      - '.:/serverconfig'
+
   # Ansible on Rocky Linux 8
   # docker compose run --rm rocky8 [args ...]
   rocky8:
