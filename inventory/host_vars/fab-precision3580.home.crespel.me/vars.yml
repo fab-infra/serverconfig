@@ -38,6 +38,7 @@ extra_packages:
   - java-11-openjdk-devel
   - java-17-openjdk-devel
   - keepassxc
+  - kio_kamera
   - kmymoney
   - kodi
   - kodi.binary-addons-pvr.hts
