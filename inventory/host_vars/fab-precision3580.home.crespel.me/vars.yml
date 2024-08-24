@@ -57,6 +57,7 @@ extra_packages:
   - pipewire-pulseaudio
   - shairport-sync
   - v4l2loopback-kmp-default
+  - virtualbox
   - wireshark
   - yakuake
 firewall_interfaces:
