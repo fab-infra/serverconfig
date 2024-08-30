@@ -22,8 +22,10 @@ extra_repos:
     description: Visual Studio Code
     repo: https://packages.microsoft.com/yumrepos/vscode
 extra_packages:
+  - ant
   - barrier
   - code
+  - darktable
   - digikam
   - dislocker
   - dolphin-plugins
@@ -37,6 +39,7 @@ extra_packages:
   - helm
   - java-11-openjdk-devel
   - java-17-openjdk-devel
+  - java-21-openjdk-devel
   - keepassxc
   - kio_kamera
   - kmymoney
@@ -54,10 +57,14 @@ extra_packages:
   - nvidia-utils-G06
   - obs-studio
   - okteta
+  - patterns-devel-base-devel_basis
+  - patterns-devel-base-devel_basis-32bit
   - pipewire-pulseaudio
+  - rdiff
   - shairport-sync
   - steam
   - v4l2loopback-kmp-default
+  - vban
   - virtualbox
   - wireshark
   - yakuake
@@ -71,6 +78,8 @@ firewall_ports:
     port: 9080/tcp
   - zone: home
     port: 9090/tcp
+  - zone: home
+    port: 6980/udp
 firewall_services:
   - zone: home
     service: airplay-server
