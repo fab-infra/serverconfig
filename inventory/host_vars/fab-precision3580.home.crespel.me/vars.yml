@@ -29,6 +29,7 @@ extra_packages:
   - digikam
   - dislocker
   - dolphin-plugins
+  - exif
   - ffmpeg-6
   - fprintd-pam
   - gimp
