@@ -61,6 +61,7 @@ extra_packages:
   - okteta
   - patterns-devel-base-devel_basis
   - patterns-devel-base-devel_basis-32bit
+  - php-composer2
   - pipewire-pulseaudio
   - rdiff
   - shairport-sync
