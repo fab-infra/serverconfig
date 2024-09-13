@@ -23,6 +23,7 @@ extra_repos:
     repo: https://packages.microsoft.com/yumrepos/vscode
 extra_packages:
   - ant
+  - audacity
   - barrier
   - code
   - darktable
