@@ -120,7 +120,7 @@
   when: "autofs_smb_enabled == true"
 
 - name: Disable autofs smb
-  copy:
+  file:
     path: /etc/auto.master.d/smb.autofs
     state: absent
   when: "autofs_smb_enabled == false"

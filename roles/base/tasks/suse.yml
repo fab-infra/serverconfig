@@ -15,6 +15,7 @@
 - name: Install base packages
   community.general.zypper:
     name:
+      - autofs
       - bash-completion
       - curl
       - git

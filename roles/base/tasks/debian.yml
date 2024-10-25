@@ -26,6 +26,7 @@
 - name: Install base packages
   apt:
     name:
+      - autofs
       - bash-completion
       - curl
       - git

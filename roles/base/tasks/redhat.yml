@@ -30,6 +30,7 @@
 - name: Install base packages
   yum:
     name:
+      - autofs
       - bash-completion
       - curl
       - dnf-automatic
