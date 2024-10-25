@@ -132,6 +132,7 @@
       username={{item.value.username}}
       password={{item.value.password}}
       domain={{item.value.domain | default('')}}
+  no_log: true
   loop: "{{autofs_smb_credentials | dict2items}}"
   when: "autofs_smb_enabled == true"
 
