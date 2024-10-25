@@ -105,6 +105,50 @@
     value: "{{sysctl_vm_swappiness}}"
   when: "skip_sysctl == false"
 
+- name: Configure autofs master
+  lineinfile:
+    path: /etc/auto.master
+    regexp: "^#\\+dir:/etc/auto\\.master\\.d"
+    line: "+dir:/etc/auto.master.d"
+  register: autofs_config
+  when: "autofs_enabled == true"
+
+- name: Enable autofs smb
+  copy:
+    dest: /etc/auto.master.d/smb.autofs
+    content: /mnt/smb /etc/auto.smb --timeout=900
+  when: "autofs_smb_enabled == true"
+
+- name: Disable autofs smb
+  copy:
+    path: /etc/auto.master.d/smb.autofs
+    state: absent
+  when: "autofs_smb_enabled == false"
+
+- name: Configure autofs smb credentials
+  copy:
+    dest: /etc/creds/{{item.key}}
+    content: |
+      username={{item.value.username}}
+      password={{item.value.password}}
+      domain={{item.value.domain | default('')}}
+  loop: "{{autofs_smb_credentials | dict2items}}"
+  when: "autofs_smb_enabled == true"
+
+- name: Start autofs service
+  service:
+    name: autofs
+    enabled: true
+    state: restarted
+  when: "autofs_enabled == true and autofs_config.changed and skip_services == false"
+
+- name: Stop autofs service
+  service:
+    name: autofs
+    enabled: false
+    state: stopped
+  when: "autofs_enabled == false and skip_services == false"
+
 - name: Process template directories
   file:
     path: /{{item.path}}

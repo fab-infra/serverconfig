@@ -1,3 +1,7 @@
+---
+autofs_enabled: true
+autofs_smb_enabled: true
+autofs_smb_credentials: {{vault_autofs_smb_credentials}}
 extra_keys:
   - https://dl.google.com/linux/linux_signing_key.pub
   - https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg

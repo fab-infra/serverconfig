@@ -1,5 +1,8 @@
 ---
 auto_update_enabled: true
+autofs_enabled: false
+autofs_smb_enabled: false
+autofs_smb_credentials: {} 
 dns_search: srv.fabinfra.net fabinfra.net
 extra_groups: []
 extra_users: []
