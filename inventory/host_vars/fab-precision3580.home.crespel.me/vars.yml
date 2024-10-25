@@ -1,7 +1,7 @@
 ---
 autofs_enabled: true
 autofs_smb_enabled: true
-autofs_smb_credentials: {{vault_autofs_smb_credentials}}
+autofs_smb_credentials: "{{vault_autofs_smb_credentials}}"
 extra_keys:
   - https://dl.google.com/linux/linux_signing_key.pub
   - https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
@@ -60,7 +60,6 @@ extra_packages:
   - nextcloud-desktop
   - nvidia-compute-utils-G06
   - nvidia-drivers-G06
-  - nvidia-open-driver-G06-signed-kmp-default
   - nvidia-utils-G06
   - obs-studio
   - okteta
