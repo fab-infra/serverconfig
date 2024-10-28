@@ -6,6 +6,7 @@ homebridge_enabled: true
 homeserver_admin_password: "{{vault_homeserver_admin_password}}"
 homeserver_admin_user: "admin"
 homeserver_root_dir: "/home/apps"
+homeserver_timezone: "Europe/Paris"
 jeedom_enabled: true
 minidlna_enabled: true
 minidlna_media_dirs: "/media"

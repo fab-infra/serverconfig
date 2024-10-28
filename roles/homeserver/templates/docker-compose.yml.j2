@@ -46,7 +46,7 @@ services:
     network_mode: host
     privileged: true
     environment:
-      - TZ=Europe/Paris
+      - TZ={{homeserver_timezone}}
     volumes:
       - homeassistant-config:/config
 
@@ -63,7 +63,7 @@ services:
       - HOMEBRIDGE_CONFIG_UI_PORT=8581
       - PGID=1000
       - PUID=1000
-      - TZ=Europe/Paris
+      - TZ={{homeserver_timezone}}
     volumes:
       - homebridge:/homebridge
 
@@ -78,6 +78,8 @@ services:
     privileged: true
     ports:
       - 8080:80
+    environment:
+      - TZ={{homeserver_timezone}}
     volumes:
       - jeedom-cache:/tmp/jeedom/cache
       - jeedom-db:/var/lib/mysql
@@ -139,7 +141,7 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Europe/Paris
+      - TZ={{homeserver_timezone}}
     volumes:
       - sickchill-config:/config
       - {{sickchill_downloads_dir}}:/downloads
@@ -171,7 +173,7 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Europe/Paris
+      - TZ={{homeserver_timezone}}
       - USER=${ADMIN_USER}
       - PASS=${ADMIN_PASSWORD}
       - DOCKER_MODS=linuxserver/mods:transmission-floodui
@@ -193,7 +195,7 @@ services:
     environment:
       - PGID=1000
       - PUID=1000
-      - TZ=Europe/Paris
+      - TZ={{homeserver_timezone}}
     volumes:
       - tvheadend-config:/config
       - {{tvheadend_recordings_dir}}:/recordings
