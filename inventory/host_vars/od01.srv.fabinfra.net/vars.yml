@@ -1,6 +1,6 @@
 ---
+dnscrypt_proxy_blocked_names: "*adobe*"
 firewall_enabled: false
-homeassistant_enabled: false
 minidlna_enabled: false
 minidlna_media_dirs: A,/media/FAB-500GB/Musique et sons/Musique:V,/media/FAB-2TB/Videos/Films:V,/media/FAB-2TB/Videos/Series
 mounts:
