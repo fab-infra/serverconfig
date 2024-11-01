@@ -21,6 +21,8 @@ services:
     command: ["-a", "0.0.0.0", "-l", "DEBUG"]
     restart: unless-stopped
     hostname: cec-api
+    ports:
+      - 127.0.0.1:8000:8000
     devices:
       - /dev/aocec
 
@@ -112,6 +114,8 @@ services:
     restart: unless-stopped
     hostname: rf433-api
     privileged: true
+    ports:
+      - 127.0.0.1:8001:8001
 
 {% endif %}
 {% if samba_enabled %}
