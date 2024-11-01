@@ -35,6 +35,9 @@ services:
     ports:
       - 53:5053/tcp
       - 53:5053/udp
+    environment:
+      - BLOCKED_IPS={{dnscrypt_proxy_blocked_ips}}
+      - BLOCKED_NAMES={{dnscrypt_proxy_blocked_names}}
 
 {% endif %}
 {% if homeassistant_enabled %}

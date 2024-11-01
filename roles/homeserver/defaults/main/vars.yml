@@ -1,6 +1,8 @@
 ---
 cec_api_enabled: true
 dnscrypt_proxy_enabled: true
+dnscrypt_proxy_blocked_ips: ""
+dnscrypt_proxy_blocked_names: ""
 homeassistant_enabled: true
 homebridge_enabled: true
 homeserver_admin_password: "{{vault_homeserver_admin_password}}"
