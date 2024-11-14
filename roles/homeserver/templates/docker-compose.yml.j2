@@ -38,6 +38,8 @@ services:
       - 53:5053/tcp
       - 53:5053/udp
     environment:
+      - ALLOWED_IPS={{dnscrypt_proxy_allowed_ips}}
+      - ALLOWED_NAMES={{dnscrypt_proxy_allowed_names}}
       - BLOCKED_IPS={{dnscrypt_proxy_blocked_ips}}
       - BLOCKED_NAMES={{dnscrypt_proxy_blocked_names}}
 
