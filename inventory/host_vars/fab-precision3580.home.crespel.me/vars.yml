@@ -36,6 +36,7 @@ extra_packages:
   - dolphin-plugins
   - exif
   - ffmpeg-6
+  - filezilla
   - fprintd-pam
   - gimp
   - git
