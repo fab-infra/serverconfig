@@ -29,6 +29,7 @@ extra_packages:
   - ant
   - audacity
   - barrier
+  - clevis
   - code
   - darktable
   - digikam
@@ -71,6 +72,7 @@ extra_packages:
   - rdiff
   - shairport-sync
   - steam
+  - tpm2.0-tools
   - v4l2loopback-kmp-default
   - vban
   - virtualbox
