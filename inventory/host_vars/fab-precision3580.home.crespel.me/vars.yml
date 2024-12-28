@@ -22,10 +22,14 @@ extra_repos:
     description: Packman
     repo: https://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Leap_$releasever/
     priority: 90
+  - name: hardware
+    description: Hardware tools
+    repo: https://download.opensuse.org/repositories/hardware/$releasever/
   - name: vscode
     description: Visual Studio Code
     repo: https://packages.microsoft.com/yumrepos/vscode
 extra_packages:
+  - android-tools
   - ant
   - audacity
   - barrier
