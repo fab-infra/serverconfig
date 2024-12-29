@@ -71,11 +71,14 @@ extra_packages:
   - okteta
   - patterns-devel-base-devel_basis
   - patterns-devel-base-devel_basis-32bit
+  - photorec
   - php-composer2
   - pipewire-pulseaudio
+  - qphotorec
   - rdiff
   - shairport-sync
   - steam
+  - testdisk
   - tpm2.0-tools
   - v4l2loopback-kmp-default
   - vban
