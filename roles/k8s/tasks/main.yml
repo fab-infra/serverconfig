@@ -20,17 +20,17 @@
 
 - name: Check Calico CLI version
   shell: calicoctl version | grep 'Client Version:' | egrep -o 'v[0-9.]+'
-  register: calico_version_check
+  register: calicoctl_version_check
   ignore_errors: true
   changed_when: false
 
 - name: Install Calico CLI
   get_url:
-    url: https://github.com/projectcalico/calico/releases/download/v{{calico_version}}/calicoctl-linux-amd64
+    url: https://github.com/projectcalico/calico/releases/download/v{{calicoctl_version}}/calicoctl-linux-amd64
     dest: /usr/local/bin/calicoctl
     mode: 0755
-    checksum: "{{calico_cli_checksum}}"
-  when: "calico_version_check.rc != 0 or calico_version_check.stdout != ('v' + calico_version)"
+    checksum: "{{calicoctl_checksum}}"
+  when: "calicoctl_version_check.rc != 0 or calicoctl_version_check.stdout != ('v' + calicoctl_version)"
 
 - name: Create Calico CLI config directory
   file:
@@ -66,33 +66,24 @@
 
 - name: Check cert-manager CLI version
   shell: cmctl version --client --short | grep 'Client Version:' | egrep -o 'v[0-9.]+'
-  register: certmanager_version_check
+  register: cmctl_version_check
   ignore_errors: true
   changed_when: false
 
 - name: Download cert-manager CLI
   get_url:
-    url: https://github.com/jetstack/cert-manager/releases/download/v{{certmanager_version}}/cmctl-linux-amd64.tar.gz
-    dest: /tmp/cmctl-v{{certmanager_version}}-linux-amd64.tar.gz
-    checksum: "{{certmanager_cli_checksum}}"
-  when: "certmanager_version_check.rc != 0 or certmanager_version_check.stdout != ('v' + certmanager_version)"
-
-- name: Install cert-manager CLI
-  shell: tar -x -C /usr/local/bin -f /tmp/cmctl-v{{certmanager_version}}-linux-amd64.tar.gz cmctl
-  when: "certmanager_version_check.rc != 0 or certmanager_version_check.stdout != ('v' + certmanager_version)"
-
-- name: Delete cert-manager CLI temporary file
-  file:
-    path: /tmp/cmctl-v{{certmanager_version}}-linux-amd64.tar.gz
-    state: absent
-  when: "certmanager_version_check.rc != 0 or certmanager_version_check.stdout != ('v' + certmanager_version)"
+    url: https://github.com/cert-manager/cmctl/releases/download/v{{cmctl_version}}/cmctl_linux_amd64
+    dest: /usr/local/bin/cmctl
+    mode: 0755
+    checksum: "{{cmctl_checksum}}"
+  when: "cmctl_version_check.rc != 0 or cmctl_version_check.stdout != ('v' + cmctl_version)"
 
 
 ### etcd
 
 - name: Check etcd CLI version
   shell: etcdctl version | grep 'etcdctl version:' | egrep -o '[0-9.]+'
-  register: etcd_version_check
+  register: etcdctl_version_check
   ignore_errors: true
   changed_when: false
 
@@ -100,18 +91,18 @@
   get_url:
     url: https://github.com/etcd-io/etcd/releases/download/v{{etcd_version}}/etcd-v{{etcd_version}}-linux-amd64.tar.gz
     dest: /tmp/etcd-v{{etcd_version}}-linux-amd64.tar.gz
-    checksum: "{{etcd_cli_checksum}}"
-  when: "etcd_version_check.rc != 0 or etcd_version_check.stdout != etcd_version"
+    checksum: "{{etcd_checksum}}"
+  when: "etcdctl_version_check.rc != 0 or etcdctl_version_check.stdout != etcd_version"
 
 - name: Install etcd CLI
   shell: tar -x -C /usr/local/bin -f /tmp/etcd-v{{etcd_version}}-linux-amd64.tar.gz --strip-components=1 etcd-v{{etcd_version}}-linux-amd64/etcdctl
-  when: "etcd_version_check.rc != 0 or etcd_version_check.stdout != etcd_version"
+  when: "etcdctl_version_check.rc != 0 or etcdctl_version_check.stdout != etcd_version"
 
 - name: Delete etcd CLI temporary file
   file:
     path: /tmp/etcd-v{{etcd_version}}-linux-amd64.tar.gz
     state: absent
-  when: "etcd_version_check.rc != 0 or etcd_version_check.stdout != etcd_version"
+  when: "etcdctl_version_check.rc != 0 or etcdctl_version_check.stdout != etcd_version"
 
 
 ### Helm
