@@ -18,6 +18,9 @@ extra_repos:
   - name: home_sohraun
     description: sohraun's Home Project
     repo: https://download.opensuse.org/repositories/home:/sohraun/$releasever/
+  - name: lens
+    description: Lens
+    repo: https://downloads.k8slens.dev/rpm/packages
   - name: packman
     description: Packman
     repo: https://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Leap_$releasever/
@@ -59,6 +62,7 @@ extra_packages:
   - kodi
   - kodi.binary-addons-pvr.hts
   - kubectl
+  - lens
   - libass9
   - libfprint-2-tod1-broadcom
   - maven
