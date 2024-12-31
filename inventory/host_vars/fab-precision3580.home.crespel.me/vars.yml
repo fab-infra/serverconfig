@@ -36,7 +36,6 @@ extra_packages:
   - ant
   - audacity
   - barrier
-  - clevis
   - code
   - darktable
   - digikam
