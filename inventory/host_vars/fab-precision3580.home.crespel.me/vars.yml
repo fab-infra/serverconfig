@@ -6,7 +6,10 @@ extra_keys:
   - https://dl.google.com/linux/linux_signing_key.pub
   - https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
   - https://download.opensuse.org/repositories/home:/sohraun/{{ansible_distribution_version}}/repodata/repomd.xml.key
+  - https://downloads.k8slens.dev/keys/gpg
   - https://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Leap_{{ansible_distribution_version}}/repodata/repomd.xml.key
+  - https://download.opensuse.org/repositories/hardware/{{ansible_distribution_version}}/repodata/repomd.xml.key
+  - https://rpm.releases.hashicorp.com/gpg
   - https://packages.microsoft.com/keys/microsoft.asc
 extra_repos:
   - name: google-chrome
@@ -28,6 +31,10 @@ extra_repos:
   - name: hardware
     description: Hardware tools
     repo: https://download.opensuse.org/repositories/hardware/$releasever/
+    priority: 100
+  - name: hashicorp
+    description: Hashicorp Stable
+    repo: https://rpm.releases.hashicorp.com/RHEL/9/x86_64/stable
   - name: vscode
     description: Visual Studio Code
     repo: https://packages.microsoft.com/yumrepos/vscode
@@ -51,6 +58,7 @@ extra_packages:
   - google-cloud-cli
   - gparted
   - handbrake-gtk
+  - heimdall
   - helm
   - java-11-openjdk-devel
   - java-17-openjdk-devel
@@ -81,9 +89,11 @@ extra_packages:
   - rdiff
   - shairport-sync
   - steam
+  - terraform
   - testdisk
   - tpm2.0-tools
   - v4l2loopback-kmp-default
+  - vagrant
   - vban
   - virtualbox
   - wireshark
