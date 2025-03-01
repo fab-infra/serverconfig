@@ -53,11 +53,13 @@ extra_packages:
   - filezilla
   - fprintd-pam
   - gimp
+  - gimp-plugin-heif
   - git
   - google-chrome-stable
   - google-cloud-cli
   - gparted
   - handbrake-gtk
+  - heif-thumbnailer
   - heimdall
   - helm
   - java-11-openjdk-devel
@@ -72,6 +74,8 @@ extra_packages:
   - lens
   - libass9
   - libfprint-2-tod1-broadcom
+  - libheif-ffmpeg
+  - libheif-HEIF
   - maven
   - nodejs20
   - nextcloud-desktop
