@@ -25,7 +25,6 @@
       - jq
       - lsof
       - netcat-openbsd
-      - nscd
       - ntp
       - openssh-server
       - postfix

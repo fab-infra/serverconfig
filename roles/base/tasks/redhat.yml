@@ -41,7 +41,6 @@
       - jq
       - lsof
       - netcat
-      - nscd
       - openssh-server
       - postfix
       - psmisc
