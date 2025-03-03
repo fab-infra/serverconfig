@@ -8,7 +8,6 @@ extra_keys:
   - https://download.opensuse.org/repositories/home:/sohraun/{{ansible_distribution_version}}/repodata/repomd.xml.key
   - https://downloads.k8slens.dev/keys/gpg
   - https://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Leap_{{ansible_distribution_version}}/repodata/repomd.xml.key
-  - https://download.opensuse.org/repositories/hardware/{{ansible_distribution_version}}/repodata/repomd.xml.key
   - https://rpm.releases.hashicorp.com/gpg
   - https://packages.microsoft.com/keys/microsoft.asc
 extra_repos:
@@ -28,10 +27,6 @@ extra_repos:
     description: Packman
     repo: https://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Leap_$releasever/
     priority: 90
-  - name: hardware
-    description: Hardware tools
-    repo: https://download.opensuse.org/repositories/hardware/$releasever/
-    priority: 100
   - name: hashicorp
     description: Hashicorp Stable
     repo: https://rpm.releases.hashicorp.com/RHEL/9/x86_64/stable
