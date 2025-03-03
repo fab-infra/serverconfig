@@ -69,17 +69,12 @@
     line: "search {{dns_search}}"
   when: "dns_search | length > 0"
 
-- name: Configure SSH server (Banner)
-  lineinfile:
-    path: /etc/ssh/sshd_config
-    regexp: "^#?Banner\\s"
-    line: "Banner /etc/ssh/banner.txt"
-
-- name: Configure SSH server (PermitRootLogin)
-  lineinfile:
-    path: /etc/ssh/sshd_config
-    regexp: "^#?PermitRootLogin\\s"
-    line: "PermitRootLogin without-password"
+- name: Configure SSH server
+  copy:
+    dest: /etc/ssh/sshd_config.d/00-custom.conf
+    content: |
+      Banner /etc/ssh/banner.txt
+      PermitRootLogin without-password
 
 - name: Configure SSH authorized keys
   authorized_key:
