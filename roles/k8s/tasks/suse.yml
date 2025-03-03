@@ -3,13 +3,13 @@
 
 - name: Install Kubic repository key
   rpm_key:
-    key: https://download.opensuse.org/repositories/devel:/kubic/{{ansible_distribution_version}}/repodata/repomd.xml.key
+    key: https://download.opensuse.org/repositories/devel:/kubic/{{ansible_distribution_version if 'Leap' in ansible_distribution else (ansible_distribution | replace(' ', '_'))}}/repodata/repomd.xml.key
 
 - name: Install Kubic repository
   community.general.zypper_repository:
     name: kubic
     description: kubic
-    repo: https://download.opensuse.org/repositories/devel:/kubic/$releasever/
+    repo: https://download.opensuse.org/repositories/devel:/kubic/{{'$releasever' if 'Leap' in ansible_distribution else (ansible_distribution | replace(' ', '_'))}}/
 
 - name: Install packages
   community.general.zypper:

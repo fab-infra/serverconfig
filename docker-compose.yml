@@ -35,6 +35,18 @@ services:
     volumes:
       - '.:/serverconfig'
 
+  # Ansible on openSUSE Tumbleweed
+  # docker compose run --rm opensusetw [args ...]
+  opensusetw:
+    image: serverconfig:opensusetw
+    build:
+      context: .
+      args:
+        BASE_IMAGE: opensuse/tumbleweed:latest
+    hostname: localhost
+    volumes:
+      - '.:/serverconfig'
+
   # Ansible on Rocky Linux 8
   # docker compose run --rm rocky8 [args ...]
   rocky8:
