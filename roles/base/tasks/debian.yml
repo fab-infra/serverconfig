@@ -1,17 +1,6 @@
 ---
 # Tasks for Debian
 
-- name: Install bullseye-backports repository key
-  apt_key:
-    url: https://ftp-master.debian.org/keys/archive-key-11.asc
-  when: "ansible_distribution_major_version == '11'"
-
-- name: Install bullseye-backports repository
-  apt_repository:
-    repo: deb http://deb.debian.org/debian bullseye-backports main contrib non-free
-    filename: backports
-  when: "ansible_distribution_major_version == '11'"
-
 - name: Install extra keys
   apt_key:
     url: "{{item}}"

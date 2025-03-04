@@ -16,9 +16,9 @@ To update and execute the `serverconfig.yml` playbook locally for the current ma
 The playbook can be tested in an isolated environment with [Docker](https://docs.docker.com/engine/install/) and [Docker Compose](https://docs.docker.com/compose/install/). Run one of the following commands depending on the target OS:
 
 ```
-./test.sh debian11
 ./test.sh debian12
-./test.sh rocky8
+./test.sh opensuse156
+./test.sh opensusetw
 ./test.sh rocky9
 ./test.sh ubuntu2204
 ```
