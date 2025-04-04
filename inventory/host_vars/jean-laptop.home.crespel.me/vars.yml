@@ -1,0 +1,40 @@
+---
+docker_daemon_enabled: false
+extra_keys:
+  - https://download.opensuse.org/repositories/home:/sohraun/{{ansible_distribution_version if 'Leap' in ansible_distribution else (ansible_distribution | replace(' ', '_'))}}/repodata/repomd.xml.key
+  - https://ftp.gwdg.de/pub/linux/misc/packman/suse/{{ansible_distribution | replace(' ', '_')}}{{('_' + ansible_distribution_version) if 'Leap' in ansible_distribution}}/repodata/repomd.xml.key
+extra_repos:
+  - name: home_sohraun
+    description: sohraun's Home Project
+    repo: https://download.opensuse.org/repositories/home:/sohraun/{{'$releasever' if 'Leap' in ansible_distribution else (ansible_distribution | replace(' ', '_'))}}/
+  - name: packman
+    description: Packman
+    repo: https://ftp.gwdg.de/pub/linux/misc/packman/suse/{{ansible_distribution | replace(' ', '_')}}{{'_$releasever' if 'Leap' in ansible_distribution}}/
+    priority: 90
+extra_packages:
+  - digikam
+  - exif
+  - ffmpeg-6
+  - gparted
+  - heif-thumbnailer
+  - hplip
+  - kdeconnect-kde
+  - kio_kamera
+  - libheif-ffmpeg
+  - libheif-HEIF
+  - MozillaThunderbird
+  - nextcloud-desktop
+  - photorec
+  - qphotorec
+firewall_interfaces:
+  - zone: home
+    interface: eth0
+  - zone: vpn
+    interface: tun0
+firewall_services:
+  - zone: public
+    service: ssh
+  - zone: vpn
+    service: ssh
+openvpn_client_enabled: true
+otelcol_enabled: true
