@@ -60,6 +60,7 @@ extra_packages:
   - java-11-openjdk-devel
   - java-17-openjdk-devel
   - java-21-openjdk-devel
+  - kdeconnect-kde
   - keepassxc
   - kio_kamera
   - kmymoney
@@ -88,6 +89,7 @@ extra_packages:
   - rdiff
   - shairport-sync
   - steam
+  - sunshine
   - terraform
   - testdisk
   - tpm2.0-tools
@@ -112,6 +114,12 @@ firewall_ports:
 firewall_services:
   - zone: home
     service: airplay-server
+  - zone: home
+    service: kdeconnect
+  - zone: home
+    service: ssh
+  - zone: home
+    service: sunshine
   - zone: home
     service: synergy
   - zone: public
