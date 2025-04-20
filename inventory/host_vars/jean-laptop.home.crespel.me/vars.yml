@@ -1,15 +1,15 @@
 ---
 docker_daemon_enabled: false
 extra_keys:
-  - https://download.opensuse.org/repositories/home:/sohraun/{{ansible_distribution_version if 'Leap' in ansible_distribution else (ansible_distribution | replace(' ', '_'))}}/repodata/repomd.xml.key
-  - https://ftp.gwdg.de/pub/linux/misc/packman/suse/{{ansible_distribution | replace(' ', '_')}}{{('_' + ansible_distribution_version) if 'Leap' in ansible_distribution}}/repodata/repomd.xml.key
+  - https://download.opensuse.org/repositories/home:/sohraun/{{ansible_distribution_version}}/repodata/repomd.xml.key
+  - https://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Leap_{{ansible_distribution_version}}/repodata/repomd.xml.key
 extra_repos:
   - name: home_sohraun
     description: sohraun's Home Project
-    repo: https://download.opensuse.org/repositories/home:/sohraun/{{'$releasever' if 'Leap' in ansible_distribution else (ansible_distribution | replace(' ', '_'))}}/
+    repo: https://download.opensuse.org/repositories/home:/sohraun/$releasever/
   - name: packman
     description: Packman
-    repo: https://ftp.gwdg.de/pub/linux/misc/packman/suse/{{ansible_distribution | replace(' ', '_')}}{{'_$releasever' if 'Leap' in ansible_distribution}}/
+    repo: https://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Leap_$releasever/
     priority: 90
 extra_packages:
   - digikam
