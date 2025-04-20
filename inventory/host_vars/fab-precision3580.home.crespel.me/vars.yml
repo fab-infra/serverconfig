@@ -5,9 +5,9 @@ autofs_smb_credentials: "{{vault_autofs_smb_credentials}}"
 extra_keys:
   - https://dl.google.com/linux/linux_signing_key.pub
   - https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-  - https://download.opensuse.org/repositories/home:/sohraun/{{ansible_distribution_version if 'Leap' in ansible_distribution else (ansible_distribution | replace(' ', '_'))}}/repodata/repomd.xml.key
+  - https://download.opensuse.org/repositories/home:/sohraun/openSUSE_Slowroll/repodata/repomd.xml.key
   - https://downloads.k8slens.dev/keys/gpg
-  - https://ftp.gwdg.de/pub/linux/misc/packman/suse/{{ansible_distribution | replace(' ', '_')}}{{('_' + ansible_distribution_version) if 'Leap' in ansible_distribution}}/repodata/repomd.xml.key
+  - https://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Slowroll/repodata/repomd.xml.key
   - https://rpm.releases.hashicorp.com/gpg
   - https://packages.microsoft.com/keys/microsoft.asc
 extra_repos:
@@ -19,13 +19,13 @@ extra_repos:
     repo: https://packages.cloud.google.com/yum/repos/cloud-sdk-el9-x86_64
   - name: home_sohraun
     description: sohraun's Home Project
-    repo: https://download.opensuse.org/repositories/home:/sohraun/{{'$releasever' if 'Leap' in ansible_distribution else (ansible_distribution | replace(' ', '_'))}}/
+    repo: https://download.opensuse.org/repositories/home:/sohraun/openSUSE_Slowroll/
   - name: lens
     description: Lens
     repo: https://downloads.k8slens.dev/rpm/packages
   - name: packman
     description: Packman
-    repo: https://ftp.gwdg.de/pub/linux/misc/packman/suse/{{ansible_distribution | replace(' ', '_')}}{{'_$releasever' if 'Leap' in ansible_distribution}}/
+    repo: https://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Slowroll/
     priority: 90
   - name: hashicorp
     description: Hashicorp Stable
