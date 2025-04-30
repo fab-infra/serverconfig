@@ -20,6 +20,8 @@ extra_packages:
   - hplip
   - kdeconnect-kde
   - kio_kamera
+  - krdc
+  - krfb
   - libheif-ffmpeg
   - libheif-HEIF
   - MozillaThunderbird
