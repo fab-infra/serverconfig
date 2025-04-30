@@ -66,6 +66,8 @@ extra_packages:
   - kmymoney
   - kodi
   - kodi.binary-addons-pvr.hts
+  - krdc
+  - krfb
   - kubectl
   - lens
   - libass9
@@ -73,6 +75,7 @@ extra_packages:
   - libheif-ffmpeg
   - libheif-HEIF
   - maven
+  - myrlyn
   - nodejs20
   - nextcloud-desktop
   - nvidia-compute-utils-G06
@@ -80,6 +83,7 @@ extra_packages:
   - nvidia-utils-G06
   - obs-studio
   - okteta
+  - osc
   - patterns-devel-base-devel_basis
   - patterns-devel-base-devel_basis-32bit
   - photorec
