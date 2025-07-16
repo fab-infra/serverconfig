@@ -20,6 +20,7 @@ extra_packages:
   - hplip
   - kdeconnect-kde
   - kio_kamera
+  - koko
   - krdc
   - krfb
   - libheif-ffmpeg
