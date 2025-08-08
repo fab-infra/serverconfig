@@ -17,9 +17,11 @@
     name:
       - autofs
       - bash-completion
+      - bzip2
       - cron
       - curl
       - git
+      - gzip
       - htop
       - iftop
       - iotop
@@ -34,6 +36,7 @@
       - rclone
       - rsync
       - sudo
+      - tar
       - tmux
       - unzip
       - vim
