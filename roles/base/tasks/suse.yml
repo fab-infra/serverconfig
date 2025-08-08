@@ -39,7 +39,6 @@
       - vim
       - vim-data
       - wget
-      - yast2-online-update-configuration
       - zip
     state: present
 
@@ -48,40 +47,3 @@
     name: "{{extra_packages}}"
     state: present
   when: "extra_packages | length > 0"
-
-- name: Configure automatic_online_update (AOU_ENABLE_CRONJOB)
-  lineinfile:
-    path: /etc/sysconfig/automatic_online_update
-    regexp: "^AOU_ENABLE_CRONJOB="
-    line: "AOU_ENABLE_CRONJOB=\"true\""
-
-- name: Configure automatic_online_update (AOU_SKIP_INTERACTIVE_PATCHES)
-  lineinfile:
-    path: /etc/sysconfig/automatic_online_update
-    regexp: "^AOU_SKIP_INTERACTIVE_PATCHES="
-    line: "AOU_SKIP_INTERACTIVE_PATCHES=\"true\""
-
-- name: Configure automatic_online_update (AOU_AUTO_AGREE_WITH_LICENSES)
-  lineinfile:
-    path: /etc/sysconfig/automatic_online_update
-    regexp: "^AOU_AUTO_AGREE_WITH_LICENSES="
-    line: "AOU_AUTO_AGREE_WITH_LICENSES=\"true\""
-
-- name: Configure automatic_online_update (AOU_PATCH_CATEGORIES)
-  lineinfile:
-    path: /etc/sysconfig/automatic_online_update
-    regexp: "^AOU_PATCH_CATEGORIES="
-    line: "AOU_PATCH_CATEGORIES=\"security\""
-
-- name: Disable automatic online update
-  file:
-    path: /etc/cron.daily/opensuse.org-online_update
-    state: absent
-  when: "auto_update_enabled == false"
-
-- name: Enable automatic online update
-  file:
-    path: /etc/cron.daily/opensuse.org-online_update
-    src: /usr/lib/YaST2/bin/online_update
-    state: link
-  when: "auto_update_enabled == true"
