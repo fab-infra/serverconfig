@@ -2,8 +2,6 @@
 dnscrypt_proxy_allowed_names: "use.typekit.net"
 dnscrypt_proxy_blocked_names: "*adobe*"
 firewall_enabled: false
-homebridge_enabled: false
-jeedom_enabled: false
 minidlna_enabled: false
 minidlna_media_dirs: A,/media/FAB-500GB/Musique et sons/Musique:V,/media/FAB-2TB/Videos/Films:V,/media/FAB-2TB/Videos/Series
 mounts:
@@ -24,8 +22,7 @@ root_authorized_keys:
   - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPykWCIZPGNDaZFh94je363FpNbLh5FSaXvF3NA+bW5m fab-precision7530-ed25519
   - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCiDjHO6intUg7IN67M3pP9guhBCoL0ITALiXnAgi98a7ojow1Ww/Wa0Ej84+Jjsp9AHf0p1Vm/Gngq34rROJuzLe5LtxHXUPRIqT8weZWbvS+jVniLGSRK9+ubwF6tWslljSLDwcyohFrj+5hRkOKsGTj8TX3W9ow/SuK0W9GHSq6zqhffMQuUUgOQajfyEGzI0f3ENa115WZKVqBMA1Fn9vax2gO/OSvvC0x3oJAXTnf2tzJdjFbOW7EC/07nyvQ1JfHhSWIvLachy7qbbLmv9gTi8J6B6PNhadzzxjg7n8dOYEkXugfppVC527WjPfD3wr2ZqCCLPX9iYbhggr1l www-data@jeedom
 samba_shares: FAB-500GB:/media/FAB-500GB,FAB-1TB:/media/FAB-1TB,FAB-2TB:/media/FAB-2TB
-sickchill_downloads_dir: /media/FAB-2TB/Downloads
-sickchill_tv_dir: /media/FAB-2TB/Videos/Series
-squid_enabled: false
+sickgear_downloads_dir: /media/FAB-2TB/Downloads
+sickgear_tv_dir: /media/FAB-2TB/Videos/Series
 transmission_downloads_dir: /media/FAB-2TB/Downloads
 tvheadend_recordings_dir: /media/FAB-500GB/Videos/TV

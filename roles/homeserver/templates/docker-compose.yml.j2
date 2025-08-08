@@ -58,41 +58,6 @@ services:
       - homeassistant-config:/config
 
 {% endif %}
-{% if homebridge_enabled %}
-  # Homebridge
-  # https://github.com/homebridge/docker-homebridge
-  homebridge:
-    image: homebridge/homebridge:latest
-    restart: unless-stopped
-    network_mode: host
-    environment:
-      - HOMEBRIDGE_CONFIG_UI=1
-      - HOMEBRIDGE_CONFIG_UI_PORT=8581
-      - PGID=1000
-      - PUID=1000
-      - TZ={{homeserver_timezone}}
-    volumes:
-      - homebridge:/homebridge
-
-{% endif %}
-{% if jeedom_enabled %}
-  # Jeedom home automation
-  # https://doc.jeedom.com/fr_FR/installation/docker
-  jeedom:
-    image: jeedom/jeedom:latest
-    restart: unless-stopped
-    hostname: jeedom
-    privileged: true
-    ports:
-      - 8080:80
-    environment:
-      - TZ={{homeserver_timezone}}
-    volumes:
-      - jeedom-cache:/tmp/jeedom/cache
-      - jeedom-db:/var/lib/mysql
-      - jeedom-www:/var/www/html
-
-{% endif %}
 {% if minidlna_enabled %}
   # MiniDLNA
   # https://github.com/fab-infra/docker-minidlna
@@ -138,13 +103,13 @@ services:
       - /media:/media
 
 {% endif %}
-{% if sickchill_enabled %}
-  # SickChill
-  # https://docs.linuxserver.io/images/docker-sickchill
-  sickchill:
-    image: lscr.io/linuxserver/sickchill:latest
+{% if sickgear_enabled %}
+  # SickGear
+  # https://docs.linuxserver.io/images/docker-sickgear
+  sickgear:
+    image: lscr.io/linuxserver/sickgear:latest
     restart: unless-stopped
-    hostname: sickchill
+    hostname: sickgear
     ports:
       - 8081:8081
     environment:
@@ -152,20 +117,9 @@ services:
       - PGID=1000
       - TZ={{homeserver_timezone}}
     volumes:
-      - sickchill-config:/config
-      - {{sickchill_downloads_dir}}:/downloads
-      - {{sickchill_tv_dir}}:/tv
-
-{% endif %}
-{% if squid_enabled %}
-  # Squid proxy
-  # https://github.com/fab-infra/docker-squid
-  squid:
-    image: ghcr.io/fab-infra/squid:6.10-opensuse15
-    restart: unless-stopped
-    hostname: squid
-    ports:
-      - 3128:3128
+      - sickgear-config:/config
+      - {{sickgear_downloads_dir}}:/downloads
+      - {{sickgear_tv_dir}}:/tv
 
 {% endif %}
 {% if transmission_enabled %}
@@ -216,19 +170,11 @@ volumes:
 {% if homeassistant_enabled %}
   homeassistant-config:
 {% endif %}
-{% if homebridge_enabled %}
-  homebridge:
-{% endif %}
-{% if jeedom_enabled %}
-  jeedom-cache:
-  jeedom-db:
-  jeedom-www:
-{% endif %}
 {% if minidlna_enabled %}
   minidlna-db:
 {% endif %}
-{% if sickchill_enabled %}
-  sickchill-config:
+{% if sickgear_enabled %}
+  sickgear-config:
 {% endif %}
 {% if transmission_enabled %}
   transmission-config:

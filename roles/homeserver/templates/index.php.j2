@@ -7,9 +7,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Home Server</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
   <style type="text/css">
+    a { text-decoration: none; }
+    a:hover { text-decoration: underline; }
     .card { width: 12rem; }
     .card-text { font-size: 1.3rem; }
   </style>
@@ -24,52 +26,32 @@
       </div>
     </div>
     <div class="row justify-content-center">
-{% if jeedom_enabled %}
-      <div class="col-auto">
-        <a class="card shadow bg-success text-light mb-4" href="http://<?php echo $HOST; ?>:8080/">
-          <div class="card-body text-center">
-            <h4 class="card-title"><i class="fas fa-home"></i></h4>
-            <p class="card-text">Jeedom</p>
-          </div>
-        </a>
-      </div>
-{% endif %}
 {% if homeassistant_enabled %}
       <div class="col-auto">
-        <a class="card shadow bg-info text-light mb-4" href="http://<?php echo $HOST; ?>:8123/">
+        <a class="card shadow bg-primary text-light mb-4" href="http://<?php echo $HOST; ?>:8123/">
           <div class="card-body text-center">
-            <h4 class="card-title"><i class="fas fa-home"></i></h4>
+            <h4 class="card-title"><i class="bi bi-house-gear-fill"></i></h4>
             <p class="card-text">Home Assistant</p>
-          </div>
-        </a>
-      </div>
-{% endif %}
-{% if homebridge_enabled %}
-      <div class="col-auto">
-        <a class="card shadow bg-warning text-dark mb-4" href="http://<?php echo $HOST; ?>:8581/">
-          <div class="card-body text-center">
-            <h4 class="card-title"><i class="fas fa-network-wired"></i></h4>
-            <p class="card-text">Homebridge</p>
           </div>
         </a>
       </div>
 {% endif %}
 {% if tvheadend_enabled %}
       <div class="col-auto">
-        <a class="card shadow bg-info text-light mb-4" href="http://<?php echo $HOST; ?>:9981/">
+        <a class="card shadow bg-warning text-dark mb-4" href="http://<?php echo $HOST; ?>:9981/">
           <div class="card-body text-center">
-            <h4 class="card-title"><i class="fas fa-broadcast-tower"></i></h4>
+            <h4 class="card-title"><i class="bi bi-broadcast-pin"></i></h4>
             <p class="card-text">Tvheadend</p>
           </div>
         </a>
       </div>
 {% endif %}
-{% if sickchill_enabled %}
+{% if sickgear_enabled %}
       <div class="col-auto">
-        <a class="card shadow bg-primary text-light mb-4" href="http://<?php echo $HOST; ?>:8081/">
+        <a class="card shadow bg-success text-light mb-4" href="http://<?php echo $HOST; ?>:8081/">
           <div class="card-body text-center">
-            <h4 class="card-title"><i class="fas fa-tv"></i></h4>
-            <p class="card-text">SickChill</p>
+            <h4 class="card-title"><i class="bi bi-tv"></i></h4>
+            <p class="card-text">SickGear</p>
           </div>
         </a>
       </div>
@@ -78,7 +60,7 @@
       <div class="col-auto">
         <a class="card shadow bg-danger text-light mb-4" href="http://<?php echo $HOST; ?>:9091/">
           <div class="card-body text-center">
-            <h4 class="card-title"><i class="fas fa-cloud-download-alt"></i></h4>
+            <h4 class="card-title"><i class="bi bi-cloud-arrow-down-fill"></i></h4>
             <p class="card-text">Transmission</p>
           </div>
         </a>
