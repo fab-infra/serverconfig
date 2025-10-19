@@ -23,6 +23,18 @@ services:
     volumes:
       - '.:/serverconfig'
 
+  # Ansible on openSUSE Leap 16.0
+  # docker compose run --rm opensuse160 [args ...]
+  opensuse160:
+    image: serverconfig:opensuse160
+    build:
+      context: .
+      args:
+        BASE_IMAGE: opensuse/leap:16.0
+    hostname: localhost
+    volumes:
+      - '.:/serverconfig'
+
   # Ansible on openSUSE Tumbleweed
   # docker compose run --rm opensusetw [args ...]
   opensusetw:

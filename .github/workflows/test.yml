@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [debian12, opensuse156, opensusetw, rocky9, ubuntu2204]
+        os: [debian12, opensuse156, opensuse160, opensusetw, rocky9, ubuntu2204]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
