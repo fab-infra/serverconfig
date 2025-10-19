@@ -1,24 +1,34 @@
 ---
 # Tasks for SUSE
 
-- name: Install Kubic repository key
+- name: Install Kubernetes repository key
   rpm_key:
-    key: https://download.opensuse.org/repositories/devel:/kubic/{{ansible_distribution_version if 'Leap' in ansible_distribution else (ansible_distribution | replace(' ', '_'))}}/repodata/repomd.xml.key
+    key: https://pkgs.k8s.io/core:/stable:/v{{k8s_version_minor}}/rpm/repodata/repomd.xml.key
 
-- name: Install Kubic repository
+- name: Install Kubernetes repository
   community.general.zypper_repository:
-    name: kubic
-    description: kubic
-    repo: https://download.opensuse.org/repositories/devel:/kubic/{{'$releasever' if 'Leap' in ansible_distribution else (ansible_distribution | replace(' ', '_'))}}/
+    name: kubernetes
+    description: kubernetes
+    repo: https://pkgs.k8s.io/core:/stable:/v{{k8s_version_minor}}/rpm/
+
+- name: Install CRI-O repository key
+  rpm_key:
+    key: https://pkgs.k8s.io/addons:/cri-o:/stable:/v{{k8s_version_minor}}/rpm/repodata/repomd.xml.key
+
+- name: Install CRI-O repository
+  community.general.zypper_repository:
+    name: cri-o
+    description: cri-o
+    repo: https://pkgs.k8s.io/addons:/cri-o:/stable:/v{{k8s_version_minor}}/rpm/
 
 - name: Install packages
   community.general.zypper:
     name:
       - cri-o
       - cri-tools
-      - kubernetes{{k8s_version_minor}}-client
-      - kubernetes{{k8s_version_minor}}-kubeadm
-      - kubernetes{{k8s_version_minor}}-kubelet
+      - kubeadm-{{k8s_version}}
+      - kubectl-{{k8s_version}}
+      - kubelet-{{k8s_version}}
       - wireguard-tools
     state: present
 
