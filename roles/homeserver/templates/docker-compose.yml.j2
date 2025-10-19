@@ -12,6 +12,8 @@ services:
     volumes:
       - ./www:/srv/www/sd/www/htdocs
       - /media:/media
+    labels:
+      - com.centurylinklabs.watchtower.scope=homeserver
 
 {% if cec_api_enabled %}
   # CEC REST API
@@ -25,6 +27,8 @@ services:
       - 127.0.0.1:8000:8000
     devices:
       - /dev/aocec
+    labels:
+      - com.centurylinklabs.watchtower.scope=homeserver
 
 {% endif %}
 {% if dnscrypt_proxy_enabled %}
@@ -42,6 +46,8 @@ services:
       - ALLOWED_NAMES={{dnscrypt_proxy_allowed_names}}
       - BLOCKED_IPS={{dnscrypt_proxy_blocked_ips}}
       - BLOCKED_NAMES={{dnscrypt_proxy_blocked_names}}
+    labels:
+      - com.centurylinklabs.watchtower.scope=homeserver
 
 {% endif %}
 {% if homeassistant_enabled %}
@@ -56,6 +62,8 @@ services:
       - TZ={{homeserver_timezone}}
     volumes:
       - homeassistant-config:/config
+    labels:
+      - com.centurylinklabs.watchtower.scope=homeserver
 
 {% endif %}
 {% if minidlna_enabled %}
@@ -70,6 +78,8 @@ services:
     volumes:
       - minidlna-db:/var/cache/minidlna
       - /media:/media
+    labels:
+      - com.centurylinklabs.watchtower.scope=homeserver
 
 {% endif %}
 {% if rf433_api_enabled %}
@@ -83,6 +93,8 @@ services:
     privileged: true
     ports:
       - 127.0.0.1:8001:8001
+    labels:
+      - com.centurylinklabs.watchtower.scope=homeserver
 
 {% endif %}
 {% if samba_enabled %}
@@ -101,6 +113,8 @@ services:
       - SMB_SHARES={{samba_shares}}
     volumes:
       - /media:/media
+    labels:
+      - com.centurylinklabs.watchtower.scope=homeserver
 
 {% endif %}
 {% if sickgear_enabled %}
@@ -120,6 +134,8 @@ services:
       - sickgear-config:/config
       - {{sickgear_downloads_dir}}:/downloads
       - {{sickgear_tv_dir}}:/tv
+    labels:
+      - com.centurylinklabs.watchtower.scope=homeserver
 
 {% endif %}
 {% if transmission_enabled %}
@@ -143,6 +159,8 @@ services:
     volumes:
       - transmission-config:/config
       - {{transmission_downloads_dir}}:/downloads
+    labels:
+      - com.centurylinklabs.watchtower.scope=homeserver
 
 {% endif %}
 {% if tvheadend_enabled %}
@@ -164,6 +182,30 @@ services:
       - {{tvheadend_recordings_dir}}:/recordings
     devices:
       - /dev/dvb:/dev/dvb
+    labels:
+      - com.centurylinklabs.watchtower.scope=homeserver
+
+{% endif %}
+{% if watchtower_enabled %}
+  # Watchtower
+  # https://containrrr.dev/watchtower/
+  watchtower:
+    image: containrrr/watchtower:latest
+    restart: unless-stopped
+    hostname: watchtower
+    environment:
+      - TZ={{homeserver_timezone}}
+      - WATCHTOWER_CLEANUP={{watchtower_cleanup}}
+      - WATCHTOWER_NOTIFICATION_URL={{watchtower_notification_url}}
+      - WATCHTOWER_ROLLING_RESTART={{watchtower_rolling_restart}}
+      - WATCHTOWER_SCHEDULE={{watchtower_schedule}}
+      - WATCHTOWER_SCOPE=homeserver
+      - WATCHTOWER_TIMEOUT={{watchtower_timeout}}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /root/.docker/config.json:/config.json:ro
+    labels:
+      - com.centurylinklabs.watchtower.scope=homeserver
 {% endif %}
 
 volumes:

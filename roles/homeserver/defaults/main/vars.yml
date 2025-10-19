@@ -1,10 +1,10 @@
 ---
 cec_api_enabled: true
-dnscrypt_proxy_enabled: true
 dnscrypt_proxy_allowed_ips: ""
 dnscrypt_proxy_allowed_names: ""
 dnscrypt_proxy_blocked_ips: ""
 dnscrypt_proxy_blocked_names: ""
+dnscrypt_proxy_enabled: true
 homeassistant_enabled: true
 homeserver_admin_password: "{{vault_homeserver_admin_password}}"
 homeserver_admin_user: "admin"
@@ -22,3 +22,9 @@ transmission_downloads_dir: "./downloads"
 transmission_enabled: true
 tvheadend_enabled: true
 tvheadend_recordings_dir: "./recordings"
+watchtower_cleanup: "true"
+watchtower_enabled: true
+watchtower_notification_url: ""
+watchtower_rolling_restart: "true"
+watchtower_schedule: "0 0 3 * * 0"
+watchtower_timeout: "60s"
