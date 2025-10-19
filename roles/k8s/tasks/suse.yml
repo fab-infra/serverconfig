@@ -9,6 +9,7 @@
   community.general.zypper_repository:
     name: kubernetes
     description: kubernetes
+    priority: 98
     repo: https://pkgs.k8s.io/core:/stable:/v{{k8s_version_minor}}/rpm/
 
 - name: Install CRI-O repository key
@@ -19,6 +20,7 @@
   community.general.zypper_repository:
     name: cri-o
     description: cri-o
+    priority: 98
     repo: https://pkgs.k8s.io/addons:/cri-o:/stable:/v{{k8s_version_minor}}/rpm/
 
 - name: Install packages
