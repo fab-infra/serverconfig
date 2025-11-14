@@ -8,5 +8,5 @@ otelcol_otlphttp_password: "{{vault_otelcol_otlphttp_password}}"
 otelcol_storage_path: "/var/lib/otelcol"
 otelcol_url: "https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download"
 otelcol_user: root
-otelcol_version: "0.98.0"
+otelcol_version: "0.139.0"
 skip_services: false
