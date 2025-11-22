@@ -207,9 +207,9 @@ services:
 {% endif %}
 {% if watchtower_enabled %}
   # Watchtower
-  # https://containrrr.dev/watchtower/
+  # https://watchtower.nickfedor.com
   watchtower:
-    image: containrrr/watchtower:latest
+    image: ghcr.io/nicholas-fedor/watchtower:latest
     restart: unless-stopped
     hostname: watchtower
     environment:
