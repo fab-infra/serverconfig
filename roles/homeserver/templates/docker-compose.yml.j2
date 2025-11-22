@@ -50,6 +50,25 @@ services:
       - com.centurylinklabs.watchtower.scope=homeserver
 
 {% endif %}
+{% if gazpar2haws_enabled %}
+  # Gazpar2HAWS
+  # https://github.com/ssenart/gazpar2haws
+  gazpar2haws:
+    image: ssenart/gazpar2haws:latest
+    restart: unless-stopped
+    hostname: gazpar2haws
+    environment:
+      - GRDF_USERNAME={{gazpar2haws_grdf_username}}
+      - GRDF_PASSWORD={{gazpar2haws_grdf_password}}
+      - GRDF_PCE_IDENTIFIER={{gazpar2haws_grdf_pce_identifier}}
+      - HOMEASSISTANT_HOST={{inventory_hostname}}
+      - HOMEASSISTANT_TOKEN={{gazpar2haws_ha_token}}
+    volumes:
+      - gazpar2haws-config:/app/config
+    labels:
+      - com.centurylinklabs.watchtower.scope=homeserver
+
+{% endif %}
 {% if homeassistant_enabled %}
   # Home Assistant
   # https://www.home-assistant.io/installation/
@@ -209,6 +228,9 @@ services:
 {% endif %}
 
 volumes:
+{% if grdf2haws_enabled %}
+  grdf2haws-config:
+{% endif %}
 {% if homeassistant_enabled %}
   homeassistant-config:
 {% endif %}

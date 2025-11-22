@@ -1,7 +1,11 @@
 ---
+cec_api_enabled: true
 dnscrypt_proxy_allowed_names: "use.typekit.net"
 dnscrypt_proxy_blocked_names: "*adobe*"
+dnscrypt_proxy_enabled: true
 firewall_enabled: false
+gazpar2haws_enabled: true
+homeassistant_enabled: true
 minidlna_enabled: false
 minidlna_media_dirs: A,/media/FAB-500GB/Musique et sons/Musique:V,/media/FAB-2TB/Videos/Films:V,/media/FAB-2TB/Videos/Series
 mounts:
@@ -18,12 +22,18 @@ mounts:
     fstype: ntfs
     opts: defaults,auto,users,rw,nofail,umask=000,x-systemd.device-timeout=30
 openvpn_client_enabled: true
+rf433_api_enabled: true
 root_authorized_keys:
   - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPykWCIZPGNDaZFh94je363FpNbLh5FSaXvF3NA+bW5m fab-precision7530-ed25519
   - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCiDjHO6intUg7IN67M3pP9guhBCoL0ITALiXnAgi98a7ojow1Ww/Wa0Ej84+Jjsp9AHf0p1Vm/Gngq34rROJuzLe5LtxHXUPRIqT8weZWbvS+jVniLGSRK9+ubwF6tWslljSLDwcyohFrj+5hRkOKsGTj8TX3W9ow/SuK0W9GHSq6zqhffMQuUUgOQajfyEGzI0f3ENa115WZKVqBMA1Fn9vax2gO/OSvvC0x3oJAXTnf2tzJdjFbOW7EC/07nyvQ1JfHhSWIvLachy7qbbLmv9gTi8J6B6PNhadzzxjg7n8dOYEkXugfppVC527WjPfD3wr2ZqCCLPX9iYbhggr1l www-data@jeedom
+samba_enabled: true
 samba_shares: FAB-500GB:/media/FAB-500GB,FAB-1TB:/media/FAB-1TB,FAB-2TB:/media/FAB-2TB
 sickgear_downloads_dir: /media/FAB-2TB/Downloads
+sickgear_enabled: true
 sickgear_tv_dir: /media/FAB-2TB/Videos/Series
 transmission_downloads_dir: /media/FAB-2TB/Downloads
+transmission_enabled: true
+tvheadend_enabled: true
 tvheadend_recordings_dir: /media/FAB-500GB/Videos/TV
+watchtower_enabled: true
 watchtower_notification_url: "{{vault_watchtower_notification_url}}"
