@@ -1,6 +1,6 @@
 ---
-calicoctl_version: "3.29.1"
-calicoctl_checksum: "sha256:2ac849181cb1fb40c61c06d075711025cdb909d80562d078cc548d50a0edcd3d"
+calicoctl_version: "3.30.5"
+calicoctl_checksum: "sha256:6cdfb17b0276f648f4fdb051a5d75617a50b3c328d4cccfc40d087b96c361d80"
 cmctl_version: "2.1.1"
 cmctl_checksum: "sha256:41d96165d5654f6988c48681deabd9cb1622a0d0ebd049f1a459e7e8877afea3"
 containers_storage_dir: "/home/apps/containers/storage"
