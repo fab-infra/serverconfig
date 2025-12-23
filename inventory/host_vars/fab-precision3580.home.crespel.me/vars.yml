@@ -37,9 +37,9 @@ extra_packages:
   - android-tools
   - ant
   - audacity
-  - barrier
   - code
   - darktable
+  - deskflow
   - digikam
   - dislocker
   - dolphin-plugins
@@ -94,6 +94,7 @@ extra_packages:
   - qphotorec
   - rdiff
   - shairport-sync
+  - starship
   - steam
   - sunshine
   - terraform
