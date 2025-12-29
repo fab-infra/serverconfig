@@ -26,22 +26,22 @@
       </div>
     </div>
     <div class="row justify-content-center">
+{% if adguard_enabled %}
+      <div class="col-auto">
+        <a class="card shadow bg-success text-light mb-4" href="http://<?php echo $HOST; ?>:3000/">
+          <div class="card-body text-center">
+            <h4 class="card-title"><i class="bi bi-shield-check"></i></h4>
+            <p class="card-text">AdGuard Home</p>
+          </div>
+        </a>
+      </div>
+{% endif %}
 {% if homeassistant_enabled %}
       <div class="col-auto">
         <a class="card shadow bg-primary text-light mb-4" href="http://<?php echo $HOST; ?>:8123/">
           <div class="card-body text-center">
             <h4 class="card-title"><i class="bi bi-house-gear-fill"></i></h4>
             <p class="card-text">Home Assistant</p>
-          </div>
-        </a>
-      </div>
-{% endif %}
-{% if tvheadend_enabled %}
-      <div class="col-auto">
-        <a class="card shadow bg-warning text-dark mb-4" href="http://<?php echo $HOST; ?>:9981/">
-          <div class="card-body text-center">
-            <h4 class="card-title"><i class="bi bi-broadcast-pin"></i></h4>
-            <p class="card-text">Tvheadend</p>
           </div>
         </a>
       </div>
@@ -62,6 +62,16 @@
           <div class="card-body text-center">
             <h4 class="card-title"><i class="bi bi-cloud-arrow-down-fill"></i></h4>
             <p class="card-text">Transmission</p>
+          </div>
+        </a>
+      </div>
+{% endif %}
+{% if tvheadend_enabled %}
+      <div class="col-auto">
+        <a class="card shadow bg-warning text-dark mb-4" href="http://<?php echo $HOST; ?>:9981/">
+          <div class="card-body text-center">
+            <h4 class="card-title"><i class="bi bi-broadcast-pin"></i></h4>
+            <p class="card-text">Tvheadend</p>
           </div>
         </a>
       </div>
