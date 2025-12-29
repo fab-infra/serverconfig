@@ -1,8 +1,6 @@
 ---
+adguard_enabled: true
 cec_api_enabled: true
-dnscrypt_proxy_allowed_names: "use.typekit.net"
-dnscrypt_proxy_blocked_names: "*adobe*"
-dnscrypt_proxy_enabled: true
 firewall_enabled: false
 gazpar2haws_enabled: true
 homeassistant_enabled: true
