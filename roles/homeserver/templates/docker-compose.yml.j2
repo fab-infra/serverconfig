@@ -15,6 +15,26 @@ services:
     labels:
       - com.centurylinklabs.watchtower.scope=homeserver
 
+{% if adguard_enabled %}
+  # AdGuard Home
+  # https://adguard-dns.io/kb/adguard-home/getting-started/
+  adguard:
+    image: adguard/adguardhome
+    restart: unless-stopped
+    hostname: adguard
+    ports:
+      - 53:53/tcp
+      - 53:53/udp
+      - 3000:3000
+    environment:
+      - ADGUARD_HOME_DEFAULT_WEB_PORT=3000
+    volumes:
+      - adguard-config:/opt/adguardhome/conf
+      - adguard-work:/opt/adguardhome/work
+    labels:
+      - com.centurylinklabs.watchtower.scope=homeserver
+
+{% endif %}
 {% if cec_api_enabled %}
   # CEC REST API
   # https://github.com/fcrespel/cec-api
@@ -228,6 +248,10 @@ services:
 {% endif %}
 
 volumes:
+{% if adguard_enabled %}
+  adguard-config:
+  adguard-work:
+{% endif %}
 {% if gazpar2haws_enabled %}
   gazpar2haws-config:
 {% endif %}
