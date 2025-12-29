@@ -18,8 +18,8 @@
   yum_repository:
     name: cri-o
     description: CRI-O
-    baseurl: https://pkgs.k8s.io/addons:/cri-o:/stable:/v{{k8s_version_minor}}/rpm/
-    gpgkey: https://pkgs.k8s.io/addons:/cri-o:/stable:/v{{k8s_version_minor}}/rpm/repodata/repomd.xml.key
+    baseurl: https://download.opensuse.org/repositories/isv:/cri-o:/stable:/v{{k8s_version_minor}}/rpm/
+    gpgkey: https://download.opensuse.org/repositories/isv:/cri-o:/stable:/v{{k8s_version_minor}}/rpm/repodata/repomd.xml.key
 
 - name: Install packages
   yum:

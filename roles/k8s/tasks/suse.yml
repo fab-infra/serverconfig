@@ -14,14 +14,14 @@
 
 - name: Install CRI-O repository key
   rpm_key:
-    key: https://pkgs.k8s.io/addons:/cri-o:/stable:/v{{k8s_version_minor}}/rpm/repodata/repomd.xml.key
+    key: https://download.opensuse.org/repositories/isv:/cri-o:/stable:/v{{k8s_version_minor}}/rpm/repodata/repomd.xml.key
 
 - name: Install CRI-O repository
   community.general.zypper_repository:
     name: cri-o
     description: cri-o
     priority: 98
-    repo: https://pkgs.k8s.io/addons:/cri-o:/stable:/v{{k8s_version_minor}}/rpm/
+    repo: https://download.opensuse.org/repositories/isv:/cri-o:/stable:/v{{k8s_version_minor}}/rpm/
 
 - name: Install packages
   community.general.zypper:

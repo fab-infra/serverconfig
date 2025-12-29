@@ -6,7 +6,7 @@
     url: "{{item}}"
   loop:
     - https://pkgs.k8s.io/core:/stable:/v{{k8s_version_minor}}/deb/Release.key
-    - https://pkgs.k8s.io/addons:/cri-o:/stable:/v{{k8s_version_minor}}/deb/Release.key
+    - https://download.opensuse.org/repositories/isv:/cri-o:/stable:/v{{k8s_version_minor}}/deb/Release.key
 
 - name: Install Kubernetes repository
   apt_repository:
@@ -15,7 +15,7 @@
 
 - name: Install CRI-O repository
   apt_repository:
-    repo: deb https://pkgs.k8s.io/addons:/cri-o:/stable:/v{{k8s_version_minor}}/deb/ /
+    repo: deb https://download.opensuse.org/repositories/isv:/cri-o:/stable:/v{{k8s_version_minor}}/deb/ /
     filename: cri-o
 
 - name: Install packages
