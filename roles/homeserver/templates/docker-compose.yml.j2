@@ -2,7 +2,7 @@ services:
   # Apache HTTPD + PHP
   # https://github.com/fab-infra/docker-php-apache
   apache:
-    image: ghcr.io/fab-infra/php-apache:8.2-opensuse15
+    image: ghcr.io/fab-infra/php-apache:8.4-opensuse16
     restart: unless-stopped
     hostname: apache
     ports:
@@ -19,7 +19,7 @@ services:
   # AdGuard Home
   # https://adguard-dns.io/kb/adguard-home/getting-started/
   adguard:
-    image: adguard/adguardhome
+    image: adguard/adguardhome:latest
     restart: unless-stopped
     hostname: adguard
     ports:
@@ -55,7 +55,7 @@ services:
   # DNSCrypt proxy
   # https://github.com/fab-infra/docker-dnscrypt-proxy
   dnscrypt-proxy:
-    image: ghcr.io/fab-infra/dnscrypt-proxy:2.1-opensuse15
+    image: ghcr.io/fab-infra/dnscrypt-proxy:2.1-opensuse16
     restart: unless-stopped
     hostname: dnscrypt-proxy
     ports:
@@ -109,7 +109,7 @@ services:
   # MiniDLNA
   # https://github.com/fab-infra/docker-minidlna
   minidlna:
-    image: ghcr.io/fab-infra/minidlna:1.3-opensuse15
+    image: ghcr.io/fab-infra/minidlna:1.3-opensuse16
     restart: unless-stopped
     network_mode: host
     environment:
@@ -140,7 +140,7 @@ services:
   # Samba file sharing
   # https://github.com/fab-infra/docker-samba
   samba:
-    image: ghcr.io/fab-infra/samba:4.19-opensuse15
+    image: ghcr.io/fab-infra/samba:4.22-opensuse16
     restart: unless-stopped
     hostname: samba
     ports:
