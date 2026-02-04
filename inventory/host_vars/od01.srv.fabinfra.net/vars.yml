@@ -29,6 +29,7 @@ samba_shares: FAB-500GB:/media/FAB-500GB,FAB-1TB:/media/FAB-1TB,FAB-2TB:/media/F
 sickgear_downloads_dir: /media/FAB-2TB/Downloads
 sickgear_enabled: true
 sickgear_tv_dir: /media/FAB-2TB/Videos/Series
+tado_api_proxy_enabled: true
 transmission_downloads_dir: /media/FAB-2TB/Downloads
 transmission_enabled: true
 tvheadend_enabled: true

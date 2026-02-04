@@ -177,6 +177,24 @@ services:
       - com.centurylinklabs.watchtower.scope=homeserver
 
 {% endif %}
+{% if tado_api_proxy_enabled %}
+  # Tado API Proxy
+  # https://github.com/s1adem4n/tado-api-proxy
+  tado-api-proxy:
+    image: ghcr.io/s1adem4n/tado-api-proxy:latest
+    restart: unless-stopped
+    hostname: tado-api-proxy
+    ports:
+      - 8090:8080
+    environment:
+      - SUPERUSER_EMAIL=${ADMIN_USER}@{{inventory_hostname}}
+      - SUPERUSER_PASSWORD=${ADMIN_PASSWORD}
+    volumes:
+      - tado-api-proxy-config:/config
+    labels:
+      - com.centurylinklabs.watchtower.scope=homeserver
+
+{% endif %}
 {% if transmission_enabled %}
   # Transmission
   # https://docs.linuxserver.io/images/docker-transmission
@@ -263,6 +281,9 @@ volumes:
 {% endif %}
 {% if sickgear_enabled %}
   sickgear-config:
+{% endif %}
+{% if tado_api_proxy_enabled %}
+  tado-api-proxy-config:
 {% endif %}
 {% if transmission_enabled %}
   transmission-config:

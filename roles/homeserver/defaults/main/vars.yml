@@ -24,6 +24,7 @@ samba_shares: ""
 sickgear_downloads_dir: "./downloads"
 sickgear_enabled: false
 sickgear_tv_dir: "./tv"
+tado_api_proxy_enabled: false
 transmission_downloads_dir: "./downloads"
 transmission_enabled: false
 tvheadend_enabled: false
