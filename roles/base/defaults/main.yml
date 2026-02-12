@@ -9,6 +9,8 @@ extra_users: []
 extra_keys: []
 extra_repos: []
 extra_packages: []
+extra_services: []
+flatpaks: []
 gai_prefer_ipv4: true
 mounts: []
 skip_services: false

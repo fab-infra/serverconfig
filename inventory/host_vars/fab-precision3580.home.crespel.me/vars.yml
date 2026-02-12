@@ -6,7 +6,6 @@ extra_keys:
   - https://dl.google.com/linux/linux_signing_key.pub
   - https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
   - https://download.opensuse.org/repositories/home:/sohraun/openSUSE_Slowroll/repodata/repomd.xml.key
-  - https://downloads.k8slens.dev/keys/gpg
   - https://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Slowroll/repodata/repomd.xml.key
   - https://rpm.releases.hashicorp.com/gpg
   - https://packages.microsoft.com/keys/microsoft.asc
@@ -20,9 +19,6 @@ extra_repos:
   - name: home_sohraun
     description: sohraun's Home Project
     repo: https://download.opensuse.org/repositories/home:/sohraun/openSUSE_Slowroll/
-  - name: lens
-    description: Lens
-    repo: https://downloads.k8slens.dev/rpm/packages
   - name: packman
     description: Packman
     repo: https://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Slowroll/
@@ -71,15 +67,14 @@ extra_packages:
   - krdc
   - krfb
   - kubectl
-  - lens
   - libass9
   - libfprint-2-tod1-broadcom
   - libheif-ffmpeg
   - libheif-HEIF
   - maven
   - myrlyn
-  - nodejs20
   - nextcloud-desktop
+  - nodejs20
   - nvidia-compute-utils-G06
   - nvidia-drivers-G06
   - nvidia-utils-G06
@@ -106,6 +101,9 @@ extra_packages:
   - virtualbox
   - wireshark
   - yakuake
+extra_services:
+  - nqptp.service
+  - update-system-flatpaks.timer
 firewall_interfaces:
   - zone: home
     interface: eth0
@@ -133,3 +131,9 @@ firewall_services:
     service: ssh
   - zone: vpn
     service: ssh
+flatpaks:
+  - app.freelens.Freelens
+  - com.discordapp.Discord
+  - com.usebruno.Bruno
+  - md.obsidian.Obsidian
+  - org.ferdium.Ferdium

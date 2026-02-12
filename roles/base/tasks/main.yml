@@ -13,6 +13,13 @@
   include_tasks: suse.yml
   when: "ansible_os_family|lower == 'suse'"
 
+- name: Install Flatpaks
+  community.general.flatpak:
+    name: "{{item}}"
+    state: present
+  loop: "{{flatpaks}}"
+  when: "flatpaks | length > 0"
+
 - name: Configure mount points
   mount:
     path: "{{item.path}}"
@@ -158,3 +165,11 @@
     dest: "/{{item.path | splitext | first}}"
   with_filetree: ../templates
   when: "item.state == 'file'"
+
+- name: Enable extra services
+  service:
+    name: "{{item}}"
+    enabled: true
+    state: started
+  loop: "{{extra_services}}"
+  when: "extra_services | length > 0 and skip_services == false"
