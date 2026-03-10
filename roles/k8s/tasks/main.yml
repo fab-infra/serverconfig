@@ -4,41 +4,47 @@
 ### Distro setup
 
 - name: Setup RedHat
-  include_tasks: redhat.yml
+  ansible.builtin.include_tasks: redhat.yml
   when: "ansible_os_family|lower == 'redhat'"
 
 - name: Setup Debian
-  include_tasks: debian.yml
+  ansible.builtin.include_tasks: debian.yml
   when: "ansible_os_family|lower == 'debian'"
 
 - name: Setup SUSE
-  include_tasks: suse.yml
+  ansible.builtin.include_tasks: suse.yml
   when: "ansible_os_family|lower == 'suse'"
 
 
 ### Calico
 
 - name: Check Calico CLI version
-  shell: calicoctl version | grep 'Client Version:' | egrep -o 'v[0-9.]+'
+  ansible.builtin.shell: calicoctl version | grep 'Client Version:' | egrep -o 'v[0-9.]+'
   register: calicoctl_version_check
+  check_mode: false
   ignore_errors: true
   changed_when: false
 
 - name: Install Calico CLI
-  get_url:
-    url: https://github.com/projectcalico/calico/releases/download/v{{calicoctl_version}}/calicoctl-linux-amd64
+  ansible.builtin.get_url:
+    url: https://github.com/projectcalico/calico/releases/download/v{{ calicoctl_version }}/calicoctl-linux-amd64
     dest: /usr/local/bin/calicoctl
-    mode: 0755
-    checksum: "{{calicoctl_checksum}}"
+    checksum: "{{ calicoctl_checksum }}"
+    owner: root
+    group: root
+    mode: "0755"
   when: "calicoctl_version_check.rc != 0 or calicoctl_version_check.stdout != ('v' + calicoctl_version)"
 
 - name: Create Calico CLI config directory
-  file:
+  ansible.builtin.file:
     path: /etc/calico
     state: directory
+    owner: root
+    group: root
+    mode: "0755"
 
 - name: Configure Calico CLI
-  copy:
+  ansible.builtin.copy:
     dest: /etc/calico/calicoctl.cfg
     content: |
       apiVersion: projectcalico.org/v3
@@ -47,60 +53,80 @@
       spec:
         datastoreType: "kubernetes"
         kubeconfig: "/root/.kube/config"
+    owner: root
+    group: root
+    mode: "0644"
 
 - name: Check if NetworkManager config directory exists
-  stat:
+  ansible.builtin.stat:
     path: /etc/NetworkManager/conf.d
   register: nm_config_dir
 
 - name: Exclude Calico from NetworkManager
-  copy:
+  ansible.builtin.copy:
     dest: /etc/NetworkManager/conf.d/calico.conf
     content: |
       [keyfile]
       unmanaged-devices=interface-name:cali*;interface-name:tunl*;interface-name:vxlan.calico
-  when: "nm_config_dir.stat.exists == true"
+    owner: root
+    group: root
+    mode: "0644"
+  when: "nm_config_dir.stat.exists"
 
 
 ### cert-manager
 
 - name: Check cert-manager CLI version
-  shell: cmctl version --client --short | grep 'Client Version:' | egrep -o 'v[0-9.]+'
+  ansible.builtin.shell: cmctl version --client --short | grep 'Client Version:' | egrep -o 'v[0-9.]+'
   register: cmctl_version_check
+  check_mode: false
   ignore_errors: true
   changed_when: false
 
 - name: Download cert-manager CLI
-  get_url:
-    url: https://github.com/cert-manager/cmctl/releases/download/v{{cmctl_version}}/cmctl_linux_amd64
+  ansible.builtin.get_url:
+    url: https://github.com/cert-manager/cmctl/releases/download/v{{ cmctl_version }}/cmctl_linux_amd64
     dest: /usr/local/bin/cmctl
-    mode: 0755
-    checksum: "{{cmctl_checksum}}"
+    checksum: "{{ cmctl_checksum }}"
+    owner: root
+    group: root
+    mode: "0755"
   when: "cmctl_version_check.rc != 0 or cmctl_version_check.stdout != ('v' + cmctl_version)"
 
 
 ### etcd
 
 - name: Check etcd CLI version
-  shell: etcdctl version | grep 'etcdctl version:' | egrep -o '[0-9.]+'
+  ansible.builtin.shell: etcdctl version | grep 'etcdctl version:' | egrep -o '[0-9.]+'
   register: etcdctl_version_check
+  check_mode: false
   ignore_errors: true
   changed_when: false
 
 - name: Download etcd CLI
-  get_url:
-    url: https://github.com/etcd-io/etcd/releases/download/v{{etcd_version}}/etcd-v{{etcd_version}}-linux-amd64.tar.gz
-    dest: /tmp/etcd-v{{etcd_version}}-linux-amd64.tar.gz
-    checksum: "{{etcd_checksum}}"
+  ansible.builtin.get_url:
+    url: https://github.com/etcd-io/etcd/releases/download/v{{ etcd_version }}/etcd-v{{ etcd_version }}-linux-amd64.tar.gz
+    dest: /tmp/etcd-v{{ etcd_version }}-linux-amd64.tar.gz
+    checksum: "{{ etcd_checksum }}"
+    owner: root
+    group: root
+    mode: "0644"
   when: "etcdctl_version_check.rc != 0 or etcdctl_version_check.stdout != etcd_version"
 
 - name: Install etcd CLI
-  shell: tar -x -C /usr/local/bin -f /tmp/etcd-v{{etcd_version}}-linux-amd64.tar.gz --strip-components=1 etcd-v{{etcd_version}}-linux-amd64/etcdctl
+  ansible.builtin.unarchive:
+    src: /tmp/etcd-v{{ etcd_version }}-linux-amd64.tar.gz
+    dest: /usr/local/bin
+    remote_src: true
+    owner: root
+    group: root
+    mode: "0755"
+    extra_opts: ['--strip-components=1', '--show-stored-names', 'etcd-v{{ etcd_version }}-linux-amd64/etcdctl']
   when: "etcdctl_version_check.rc != 0 or etcdctl_version_check.stdout != etcd_version"
 
 - name: Delete etcd CLI temporary file
-  file:
-    path: /tmp/etcd-v{{etcd_version}}-linux-amd64.tar.gz
+  ansible.builtin.file:
+    path: /tmp/etcd-v{{ etcd_version }}-linux-amd64.tar.gz
     state: absent
   when: "etcdctl_version_check.rc != 0 or etcdctl_version_check.stdout != etcd_version"
 
@@ -108,25 +134,36 @@
 ### Helm
 
 - name: Check Helm version
-  shell: helm version --template {% raw %}{{.Version}}{% endraw %}
+  ansible.builtin.command: helm version --template {% raw %}{{.Version}}{% endraw %}
   register: helm_version_check
+  check_mode: false
   ignore_errors: true
   changed_when: false
 
 - name: Download Helm
-  get_url:
-    url: https://get.helm.sh/helm-v{{helm_version}}-linux-amd64.tar.gz
-    dest: /tmp/helm-v{{helm_version}}-linux-amd64.tar.gz
-    checksum: "{{helm_checksum}}"
+  ansible.builtin.get_url:
+    url: https://get.helm.sh/helm-v{{ helm_version }}-linux-amd64.tar.gz
+    dest: /tmp/helm-v{{ helm_version }}-linux-amd64.tar.gz
+    checksum: "{{ helm_checksum }}"
+    owner: root
+    group: root
+    mode: "0644"
   when: "helm_version_check.rc != 0 or helm_version_check.stdout != ('v' + helm_version)"
 
 - name: Install Helm
-  shell: tar -x -C /usr/local/bin -f /tmp/helm-v{{helm_version}}-linux-amd64.tar.gz --strip-components=1 linux-amd64/helm
+  ansible.builtin.unarchive:
+    src: /tmp/helm-v{{ helm_version }}-linux-amd64.tar.gz
+    dest: /usr/local/bin
+    remote_src: true
+    owner: root
+    group: root
+    mode: "0755"
+    extra_opts: ['--strip-components=1', '--show-stored-names', 'linux-amd64/helm']
   when: "helm_version_check.rc != 0 or helm_version_check.stdout != ('v' + helm_version)"
 
 - name: Delete Helm temporary file
-  file:
-    path: /tmp/helm-v{{helm_version}}-linux-amd64.tar.gz
+  ansible.builtin.file:
+    path: /tmp/helm-v{{ helm_version }}-linux-amd64.tar.gz
     state: absent
   when: "helm_version_check.rc != 0 or helm_version_check.stdout != ('v' + helm_version)"
 
@@ -134,24 +171,35 @@
 ### k9s
 
 - name: Check k9s version
-  shell: k9s version -s | grep 'Version' | egrep -o '[0-9.]+'
+  ansible.builtin.shell: k9s version -s | grep 'Version' | egrep -o '[0-9.]+'
   register: k9s_version_check
+  check_mode: false
   ignore_errors: true
   changed_when: false
 
 - name: Download k9s
-  get_url:
-    url: https://github.com/derailed/k9s/releases/download/v{{k9s_version}}/k9s_Linux_amd64.tar.gz
+  ansible.builtin.get_url:
+    url: https://github.com/derailed/k9s/releases/download/v{{ k9s_version }}/k9s_Linux_amd64.tar.gz
     dest: /tmp/k9s_Linux_amd64.tar.gz
-    checksum: "{{k9s_checksum}}"
+    checksum: "{{ k9s_checksum }}"
+    owner: root
+    group: root
+    mode: "0644"
   when: "k9s_version_check.rc != 0 or k9s_version_check.stdout != k9s_version"
 
 - name: Install k9s
-  shell: tar -x -C /usr/local/bin -f /tmp/k9s_Linux_amd64.tar.gz k9s
+  ansible.builtin.unarchive:
+    src: /tmp/k9s_Linux_amd64.tar.gz
+    dest: /usr/local/bin
+    remote_src: true
+    owner: root
+    group: root
+    mode: "0755"
+    extra_opts: ['k9s']
   when: "k9s_version_check.rc != 0 or k9s_version_check.stdout != k9s_version"
 
 - name: Delete k9s temporary file
-  file:
+  ansible.builtin.file:
     path: /tmp/k9s_Linux_amd64.tar.gz
     state: absent
   when: "k9s_version_check.rc != 0 or k9s_version_check.stdout != k9s_version"
@@ -160,164 +208,224 @@
 ### kubectx
 
 - name: Check kubectx version
-  shell: kubectx --version
+  ansible.builtin.command: kubectx --version
   register: kubectx_version_check
+  check_mode: false
   ignore_errors: true
   changed_when: false
 
+- name: Download kubectx
+  ansible.builtin.get_url:
+    url: https://github.com/ahmetb/kubectx/releases/download/v{{ kubectx_version }}/kubectx_v{{ kubectx_version }}_linux_x86_64.tar.gz
+    dest: /tmp/kubectx_v{{ kubectx_version }}_linux_x86_64.tar.gz
+    checksum: "{{ kubectx_checksum }}"
+    owner: root
+    group: root
+    mode: "0644"
+  when: "kubectx_version_check.rc != 0 or kubectx_version_check.stdout != kubectx_version"
+
 - name: Install kubectx
-  get_url:
-    url: https://github.com/ahmetb/kubectx/releases/download/v{{kubectx_version}}/kubectx
-    dest: /usr/local/bin/kubectx
-    mode: 0755
-    checksum: "{{kubectx_checksum}}"
+  ansible.builtin.unarchive:
+    src: /tmp/kubectx_v{{ kubectx_version }}_linux_x86_64.tar.gz
+    dest: /usr/local/bin
+    remote_src: true
+    owner: root
+    group: root
+    mode: "0755"
+    extra_opts: ['kubectx']
+  when: "kubectx_version_check.rc != 0 or kubectx_version_check.stdout != kubectx_version"
+
+- name: Delete kubectx temporary file
+  ansible.builtin.file:
+    path: /tmp/kubectx_v{{ kubectx_version }}_linux_x86_64.tar.gz
+    state: absent
   when: "kubectx_version_check.rc != 0 or kubectx_version_check.stdout != kubectx_version"
 
 
 ### kubens
 
 - name: Check kubens version
-  shell: kubens --version
+  ansible.builtin.command: kubens --version
   register: kubens_version_check
+  check_mode: false
   ignore_errors: true
   changed_when: false
 
+- name: Download kubens
+  ansible.builtin.get_url:
+    url: https://github.com/ahmetb/kubectx/releases/download/v{{ kubens_version }}/kubens_v{{ kubens_version }}_linux_x86_64.tar.gz
+    dest: /tmp/kubens_v{{ kubens_version }}_linux_x86_64.tar.gz
+    checksum: "{{ kubens_checksum }}"
+    owner: root
+    group: root
+    mode: "0644"
+  when: "kubens_version_check.rc != 0 or kubens_version_check.stdout != kubens_version"
+
 - name: Install kubens
-  get_url:
-    url: https://github.com/ahmetb/kubectx/releases/download/v{{kubens_version}}/kubens
-    dest: /usr/local/bin/kubens
-    mode: 0755
-    checksum: "{{kubens_checksum}}"
+  ansible.builtin.unarchive:
+    src: /tmp/kubens_v{{ kubens_version }}_linux_x86_64.tar.gz
+    dest: /usr/local/bin
+    remote_src: true
+    owner: root
+    group: root
+    mode: "0755"
+    extra_opts: ['kubens']
+  when: "kubens_version_check.rc != 0 or kubens_version_check.stdout != kubens_version"
+
+- name: Delete kubens temporary file
+  ansible.builtin.file:
+    path: /tmp/kubens_v{{ kubens_version }}_linux_x86_64.tar.gz
+    state: absent
   when: "kubens_version_check.rc != 0 or kubens_version_check.stdout != kubens_version"
 
 
 ### Container tools
 
 - name: Create containers storage directory
-  file:
-    path: "{{containers_storage_dir}}"
-    mode: 0700
+  ansible.builtin.file:
+    path: "{{ containers_storage_dir }}"
+    owner: root
+    group: root
+    mode: "0700"
     state: directory
 
 - name: Configure containers storage
-  template:
+  ansible.builtin.template:
     src: crio.conf.j2
     dest: "/etc/crio/crio.conf.d/99-custom.conf"
+    owner: root
+    group: root
+    mode: "0644"
 
 - name: Configure containers policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/containers/policy.json
     content: "{\"default\":[{\"type\":\"insecureAcceptAnything\"}]}"
+    owner: root
+    group: root
+    mode: "0644"
 
 
 ### System
 
 - name: Load br_netfilter kernel module
-  modprobe:
+  community.general.modprobe:
     name: br_netfilter
-  when: "skip_modprobe == false"
+  when: "not skip_modprobe"
 
 - name: Configure br_netfilter kernel module
-  copy:
+  ansible.builtin.copy:
     dest: /etc/modules-load.d/br_netfilter.conf
     content: "br_netfilter"
-  when: "skip_modprobe == false"
+    owner: root
+    group: root
+    mode: "0644"
+  when: "not skip_modprobe"
 
 - name: Configure sysctl
-  sysctl:
-    name: "{{item}}"
+  ansible.posix.sysctl:
+    name: "{{ item }}"
     value: "1"
   loop:
     - net.ipv4.ip_forward
     - net.bridge.bridge-nf-call-iptables
     - net.bridge.bridge-nf-call-ip6tables
-  when: "skip_sysctl == false"
+  when: "not skip_sysctl"
 
 - name: Check if SELinux config exists
-  stat:
+  ansible.builtin.stat:
     path: /etc/selinux/config
   register: selinux_config_file
 
 - name: Disable SELinux
-  selinux:
+  ansible.posix.selinux:
     state: disabled
-  when: "selinux_config_file.stat.exists == true"
+  when: "selinux_config_file.stat.exists"
 
 - name: Enable services
-  service:
-    name: "{{item}}"
+  ansible.builtin.service:
+    name: "{{ item }}"
     enabled: true
     state: started
   loop:
     - crio
     - kubelet
-  when: "skip_services == false"
+  when: "not skip_services"
 
 
 ### kubeadm & kubelet
 
 - name: Create kubelet directory
-  file:
+  ansible.builtin.file:
     path: /var/lib/kubelet
-    mode: 0700
+    owner: root
+    group: root
+    mode: "0700"
     state: directory
 
 - name: Configure registry authentication
-  copy:
+  ansible.builtin.copy:
     dest: /var/lib/kubelet/config.json
-    content: "{\"auths\": {{vault_k8s_registry_auths | to_json}}}"
-    mode: 0600
+    content: "{\"auths\": {{ vault_k8s_registry_auths | to_json }}}"
+    owner: root
+    group: root
+    mode: "0600"
 
 - name: Check if kubelet config exists
-  stat:
+  ansible.builtin.stat:
     path: /var/lib/kubelet/config.yaml
   register: kubelet_config_file
 
 - name: Init cluster as master
-  shell: "kubeadm init --node-name={{k8s_node_name}} --cri-socket=unix:///var/run/crio/crio.sock --pod-network-cidr={{k8s_pod_cidr}} --service-cidr={{k8s_service_cidr}} --control-plane-endpoint={{k8s_master_host}}:{{k8s_master_port}} --upload-certs"
-  when: "kubelet_config_file.stat.exists == false and k8s_node_role == 'master'"
+  ansible.builtin.command: "kubeadm init --node-name={{ k8s_node_name }} --cri-socket=unix:///var/run/crio/crio.sock --pod-network-cidr={{ k8s_pod_cidr }} --service-cidr={{ k8s_service_cidr }} --control-plane-endpoint={{ k8s_master_host }}:{{ k8s_master_port }} --upload-certs"
+  when: "not kubelet_config_file.stat.exists and k8s_node_role == 'master'"
 
 - name: Join cluster as control plane
-  shell: "kubeadm join --node-name={{k8s_node_name}} --cri-socket=unix:///var/run/crio/crio.sock --token {{k8s_join_token}} {{k8s_master_host}}:{{k8s_master_port}} --discovery-token-ca-cert-hash sha256:{{k8s_cert_hash}} --control-plane --certificate-key {{k8s_cert_key}}"
-  when: "kubelet_config_file.stat.exists == false and k8s_node_role == 'controlplane' and k8s_join_token|length > 0 and k8s_cert_hash|length > 0 and k8s_cert_key|length > 0"
+  ansible.builtin.command: "kubeadm join --node-name={{ k8s_node_name }} --cri-socket=unix:///var/run/crio/crio.sock --token {{ k8s_join_token }} {{ k8s_master_host }}:{{ k8s_master_port }} --discovery-token-ca-cert-hash sha256:{{ k8s_cert_hash }} --control-plane --certificate-key {{ k8s_cert_key }}"
+  when: "not kubelet_config_file.stat.exists and k8s_node_role == 'controlplane' and k8s_join_token|length > 0 and k8s_cert_hash|length > 0 and k8s_cert_key|length > 0"
 
 - name: Join cluster as worker
-  shell: "kubeadm join --node-name={{k8s_node_name}} --cri-socket=unix:///var/run/crio/crio.sock --token {{k8s_join_token}} {{k8s_master_host}}:{{k8s_master_port}} --discovery-token-ca-cert-hash sha256:{{k8s_cert_hash}}"
-  when: "kubelet_config_file.stat.exists == false and k8s_node_role == 'worker' and k8s_join_token|length > 0 and k8s_cert_hash|length > 0"
+  ansible.builtin.command: "kubeadm join --node-name={{ k8s_node_name }} --cri-socket=unix:///var/run/crio/crio.sock --token {{ k8s_join_token }} {{ k8s_master_host }}:{{ k8s_master_port }} --discovery-token-ca-cert-hash sha256:{{ k8s_cert_hash }}"
+  when: "not kubelet_config_file.stat.exists and k8s_node_role == 'worker' and k8s_join_token|length > 0 and k8s_cert_hash|length > 0"
 
 - name: Check if kubectl admin config exists
-  stat:
+  ansible.builtin.stat:
     path: /etc/kubernetes/admin.conf
   register: kubectl_config_file
 
 - name: Create kubectl config directory for root
-  file:
+  ansible.builtin.file:
     path: /root/.kube
     state: directory
-  when: "kubectl_config_file.stat.exists == true"
+    owner: root
+    group: root
+    mode: "0755"
+  when: "kubectl_config_file.stat.exists"
 
 - name: Copy kubectl config for root
-  copy:
+  ansible.builtin.copy:
     dest: /root/.kube/config
     src: /etc/kubernetes/admin.conf
     remote_src: true
-    mode: 0600
-  when: "kubectl_config_file.stat.exists == true"
+    owner: root
+    group: root
+    mode: "0600"
+  when: "kubectl_config_file.stat.exists"
 
 - name: Allow control plane to schedule pods (master taint)
-  shell: "kubectl taint nodes {{k8s_node_name}} node-role.kubernetes.io/master-"
+  ansible.builtin.command: "kubectl taint nodes {{ k8s_node_name }} node-role.kubernetes.io/master-"
   ignore_errors: true
-  when: "kubectl_config_file.stat.exists == true and (k8s_node_role == 'master' or k8s_node_role == 'controlplane')"
+  when: "kubectl_config_file.stat.exists and (k8s_node_role == 'master' or k8s_node_role == 'controlplane')"
 
 - name: Allow control plane to schedule pods (control-plane taint)
-  shell: "kubectl taint nodes {{k8s_node_name}} node-role.kubernetes.io/control-plane-"
+  ansible.builtin.command: "kubectl taint nodes {{ k8s_node_name }} node-role.kubernetes.io/control-plane-"
   ignore_errors: true
-  when: "kubectl_config_file.stat.exists == true and (k8s_node_role == 'master' or k8s_node_role == 'controlplane')"
+  when: "kubectl_config_file.stat.exists and (k8s_node_role == 'master' or k8s_node_role == 'controlplane')"
 
 - name: Configure node labels
-  shell: "kubectl label --overwrite nodes {{k8s_node_name}} {{k8s_node_labels}}"
-  when: "kubectl_config_file.stat.exists == true and k8s_node_labels|length > 0"
+  ansible.builtin.command: "kubectl label --overwrite nodes {{ k8s_node_name }} {{ k8s_node_labels }}"
+  when: "kubectl_config_file.stat.exists and k8s_node_labels|length > 0"
 
 - name: Configure node taints
-  shell: "kubectl taint --overwrite nodes {{k8s_node_name}} {{k8s_node_taints}}"
-  when: "kubectl_config_file.stat.exists == true and k8s_node_taints|length > 0"
+  ansible.builtin.command: "kubectl taint --overwrite nodes {{ k8s_node_name }} {{ k8s_node_taints }}"
+  when: "kubectl_config_file.stat.exists and k8s_node_taints|length > 0"

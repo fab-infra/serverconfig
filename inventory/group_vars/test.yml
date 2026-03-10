@@ -1,5 +1,10 @@
 ---
 dns_search: ""
+docker_daemon_enabled: true
+firewall_enabled: false
+otelcol_enabled: true
+openvpn_client_enabled: true
+openvpn_server_enabled: true
 server_env: test
 skip_modprobe: true
 skip_services: true

@@ -2,41 +2,44 @@
 # Tasks for SUSE
 
 - name: Install Kubernetes repository key
-  rpm_key:
-    key: https://pkgs.k8s.io/core:/stable:/v{{k8s_version_minor}}/rpm/repodata/repomd.xml.key
+  ansible.builtin.rpm_key:
+    key: https://pkgs.k8s.io/core:/stable:/v{{ k8s_version_minor }}/rpm/repodata/repomd.xml.key
 
 - name: Install Kubernetes repository
   community.general.zypper_repository:
     name: kubernetes
     description: kubernetes
     priority: 98
-    repo: https://pkgs.k8s.io/core:/stable:/v{{k8s_version_minor}}/rpm/
+    repo: https://pkgs.k8s.io/core:/stable:/v{{ k8s_version_minor }}/rpm/
 
 - name: Install CRI-O repository key
-  rpm_key:
-    key: https://download.opensuse.org/repositories/isv:/cri-o:/stable:/v{{k8s_version_minor}}/rpm/repodata/repomd.xml.key
+  ansible.builtin.rpm_key:
+    key: https://download.opensuse.org/repositories/isv:/cri-o:/stable:/v{{ k8s_version_minor }}/rpm/repodata/repomd.xml.key
 
 - name: Install CRI-O repository
   community.general.zypper_repository:
     name: cri-o
     description: cri-o
     priority: 98
-    repo: https://download.opensuse.org/repositories/isv:/cri-o:/stable:/v{{k8s_version_minor}}/rpm/
+    repo: https://download.opensuse.org/repositories/isv:/cri-o:/stable:/v{{ k8s_version_minor }}/rpm/
 
 - name: Install packages
   community.general.zypper:
     name:
       - cri-o
       - cri-tools
-      - kubeadm-{{k8s_version}}
-      - kubectl-{{k8s_version}}
-      - kubelet-{{k8s_version}}
+      - kubeadm-{{ k8s_version }}
+      - kubectl-{{ k8s_version }}
+      - kubelet-{{ k8s_version }}
       - wireguard-tools
     state: present
 
 - name: Configure kubelet
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/sysconfig/kubelet
     regexp: "^KUBELET_EXTRA_ARGS="
-    line: "KUBELET_EXTRA_ARGS=\"--runtime-request-timeout=15m --cgroup-driver=systemd -v=2 --hostname-override={{k8s_node_name}}\""
+    line: "KUBELET_EXTRA_ARGS=\"--runtime-request-timeout=15m --cgroup-driver=systemd -v=2 --hostname-override={{ k8s_node_name }}\""
     create: true
+    owner: root
+    group: root
+    mode: "0644"

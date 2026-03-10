@@ -2,66 +2,73 @@
 # Main tasks
 
 - name: Setup RedHat
-  include_tasks: redhat.yml
-  when: "(openvpn_client_enabled == true or openvpn_server_enabled == true) and ansible_os_family|lower == 'redhat'"
+  ansible.builtin.include_tasks: redhat.yml
+  when: "(openvpn_client_enabled or openvpn_server_enabled) and ansible_os_family|lower == 'redhat'"
 
 - name: Setup Debian
-  include_tasks: debian.yml
-  when: "(openvpn_client_enabled == true or openvpn_server_enabled == true) and ansible_os_family|lower == 'debian'"
+  ansible.builtin.include_tasks: debian.yml
+  when: "(openvpn_client_enabled or openvpn_server_enabled) and ansible_os_family|lower == 'debian'"
 
 - name: Setup SUSE
-  include_tasks: suse.yml
-  when: "(openvpn_client_enabled == true or openvpn_server_enabled == true) and ansible_os_family|lower == 'suse'"
+  ansible.builtin.include_tasks: suse.yml
+  when: "(openvpn_client_enabled or openvpn_server_enabled) and ansible_os_family|lower == 'suse'"
 
 - name: Configure OpenVPN (client.conf)
-  template:
+  ansible.builtin.template:
     src: client.conf.j2
-    dest: /etc/openvpn/client/client.conf
-    mode: 0600
+    dest: "{{ openvpn_client_dir }}/client.conf"
+    owner: root
+    group: root
+    mode: "0600"
   register: openvpn_client_config
-  when: "openvpn_client_enabled == true"
+  when: "openvpn_client_enabled"
 
 - name: Configure OpenVPN (server.conf)
-  template:
+  ansible.builtin.template:
     src: server.conf.j2
-    dest: /etc/openvpn/server/server.conf
-    mode: 0600
+    dest: "{{ openvpn_server_dir }}/server.conf"
+    owner: root
+    group: root
+    mode: "0600"
   register: openvpn_server_config
-  when: "openvpn_server_enabled == true"
+  when: "openvpn_server_enabled"
 
 - name: Configure OpenVPN (ipp.txt)
-  template:
+  ansible.builtin.template:
     src: ipp.txt.j2
-    dest: /etc/openvpn/server/ipp.txt
+    dest: "{{ openvpn_server_dir }}/ipp.txt"
+    owner: root
+    group: root
+    mode: "0644"
   register: openvpn_ipp_config
-  when: "openvpn_server_enabled == true"
+  when: "openvpn_server_enabled"
 
 - name: Stop OpenVPN client service
-  service:
-    name: openvpn-client@client
+  ansible.builtin.service:
+    name: "{{ openvpn_client_service }}@client"
     enabled: false
     state: stopped
-  when: "openvpn_client_enabled == false and skip_services == false"
+  when: "not openvpn_client_enabled and not skip_services"
   ignore_errors: true
 
 - name: Start OpenVPN client service
-  service:
-    name: openvpn-client@client
+  ansible.builtin.service:
+    name: "{{ openvpn_client_service }}@client"
     enabled: true
     state: restarted
-  when: "openvpn_client_enabled == true and openvpn_client_config.changed and skip_services == false"
+  when: "openvpn_client_enabled and openvpn_client_config.changed and not skip_services"
 
 - name: Stop OpenVPN server service
-  service:
-    name: openvpn-server@server
+  ansible.builtin.service:
+    name: "{{ openvpn_server_service }}@server"
     enabled: false
     state: stopped
-  when: "openvpn_server_enabled == false and skip_services == false"
+  when: "not openvpn_server_enabled and not skip_services"
   ignore_errors: true
 
 - name: Start OpenVPN server service
-  service:
-    name: openvpn-server@server
+  ansible.builtin.service:
+    name: "{{ openvpn_server_service }}@server"
     enabled: true
     state: restarted
-  when: "openvpn_server_enabled == true and (openvpn_server_config.changed or openvpn_ipp_config.changed) and skip_services == false"
+  when: "openvpn_server_enabled and (openvpn_server_config.changed or openvpn_ipp_config.changed) and not skip_services"

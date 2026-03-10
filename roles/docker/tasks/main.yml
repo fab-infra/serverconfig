@@ -2,69 +2,86 @@
 # Main tasks
 
 - name: Setup RedHat
-  include_tasks: redhat.yml
-  when: "docker_daemon_enabled == true and ansible_os_family|lower == 'redhat'"
+  ansible.builtin.include_tasks: redhat.yml
+  when: "docker_daemon_enabled and ansible_os_family|lower == 'redhat'"
 
 - name: Setup Debian
-  include_tasks: debian.yml
-  when: "docker_daemon_enabled == true and ansible_os_family|lower == 'debian'"
+  ansible.builtin.include_tasks: debian.yml
+  when: "docker_daemon_enabled and ansible_os_family|lower == 'debian'"
 
 - name: Setup SUSE
-  include_tasks: suse.yml
-  when: "docker_daemon_enabled == true and ansible_os_family|lower == 'suse'"
+  ansible.builtin.include_tasks: suse.yml
+  when: "docker_daemon_enabled and ansible_os_family|lower == 'suse'"
 
 - name: Create Docker storage directory
-  file:
-    path: "{{docker_storage_dir}}"
-    mode: 0700
+  ansible.builtin.file:
+    path: "{{ docker_storage_dir }}"
+    owner: root
+    group: root
+    mode: "0700"
     state: directory
-  when: "docker_daemon_enabled == true"
+  when: "docker_daemon_enabled"
 
 - name: Create Docker config directory
-  file:
+  ansible.builtin.file:
     path: /etc/docker
     state: directory
-  when: "docker_daemon_enabled == true"
+    owner: root
+    group: root
+    mode: "0755"
+  when: "docker_daemon_enabled"
 
 - name: Configure Docker daemon
-  template:
+  ansible.builtin.template:
     src: daemon.json.j2
     dest: /etc/docker/daemon.json
+    owner: root
+    group: root
+    mode: "0644"
   register: docker_daemon_config
-  when: "docker_daemon_enabled == true"
+  when: "docker_daemon_enabled"
 
 - name: Stop Docker daemon
-  service:
+  ansible.builtin.service:
     name: docker
     enabled: false
     state: stopped
-  when: "docker_daemon_enabled == false and skip_services == false"
+  when: "not docker_daemon_enabled and not skip_services"
   ignore_errors: true
 
 - name: Start Docker daemon
-  service:
+  ansible.builtin.service:
     name: docker
     enabled: true
     state: restarted
-  when: "docker_daemon_enabled == true and docker_daemon_config.changed and skip_services == false"
+  when: "docker_daemon_enabled and docker_daemon_config.changed and not skip_services"
 
 - name: Install ctop (x86_64)
-  get_url:
-    url: https://github.com/bcicen/ctop/releases/download/v{{ctop_version}}/ctop-{{ctop_version}}-linux-amd64
+  ansible.builtin.get_url:
+    url: https://github.com/bcicen/ctop/releases/download/v{{ ctop_version }}/ctop-{{ ctop_version }}-linux-amd64
     dest: /usr/local/bin/ctop
-    mode: 0755
-  when: "docker_daemon_enabled == true and ansible_architecture == 'x86_64'"
+    checksum: "{{ ctop_checksum_x86_64 }}"
+    owner: root
+    group: root
+    mode: "0755"
+  when: "docker_daemon_enabled and ansible_architecture == 'x86_64'"
 
 - name: Install ctop (aarch64)
-  get_url:
-    url: https://github.com/bcicen/ctop/releases/download/v{{ctop_version}}/ctop-{{ctop_version}}-linux-arm64
+  ansible.builtin.get_url:
+    url: https://github.com/bcicen/ctop/releases/download/v{{ ctop_version }}/ctop-{{ ctop_version }}-linux-arm64
     dest: /usr/local/bin/ctop
-    mode: 0755
-  when: "docker_daemon_enabled == true and ansible_architecture == 'aarch64'"
+    checksum: "{{ ctop_checksum_aarch64 }}"
+    owner: root
+    group: root
+    mode: "0755"
+  when: "docker_daemon_enabled and ansible_architecture == 'aarch64'"
 
 - name: Install ctop (armv7l)
-  get_url:
-    url: https://github.com/bcicen/ctop/releases/download/v{{ctop_version}}/ctop-{{ctop_version}}-linux-arm
+  ansible.builtin.get_url:
+    url: https://github.com/bcicen/ctop/releases/download/v{{ ctop_version }}/ctop-{{ ctop_version }}-linux-arm
     dest: /usr/local/bin/ctop
-    mode: 0755
-  when: "docker_daemon_enabled == true and ansible_architecture == 'armv7l'"
+    checksum: "{{ ctop_checksum_armv7l }}"
+    owner: root
+    group: root
+    mode: "0755"
+  when: "docker_daemon_enabled and ansible_architecture == 'armv7l'"

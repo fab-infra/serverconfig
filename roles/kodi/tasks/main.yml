@@ -2,27 +2,30 @@
 # Main tasks
 
 - name: Setup Debian
-  include_tasks: debian.yml
-  when: "kodi_enabled == true and ansible_os_family|lower == 'debian'"
+  ansible.builtin.include_tasks: debian.yml
+  when: "kodi_enabled and ansible_os_family|lower == 'debian'"
 
 - name: Configure service
-  template:
+  ansible.builtin.template:
     src: kodi.service.j2
     dest: /etc/systemd/system/kodi.service
-  when: "kodi_enabled == true"
+    owner: root
+    group: root
+    mode: "0644"
+  when: "kodi_enabled"
   register: kodi_service
 
 - name: Stop Kodi service
-  service:
+  ansible.builtin.service:
     name: kodi
     enabled: false
     state: stopped
-  when: "kodi_enabled == false and skip_services == false"
+  when: "not kodi_enabled and not skip_services"
   ignore_errors: true
 
 - name: Start Kodi service
-  service:
+  ansible.builtin.service:
     name: kodi
     enabled: true
     state: restarted
-  when: "kodi_enabled == true and kodi_service.changed and skip_services == false"
+  when: "kodi_enabled and kodi_service.changed and not skip_services"

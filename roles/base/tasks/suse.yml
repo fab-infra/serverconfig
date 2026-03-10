@@ -2,16 +2,16 @@
 # Tasks for SUSE
 
 - name: Install extra keys
-  rpm_key:
-    key: "{{item}}"
-  loop: "{{extra_keys}}"
+  ansible.builtin.rpm_key:
+    key: "{{ item }}"
+  loop: "{{ extra_keys }}"
   when: "extra_keys | length > 0"
 
 - name: Install extra repositories
-  community.general.zypper_repository: "{{item}}"
-  loop: "{{extra_repos}}"
+  community.general.zypper_repository: "{{ item }}"
+  loop: "{{ extra_repos }}"
   when: "extra_repos | length > 0"
-  
+
 - name: Install base packages
   community.general.zypper:
     name:
@@ -47,6 +47,6 @@
 
 - name: Install extra packages
   community.general.zypper:
-    name: "{{extra_packages}}"
+    name: "{{ extra_packages }}"
     state: present
   when: "extra_packages | length > 0"

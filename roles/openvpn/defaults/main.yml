@@ -52,7 +52,7 @@ openvpn_ca: |
   W/xQks2o2o/tHkybC/+BNKMWCjTHpVv7LEZSPCqKcNX5alDCWRhrGpuN6NiQrcOf
   lUMJGP/FKuOxMWGL4ymrkgbCbydSivC1
   -----END CERTIFICATE-----
-openvpn_cert: "{{vault_openvpn_cert}}"
-openvpn_key: "{{vault_openvpn_key}}"
-openvpn_dh: "{{vault_openvpn_dh}}"
+openvpn_cert: "{{ vault_openvpn_cert | default('') }}"
+openvpn_key: "{{ vault_openvpn_key | default('') }}"
+openvpn_dh: "{{ vault_openvpn_dh | default('') }}"
 skip_services: false

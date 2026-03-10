@@ -2,7 +2,7 @@
 # Tasks for RedHat
 
 - name: Install packages
-  yum:
+  ansible.builtin.dnf:
     name:
       - fail2ban
       - firewalld

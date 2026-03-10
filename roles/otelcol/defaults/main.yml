@@ -3,8 +3,8 @@ docker_storage_dir: "/home/apps/docker"
 otelcol_enabled: true
 otelcol_group: otelcol-contrib
 otelcol_otlphttp_endpoint: "https://otlp-gateway-prod-us-central-0.grafana.net/otlp"
-otelcol_otlphttp_username: "{{vault_otelcol_otlphttp_username}}"
-otelcol_otlphttp_password: "{{vault_otelcol_otlphttp_password}}"
+otelcol_otlphttp_username: "{{ vault_otelcol_otlphttp_username | default('') }}"
+otelcol_otlphttp_password: "{{ vault_otelcol_otlphttp_password | default('') }}"
 otelcol_storage_path: "/var/lib/otelcol"
 otelcol_url: "https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download"
 otelcol_user: root

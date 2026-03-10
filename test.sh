@@ -5,7 +5,7 @@
 
 # Script variables
 SCRIPT_DIR=`dirname "$0"`
-TARGET_OS="${1:-rocky8}"
+TARGET_OS="${1:-rocky9}"
 
 # Run container
 pushd "$SCRIPT_DIR" >/dev/null 2>&1

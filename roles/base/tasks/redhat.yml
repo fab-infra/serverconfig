@@ -2,33 +2,33 @@
 # Tasks for RedHat
 
 - name: Install EPEL and ELRepo keys
-  rpm_key:
-    key: "{{item}}"
+  ansible.builtin.rpm_key:
+    key: "{{ item }}"
     state: present
   loop:
-    - https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ansible_distribution_major_version}}
+    - https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}
     - https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
 
 - name: Install EPEL and ELRepo repositories
-  yum:
+  ansible.builtin.dnf:
     name:
-      - https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ansible_distribution_major_version}}.noarch.rpm
-      - https://www.elrepo.org/elrepo-release-{{ansible_distribution_major_version}}.el{{ansible_distribution_major_version}}.elrepo.noarch.rpm
+      - https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm
+      - https://www.elrepo.org/elrepo-release-{{ ansible_distribution_major_version }}.el{{ ansible_distribution_major_version }}.elrepo.noarch.rpm
     state: present
 
 - name: Install extra keys
-  rpm_key:
-    key: "{{item}}"
-  loop: "{{extra_keys}}"
+  ansible.builtin.rpm_key:
+    key: "{{ item }}"
+  loop: "{{ extra_keys }}"
   when: "extra_keys | length > 0"
 
 - name: Install extra repositories
-  yum_repository: "{{item}}"
-  loop: "{{extra_repos}}"
+  ansible.builtin.yum_repository: "{{ item }}"
+  loop: "{{ extra_repos }}"
   when: "extra_repos | length > 0"
 
 - name: Install base packages
-  yum:
+  ansible.builtin.dnf:
     name:
       - autofs
       - bash-completion
@@ -58,34 +58,34 @@
     state: present
 
 - name: Install extra packages
-  yum:
-    name: "{{extra_packages}}"
+  ansible.builtin.dnf:
+    name: "{{ extra_packages }}"
     state: present
   when: "extra_packages | length > 0"
 
 - name: Configure dnf-automatic (upgrade_type)
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/dnf/automatic.conf
     regexp: "^upgrade_type ="
     line: "upgrade_type = security"
 
 - name: Configure dnf-automatic (apply_updates)
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/dnf/automatic.conf
     regexp: "^apply_updates ="
     line: "apply_updates = yes"
 
 - name: Disable dnf-automatic timer
-  service:
+  ansible.builtin.service:
     name: dnf-automatic.timer
     enabled: false
     state: stopped
-  when: "auto_update_enabled == false and skip_services == false"
+  when: "not auto_update_enabled and not skip_services"
   ignore_errors: true
 
 - name: Enable dnf-automatic timer
-  service:
+  ansible.builtin.service:
     name: dnf-automatic.timer
     enabled: true
     state: started
-  when: "auto_update_enabled == true and skip_services == false"
+  when: "auto_update_enabled and not skip_services"

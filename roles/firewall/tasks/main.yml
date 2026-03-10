@@ -2,105 +2,108 @@
 # Main tasks
 
 - name: Setup RedHat
-  include_tasks: redhat.yml
-  when: "firewall_enabled == true and ansible_os_family|lower == 'redhat'"
+  ansible.builtin.include_tasks: redhat.yml
+  when: "firewall_enabled and ansible_os_family|lower == 'redhat'"
 
 - name: Setup Debian
-  include_tasks: debian.yml
-  when: "firewall_enabled == true and ansible_os_family|lower == 'debian'"
+  ansible.builtin.include_tasks: debian.yml
+  when: "firewall_enabled and ansible_os_family|lower == 'debian'"
 
 - name: Setup SUSE
-  include_tasks: suse.yml
-  when: "firewall_enabled == true and ansible_os_family|lower == 'suse'"
+  ansible.builtin.include_tasks: suse.yml
+  when: "firewall_enabled and ansible_os_family|lower == 'suse'"
 
 - name: Configure firewalld (IndividualCalls)
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/firewalld/firewalld.conf
     regexp: "^IndividualCalls="
-    line: "IndividualCalls={{'yes' if firewall_individual_calls else 'no'}}"
-  when: "firewall_enabled == true"
+    line: "IndividualCalls={{ 'yes' if firewall_individual_calls else 'no' }}"
+  when: "firewall_enabled"
 
 - name: Stop firewalld service
-  service:
+  ansible.builtin.service:
     name: firewalld
     enabled: false
     state: stopped
-  when: "firewall_enabled == false and skip_services == false"
+  when: "not firewall_enabled and not skip_services"
   ignore_errors: true
 
 - name: Start firewalld service
-  service:
+  ansible.builtin.service:
     name: firewalld
     enabled: true
     state: started
-  when: "firewall_enabled == true and skip_services == false"
+  when: "firewall_enabled and not skip_services"
 
 - name: Add zone
-  firewalld:
-    zone: "{{item}}"
-    permanent: yes
+  ansible.posix.firewalld:
+    zone: "{{ item }}"
+    permanent: true
     state: present
-  loop: "{{firewall_zones}}"
-  when: "firewall_enabled == true"
+  loop: "{{ firewall_zones }}"
+  when: "firewall_enabled"
 
 - name: Add interface to zone
-  firewalld:
-    zone: "{{item.zone}}"
-    interface: "{{item.interface}}"
-    permanent: yes
+  ansible.posix.firewalld:
+    zone: "{{ item.zone }}"
+    interface: "{{ item.interface }}"
+    permanent: true
     state: enabled
-  loop: "{{firewall_interfaces}}"
-  when: "firewall_enabled == true"
+  loop: "{{ firewall_interfaces }}"
+  when: "firewall_enabled"
 
 - name: Add port to zone
-  firewalld:
-    zone: "{{item.zone}}"
-    port: "{{item.port}}"
-    permanent: yes
+  ansible.posix.firewalld:
+    zone: "{{ item.zone }}"
+    port: "{{ item.port }}"
+    permanent: true
     state: enabled
-  loop: "{{firewall_ports}}"
-  when: "firewall_enabled == true"
+  loop: "{{ firewall_ports }}"
+  when: "firewall_enabled"
 
 - name: Add service to zone
-  firewalld:
-    zone: "{{item.zone}}"
-    service: "{{item.service}}"
-    permanent: yes
+  ansible.posix.firewalld:
+    zone: "{{ item.zone }}"
+    service: "{{ item.service }}"
+    permanent: true
     state: enabled
-  loop: "{{firewall_services}}"
-  when: "firewall_enabled == true"
+  loop: "{{ firewall_services }}"
+  when: "firewall_enabled"
 
 - name: Add source to zone
-  firewalld:
-    zone: "{{item.zone}}"
-    source: "{{item.source}}"
-    permanent: yes
+  ansible.posix.firewalld:
+    zone: "{{ item.zone }}"
+    source: "{{ item.source }}"
+    permanent: true
     state: enabled
-  loop: "{{firewall_sources}}"
-  when: "firewall_enabled == true"
+  loop: "{{ firewall_sources }}"
+  when: "firewall_enabled"
 
 - name: Reload firewalld config
-  shell: firewall-cmd --reload
-  when: "firewall_enabled == true and skip_services == false"
+  ansible.builtin.command: firewall-cmd --reload
+  when: "firewall_enabled and not skip_services"
 
 - name: Configure fail2ban
-  template:
+  ansible.builtin.template:
     src: jail.local.j2
     dest: /etc/fail2ban/jail.local
-  when: "firewall_enabled == true and fail2ban_enabled == true"
+    owner: root
+    group: root
+    mode: "0644"
+  when: "firewall_enabled and fail2ban_enabled"
   register: fail2ban_config
 
 - name: Stop fail2ban service
-  service:
+  ansible.builtin.service:
     name: fail2ban
     enabled: false
     state: stopped
-  when: "(firewall_enabled == false or fail2ban_enabled == false) and skip_services == false"
+  when: "not (firewall_enabled or not fail2ban_enabled) and not skip_services"
   ignore_errors: true
 
 - name: Start fail2ban service
-  service:
+  ansible.builtin.service:
     name: fail2ban
     enabled: true
     state: restarted
-  when: "firewall_enabled == true and fail2ban_enabled == true and fail2ban_config.changed and skip_services == false"
+  when: "firewall_enabled and fail2ban_enabled and fail2ban_config.changed and not skip_services"

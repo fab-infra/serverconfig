@@ -2,7 +2,7 @@
 # Tasks for Debian
 
 - name: Install packages
-  apt:
+  ansible.builtin.apt:
     name:
       - fail2ban
       - firewalld

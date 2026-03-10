@@ -7,12 +7,12 @@ dnscrypt_proxy_blocked_ips: ""
 dnscrypt_proxy_blocked_names: ""
 dnscrypt_proxy_enabled: false
 gazpar2haws_enabled: false
-gazpar2haws_grdf_username: "{{vault_gazpar2haws_grdf_username}}"
-gazpar2haws_grdf_password: "{{vault_gazpar2haws_grdf_password}}"
-gazpar2haws_grdf_pce_identifier: "{{vault_gazpar2haws_grdf_pce_identifier}}"
-gazpar2haws_ha_token: "{{vault_gazpar2haws_ha_token}}"
+gazpar2haws_grdf_username: "{{ vault_gazpar2haws_grdf_username | default('') }}"
+gazpar2haws_grdf_password: "{{ vault_gazpar2haws_grdf_password | default('') }}"
+gazpar2haws_grdf_pce_identifier: "{{ vault_gazpar2haws_grdf_pce_identifier | default('') }}"
+gazpar2haws_ha_token: "{{ vault_gazpar2haws_ha_token | default('') }}"
 homeassistant_enabled: false
-homeserver_admin_password: "{{vault_homeserver_admin_password}}"
+homeserver_admin_password: "{{ vault_homeserver_admin_password | default('admin') }}"
 homeserver_admin_user: "admin"
 homeserver_root_dir: "/home/apps"
 homeserver_timezone: "Europe/Paris"
@@ -31,7 +31,7 @@ tvheadend_enabled: false
 tvheadend_recordings_dir: "./recordings"
 watchtower_cleanup: "true"
 watchtower_enabled: false
-watchtower_notification_url: ""
+watchtower_notification_url: "{{ vault_watchtower_notification_url | default('') }}"
 watchtower_rolling_restart: "true"
 watchtower_schedule: "0 0 3 * * 0"
 watchtower_timeout: "60s"

@@ -35,4 +35,3 @@ transmission_enabled: true
 tvheadend_enabled: true
 tvheadend_recordings_dir: /media/FAB-500GB/Videos/TV
 watchtower_enabled: true
-watchtower_notification_url: "{{vault_watchtower_notification_url}}"

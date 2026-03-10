@@ -2,73 +2,80 @@
 # Main tasks
 
 - name: Setup RedHat
-  include_tasks: redhat.yml
-  when: "otelcol_enabled == true and ansible_os_family|lower == 'redhat'"
+  ansible.builtin.include_tasks: redhat.yml
+  when: "otelcol_enabled and ansible_os_family|lower == 'redhat'"
 
 - name: Setup Debian
-  include_tasks: debian.yml
-  when: "otelcol_enabled == true and ansible_os_family|lower == 'debian'"
+  ansible.builtin.include_tasks: debian.yml
+  when: "otelcol_enabled and ansible_os_family|lower == 'debian'"
 
 - name: Setup SUSE
-  include_tasks: suse.yml
-  when: "otelcol_enabled == true and ansible_os_family|lower == 'suse'"
+  ansible.builtin.include_tasks: suse.yml
+  when: "otelcol_enabled and ansible_os_family|lower == 'suse'"
 
 - name: Create otelcol service override directory
-  file:
+  ansible.builtin.file:
     path: /etc/systemd/system/otelcol-contrib.service.d
     state: directory
-  when: "otelcol_enabled == true"
+    owner: root
+    group: root
+    mode: "0755"
+  when: "otelcol_enabled"
 
 - name: Configure otelcol service
-  copy:
+  ansible.builtin.copy:
     dest: /etc/systemd/system/otelcol-contrib.service.d/override.conf
     content: |
       [Service]
-      User={{otelcol_user}}
-      Group={{otelcol_group}}
+      User={{ otelcol_user }}
+      Group={{ otelcol_group }}
+    owner: root
+    group: root
+    mode: "0644"
   register: otelcol_service
-  when: "otelcol_enabled == true"
+  when: "otelcol_enabled"
 
 - name: Add otelcol user to systemd-journal group
-  user:
-    name: "{{otelcol_user}}"
+  ansible.builtin.user:
+    name: "{{ otelcol_user }}"
     groups: [systemd-journal]
-  when: "otelcol_enabled == true"
+  when: "otelcol_enabled"
 
 - name: Create otelcol storage directory
-  file:
-    path: "{{otelcol_storage_path}}"
-    owner: "{{otelcol_user}}"
-    group: "{{otelcol_group}}"
+  ansible.builtin.file:
+    path: "{{ otelcol_storage_path }}"
+    owner: "{{ otelcol_user }}"
+    group: "{{ otelcol_group }}"
+    mode: "0755"
     state: directory
-  when: "otelcol_enabled == true"
+  when: "otelcol_enabled"
 
 - name: Configure otelcol
-  template:
+  ansible.builtin.template:
     src: config.yaml.j2
     dest: /etc/otelcol-contrib/config.yaml
-    mode: 0640
-    owner: "{{otelcol_user}}"
-    group: "{{otelcol_group}}"
+    owner: "{{ otelcol_user }}"
+    group: "{{ otelcol_group }}"
+    mode: "0640"
   register: otelcol_config
-  when: "otelcol_enabled == true"
+  when: "otelcol_enabled"
 
 - name: Reload systemd
-  systemd:
+  ansible.builtin.systemd:
     daemon_reload: true
-  when: "otelcol_enabled == true and otelcol_service.changed and skip_services == false"
+  when: "otelcol_enabled and otelcol_service.changed and not skip_services"
 
 - name: Stop otelcol service
-  service:
+  ansible.builtin.service:
     name: otelcol-contrib
     enabled: false
     state: stopped
-  when: "otelcol_enabled == false and skip_services == false"
+  when: "not otelcol_enabled and not skip_services"
   ignore_errors: true
 
 - name: Start otelcol service
-  service:
+  ansible.builtin.service:
     name: otelcol-contrib
     enabled: true
     state: restarted
-  when: "otelcol_enabled == true and otelcol_config.changed and skip_services == false"
+  when: "otelcol_enabled and otelcol_config.changed and not skip_services"

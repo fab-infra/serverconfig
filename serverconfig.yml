@@ -5,10 +5,10 @@
   hosts: all
   tasks:
     - name: Include role
-      include_role:
-        name: "{{roleName}}"
+      ansible.builtin.include_role:
+        name: "{{ roleName }}"
         apply:
-          tags: "{{roleName}}"
+          tags: "{{ roleName }}"
       tags: always
       loop_control:
         loop_var: "roleName"
@@ -21,13 +21,13 @@
 
 - name: Kubernetes setup
   hosts: k8s
-  gather_facts: no
+  gather_facts: false
   tasks:
     - name: Include role
-      include_role:
-        name: "{{roleName}}"
+      ansible.builtin.include_role:
+        name: "{{ roleName }}"
         apply:
-          tags: "{{roleName}}"
+          tags: "{{ roleName }}"
       tags: always
       loop_control:
         loop_var: "roleName"
@@ -36,13 +36,13 @@
 
 - name: Home server setup
   hosts: homeserver
-  gather_facts: no
+  gather_facts: false
   tasks:
     - name: Include role
-      include_role:
-        name: "{{roleName}}"
+      ansible.builtin.include_role:
+        name: "{{ roleName }}"
         apply:
-          tags: "{{roleName}}"
+          tags: "{{ roleName }}"
       tags: always
       loop_control:
         loop_var: "roleName"
@@ -51,13 +51,13 @@
 
 - name: Media center setup
   hosts: mediacenter
-  gather_facts: no
+  gather_facts: false
   tasks:
     - name: Include role
-      include_role:
-        name: "{{roleName}}"
+      ansible.builtin.include_role:
+        name: "{{ roleName }}"
         apply:
-          tags: "{{roleName}}"
+          tags: "{{ roleName }}"
       tags: always
       loop_control:
         loop_var: "roleName"

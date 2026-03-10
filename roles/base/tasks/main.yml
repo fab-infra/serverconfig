@@ -2,39 +2,39 @@
 # Main tasks
 
 - name: Setup RedHat
-  include_tasks: redhat.yml
+  ansible.builtin.include_tasks: redhat.yml
   when: "ansible_os_family|lower == 'redhat'"
 
 - name: Setup Debian
-  include_tasks: debian.yml
+  ansible.builtin.include_tasks: debian.yml
   when: "ansible_os_family|lower == 'debian'"
 
 - name: Setup SUSE
-  include_tasks: suse.yml
+  ansible.builtin.include_tasks: suse.yml
   when: "ansible_os_family|lower == 'suse'"
 
 - name: Install Flatpaks
   community.general.flatpak:
-    name: "{{item}}"
+    name: "{{ item }}"
     state: present
-  loop: "{{flatpaks}}"
+  loop: "{{ flatpaks }}"
   when: "flatpaks | length > 0"
 
 - name: Configure mount points
-  mount:
-    path: "{{item.path}}"
-    src: "{{item.src}}"
-    fstype: "{{item.fstype}}"
-    opts: "{{item.opts | default(omit)}}"
+  ansible.posix.mount:
+    path: "{{ item.path }}"
+    src: "{{ item.src }}"
+    fstype: "{{ item.fstype }}"
+    opts: "{{ item.opts | default(omit) }}"
     state: mounted
-  loop: "{{mounts}}"
+  loop: "{{ mounts }}"
 
 - name: Create sysadmin group
-  group:
+  ansible.builtin.group:
     name: sysadmin
 
 - name: Create admin user
-  user:
+  ansible.builtin.user:
     name: admin
     group: users
     groups: [sysadmin]
@@ -42,134 +42,152 @@
     comment: "System Admin"
 
 - name: Create extra groups
-  group:
-    name: "{{item.name}}"
-    gid: "{{item.gid}}"
-  loop: "{{extra_groups}}"
+  ansible.builtin.group:
+    name: "{{ item.name }}"
+    gid: "{{ item.gid }}"
+  loop: "{{ extra_groups }}"
 
 - name: Create extra users
-  user:
-    name: "{{item.name}}"
-    uid: "{{item.uid}}"
-    group: "{{item.group}}"
-    home: "{{item.home}}"
-  loop: "{{extra_users}}"
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    uid: "{{ item.uid }}"
+    group: "{{ item.group }}"
+    home: "{{ item.home }}"
+  loop: "{{ extra_users }}"
 
 - name: Check if NetworkManager config directory exists
-  stat:
+  ansible.builtin.stat:
     path: /etc/NetworkManager/conf.d
   register: nm_config_dir
 
 - name: Configure NetworkManager DNS resolver
-  copy:
+  ansible.builtin.copy:
     dest: /etc/NetworkManager/conf.d/dns.conf
     content: |
       [main]
       dns=default
+    owner: root
+    group: root
+    mode: "0644"
   register: nm_dns_config
-  when: "nm_config_dir.stat.exists == true"
+  when: "nm_config_dir.stat.exists"
 
 - name: Configure resolv.conf (search)
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/resolv.conf
     regexp: "^search"
-    line: "search {{dns_search}}"
+    line: "search {{ dns_search }}"
   when: "dns_search | length > 0"
 
 - name: Configure SSH server
-  copy:
+  ansible.builtin.copy:
     dest: /etc/ssh/sshd_config.d/00-custom.conf
     content: |
       Banner /etc/ssh/banner.txt
       PermitRootLogin without-password
+    owner: root
+    group: root
+    mode: "0644"
 
 - name: Configure SSH authorized keys
-  authorized_key:
-    key: "{{item}}"
+  ansible.posix.authorized_key:
+    key: "{{ item }}"
     user: root
-  loop: "{{root_authorized_keys}}"
+  loop: "{{ root_authorized_keys }}"
 
 - name: Configure sysctl (fs.inotify.max_user_instances)
-  sysctl:
+  ansible.posix.sysctl:
     name: fs.inotify.max_user_instances
-    value: "{{sysctl_fs_inotify_max_user_instances}}"
-  when: "skip_sysctl == false"
+    value: "{{ sysctl_fs_inotify_max_user_instances }}"
+  when: "not skip_sysctl"
 
 - name: Configure sysctl (vm.max_map_count)
-  sysctl:
+  ansible.posix.sysctl:
     name: vm.max_map_count
-    value: "{{sysctl_vm_max_map_count}}"
-  when: "skip_sysctl == false"
+    value: "{{ sysctl_vm_max_map_count }}"
+  when: "not skip_sysctl"
 
 - name: Configure sysctl (vm.swappiness)
-  sysctl:
+  ansible.posix.sysctl:
     name: vm.swappiness
-    value: "{{sysctl_vm_swappiness}}"
-  when: "skip_sysctl == false"
+    value: "{{ sysctl_vm_swappiness }}"
+  when: "not skip_sysctl"
 
 - name: Configure autofs master
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/auto.master
     regexp: "^#\\+dir:/etc/auto\\.master\\.d"
     line: "+dir:/etc/auto.master.d"
   register: autofs_config
-  when: "autofs_enabled == true"
+  when: "autofs_enabled"
 
 - name: Enable autofs smb
-  copy:
+  ansible.builtin.copy:
     dest: /etc/auto.master.d/smb.autofs
     content: /mnt/smb /etc/auto.smb --timeout=900
-  when: "autofs_smb_enabled == true"
+    owner: root
+    group: root
+    mode: "0644"
+  when: "autofs_smb_enabled"
 
 - name: Disable autofs smb
-  file:
+  ansible.builtin.file:
     path: /etc/auto.master.d/smb.autofs
     state: absent
-  when: "autofs_smb_enabled == false"
+  when: "not autofs_smb_enabled"
 
 - name: Configure autofs smb credentials
-  copy:
-    dest: /etc/creds/{{item.key}}
+  ansible.builtin.copy:
+    dest: /etc/creds/{{ item.key }}
     content: |
-      username={{item.value.username}}
-      password={{item.value.password}}
-      domain={{item.value.domain | default('')}}
+      username={{ item.value.username }}
+      password={{ item.value.password }}
+      domain={{ item.value.domain | default('') }}
+    owner: root
+    group: root
+    mode: "0640"
   no_log: true
-  loop: "{{autofs_smb_credentials | dict2items}}"
-  when: "autofs_smb_enabled == true"
+  loop: "{{ autofs_smb_credentials | dict2items }}"
+  when: "autofs_smb_enabled"
 
 - name: Start autofs service
-  service:
+  ansible.builtin.service:
     name: autofs
     enabled: true
     state: restarted
-  when: "autofs_enabled == true and autofs_config.changed and skip_services == false"
+  when: "autofs_enabled and autofs_config.changed and not skip_services"
 
 - name: Stop autofs service
-  service:
+  ansible.builtin.service:
     name: autofs
     enabled: false
     state: stopped
-  when: "autofs_enabled == false and skip_services == false"
+  when: "not autofs_enabled and not skip_services"
 
 - name: Process template directories
-  file:
-    path: /{{item.path}}
+  ansible.builtin.file:
+    path: /{{ item.path }}
     state: directory
-  with_filetree: ../templates
+    owner: root
+    group: root
+    mode: "0755"
+  with_community.general.filetree: ../templates
   when: "item.state == 'directory'"
 
 - name: Process template files
-  template:
-    src: "{{item.src}}"
-    dest: "/{{item.path | splitext | first}}"
-  with_filetree: ../templates
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "/{{ item.path | splitext | first }}"
+    owner: root
+    group: root
+    mode: "0644"
+  with_community.general.filetree: ../templates
   when: "item.state == 'file'"
 
 - name: Enable extra services
-  service:
-    name: "{{item}}"
+  ansible.builtin.service:
+    name: "{{ item }}"
     enabled: true
     state: started
-  loop: "{{extra_services}}"
-  when: "extra_services | length > 0 and skip_services == false"
+  loop: "{{ extra_services }}"
+  when: "extra_services | length > 0 and not skip_services"

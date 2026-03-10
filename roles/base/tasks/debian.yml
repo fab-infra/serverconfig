@@ -2,18 +2,18 @@
 # Tasks for Debian
 
 - name: Install extra keys
-  apt_key:
-    url: "{{item}}"
-  loop: "{{extra_keys}}"
+  ansible.builtin.apt_key:
+    url: "{{ item }}"
+  loop: "{{ extra_keys }}"
   when: "extra_keys | length > 0"
 
 - name: Install extra repositories
-  apt_repository: "{{item}}"
-  loop: "{{extra_repos}}"
+  ansible.builtin.apt_repository: "{{ item }}"
+  loop: "{{ extra_repos }}"
   when: "extra_repos | length > 0"
 
 - name: Install base packages
-  apt:
+  ansible.builtin.apt:
     name:
       - autofs
       - bash-completion
@@ -42,21 +42,27 @@
     state: present
 
 - name: Install extra packages
-  apt:
-    name: "{{extra_packages}}"
+  ansible.builtin.apt:
+    name: "{{ extra_packages }}"
     state: present
   when: "extra_packages | length > 0"
 
 - name: Disable unattended-upgrades
-  copy:
+  ansible.builtin.copy:
     dest: /etc/apt/apt.conf.d/20auto-upgrades
     src: /usr/share/unattended-upgrades/20auto-upgrades-disabled
     remote_src: true
-  when: "auto_update_enabled == false"
+    owner: root
+    group: root
+    mode: "0644"
+  when: "not auto_update_enabled"
 
 - name: Enable unattended-upgrades
-  copy:
+  ansible.builtin.copy:
     dest: /etc/apt/apt.conf.d/20auto-upgrades
     src: /usr/share/unattended-upgrades/20auto-upgrades
     remote_src: true
-  when: "auto_update_enabled == true"
+    owner: root
+    group: root
+    mode: "0644"
+  when: "auto_update_enabled"

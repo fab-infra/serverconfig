@@ -2,11 +2,11 @@
 # Tasks for RedHat
 
 - name: Install Kubernetes repository
-  yum_repository:
+  ansible.builtin.yum_repository:
     name: kubernetes
     description: kubernetes
-    baseurl: https://pkgs.k8s.io/core:/stable:/v{{k8s_version_minor}}/rpm/
-    gpgkey: https://pkgs.k8s.io/core:/stable:/v{{k8s_version_minor}}/rpm/repodata/repomd.xml.key
+    baseurl: https://pkgs.k8s.io/core:/stable:/v{{ k8s_version_minor }}/rpm/
+    gpgkey: https://pkgs.k8s.io/core:/stable:/v{{ k8s_version_minor }}/rpm/repodata/repomd.xml.key
     exclude:
       - cri-tools
       - kubeadm
@@ -15,27 +15,30 @@
       - kubernetes-cni
 
 - name: Install CRI-O repository
-  yum_repository:
+  ansible.builtin.yum_repository:
     name: cri-o
     description: CRI-O
-    baseurl: https://download.opensuse.org/repositories/isv:/cri-o:/stable:/v{{k8s_version_minor}}/rpm/
-    gpgkey: https://download.opensuse.org/repositories/isv:/cri-o:/stable:/v{{k8s_version_minor}}/rpm/repodata/repomd.xml.key
+    baseurl: https://download.opensuse.org/repositories/isv:/cri-o:/stable:/v{{ k8s_version_minor }}/rpm/
+    gpgkey: https://download.opensuse.org/repositories/isv:/cri-o:/stable:/v{{ k8s_version_minor }}/rpm/repodata/repomd.xml.key
 
 - name: Install packages
-  yum:
+  ansible.builtin.dnf:
     name:
       - cri-o
       - cri-tools
-      - kubeadm-{{k8s_version}}
-      - kubectl-{{k8s_version}}
-      - kubelet-{{k8s_version}}
+      - kubeadm-{{ k8s_version }}
+      - kubectl-{{ k8s_version }}
+      - kubelet-{{ k8s_version }}
       - wireguard-tools
     disable_excludes: kubernetes
     state: present
 
 - name: Configure kubelet
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/sysconfig/kubelet
     regexp: "^KUBELET_EXTRA_ARGS="
-    line: "KUBELET_EXTRA_ARGS=\"--runtime-request-timeout=15m --cgroup-driver=systemd -v=2 --hostname-override={{k8s_node_name}}\""
+    line: "KUBELET_EXTRA_ARGS=\"--runtime-request-timeout=15m --cgroup-driver=systemd -v=2 --hostname-override={{ k8s_node_name }}\""
     create: true
+    owner: root
+    group: root
+    mode: "0644"

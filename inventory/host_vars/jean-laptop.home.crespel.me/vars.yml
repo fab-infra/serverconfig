@@ -1,8 +1,8 @@
 ---
 docker_daemon_enabled: false
 extra_keys:
-  - https://download.opensuse.org/repositories/home:/sohraun/{{ansible_distribution_version}}/repodata/repomd.xml.key
-  - https://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Leap_{{ansible_distribution_version}}/repodata/repomd.xml.key
+  - https://download.opensuse.org/repositories/home:/sohraun/{{ ansible_distribution_version }}/repodata/repomd.xml.key
+  - https://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Leap_{{ ansible_distribution_version }}/repodata/repomd.xml.key
 extra_repos:
   - name: home_sohraun
     description: sohraun's Home Project
