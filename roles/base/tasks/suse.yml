@@ -28,7 +28,6 @@
       - jq
       - lsof
       - netcat-openbsd
-      - ntp
       - openssh-server
       - postfix
       - psmisc

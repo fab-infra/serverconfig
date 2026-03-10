@@ -17,7 +17,8 @@ The playbook can be tested in an isolated environment with [Docker](https://docs
 
 ```
 ./test.sh debian12
-./test.sh opensuse156
+./test.sh debian13
+./test.sh opensuse160
 ./test.sh opensusetw
 ./test.sh rocky9
 ./test.sh ubuntu2204
@@ -48,14 +49,14 @@ Role names can be used as tags to include/exclude some of them during execution,
 
 ## Vault
 
-As a [best practice](https://docs.ansible.com/ansible/2.9/user_guide/playbooks_best_practices.html#variables-and-vaults), secret variables should be named with a `vault_` prefix, placed in an encrypted `vault.yml` file and referenced from a `vars.yml` file.
+As a [best practice](https://docs.ansible.com/projects/ansible/latest/tips_tricks/ansible_tips_tricks.html#keep-vaulted-variables-safely-visible), secret variables should be named with a `vault_` prefix, placed in an encrypted `vault.yml` file and referenced from a `vars.yml` file.
 
 The Vault password must be specified in a `vault.password` file at the root of this repository.
 
 To encrypt/view/decrypt files, use one of the following commands:
 
 ```
-./vault.sh encrypt roles/<rolename>/defaults/main/vault.yml
-./vault.sh view roles/<rolename>/defaults/main/vault.yml
-./vault.sh decrypt roles/<rolename>/defaults/main/vault.yml
+./vault.sh encrypt inventory/host_vars/<host>/vault.yml
+./vault.sh view inventory/host_vars/<host>/vault.yml
+./vault.sh decrypt inventory/host_vars/<host>/vault.yml
 ```

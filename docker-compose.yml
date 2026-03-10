@@ -11,14 +11,14 @@ services:
     volumes:
       - '.:/serverconfig'
 
-  # Ansible on openSUSE Leap 15.6
-  # docker compose run --rm opensuse156 [args ...]
-  opensuse156:
-    image: serverconfig:opensuse156
+  # Ansible on Debian 13
+  # docker compose run --rm debian13 [args ...]
+  debian13:
+    image: serverconfig:debian13
     build:
       context: .
       args:
-        BASE_IMAGE: opensuse/leap:15.6
+        BASE_IMAGE: debian:13
     hostname: localhost
     volumes:
       - '.:/serverconfig'
