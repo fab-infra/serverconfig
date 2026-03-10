@@ -30,6 +30,7 @@ extra_repos:
     repo: https://packages.microsoft.com/yumrepos/vscode
 extra_packages:
   - android-tools
+  - ansible-lint
   - ant
   - audacity
   - code
@@ -42,6 +43,7 @@ extra_packages:
   - ffmpeg-6
   - filezilla
   - fprintd-pam
+  - fzf
   - gamemode
   - gimp
   - gimp-plugin-heif
@@ -85,6 +87,7 @@ extra_packages:
   - photorec
   - php-composer2
   - pipewire-pulseaudio
+  - python313-mkdocs-material
   - qphotorec
   - rdiff
   - shairport-sync
