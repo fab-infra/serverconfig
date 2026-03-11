@@ -5,15 +5,15 @@
 
 - name: Setup RedHat
   ansible.builtin.include_tasks: redhat.yml
-  when: "ansible_os_family|lower == 'redhat'"
+  when: "ansible_facts['os_family'] | lower == 'redhat'"
 
 - name: Setup Debian
   ansible.builtin.include_tasks: debian.yml
-  when: "ansible_os_family|lower == 'debian'"
+  when: "ansible_facts['os_family'] | lower == 'debian'"
 
 - name: Setup SUSE
   ansible.builtin.include_tasks: suse.yml
-  when: "ansible_os_family|lower == 'suse'"
+  when: "ansible_facts['os_family'] | lower == 'suse'"
 
 
 ### Calico
@@ -382,11 +382,11 @@
 
 - name: Join cluster as control plane
   ansible.builtin.command: "kubeadm join --node-name={{ k8s_node_name }} --cri-socket=unix:///var/run/crio/crio.sock --token {{ k8s_join_token }} {{ k8s_master_host }}:{{ k8s_master_port }} --discovery-token-ca-cert-hash sha256:{{ k8s_cert_hash }} --control-plane --certificate-key {{ k8s_cert_key }}"
-  when: "not kubelet_config_file.stat.exists and k8s_node_role == 'controlplane' and k8s_join_token|length > 0 and k8s_cert_hash|length > 0 and k8s_cert_key|length > 0"
+  when: "not kubelet_config_file.stat.exists and k8s_node_role == 'controlplane' and k8s_join_token | length > 0 and k8s_cert_hash | length > 0 and k8s_cert_key | length > 0"
 
 - name: Join cluster as worker
   ansible.builtin.command: "kubeadm join --node-name={{ k8s_node_name }} --cri-socket=unix:///var/run/crio/crio.sock --token {{ k8s_join_token }} {{ k8s_master_host }}:{{ k8s_master_port }} --discovery-token-ca-cert-hash sha256:{{ k8s_cert_hash }}"
-  when: "not kubelet_config_file.stat.exists and k8s_node_role == 'worker' and k8s_join_token|length > 0 and k8s_cert_hash|length > 0"
+  when: "not kubelet_config_file.stat.exists and k8s_node_role == 'worker' and k8s_join_token | length > 0 and k8s_cert_hash | length > 0"
 
 - name: Check if kubectl admin config exists
   ansible.builtin.stat:
@@ -424,8 +424,8 @@
 
 - name: Configure node labels
   ansible.builtin.command: "kubectl label --overwrite nodes {{ k8s_node_name }} {{ k8s_node_labels }}"
-  when: "kubectl_config_file.stat.exists and k8s_node_labels|length > 0"
+  when: "kubectl_config_file.stat.exists and k8s_node_labels | length > 0"
 
 - name: Configure node taints
   ansible.builtin.command: "kubectl taint --overwrite nodes {{ k8s_node_name }} {{ k8s_node_taints }}"
-  when: "kubectl_config_file.stat.exists and k8s_node_taints|length > 0"
+  when: "kubectl_config_file.stat.exists and k8s_node_taints | length > 0"

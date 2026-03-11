@@ -3,7 +3,7 @@
 
 - name: Setup Debian
   ansible.builtin.include_tasks: debian.yml
-  when: "ansible_os_family|lower == 'debian'"
+  when: "ansible_facts['os_family'] | lower == 'debian'"
 
 - name: Install AF9015 DVB USB tuner firmware
   ansible.builtin.get_url:

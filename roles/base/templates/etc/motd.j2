@@ -1,14 +1,14 @@
 
 -------------------------------------------------------------------------------
 Hostname:       {{inventory_hostname}} ({{server_env}})
-Kernel:         {{ansible_kernel}}
-Distribution:   {{ansible_distribution}} {{ansible_distribution_version}}
-Hardware:       {{ansible_processor_vcpus}} vCPUs / {{(ansible_memtotal_mb/1024) | round(1)}} GB RAM
-{% if ansible_default_ipv4.address is defined %}
-IPv4 address:   {{ansible_default_ipv4.address}}
+Kernel:         {{ansible_facts['kernel']}}
+Distribution:   {{ansible_facts['distribution']}} {{ansible_facts['distribution_version']}}
+Hardware:       {{ansible_facts['processor_vcpus']}} vCPUs / {{(ansible_facts['memtotal_mb']/1024) | round(1)}} GB RAM
+{% if ansible_facts['default_ipv4'].address is defined %}
+IPv4 address:   {{ansible_facts['default_ipv4'].address}}
 {% endif %}
-{% if ansible_default_ipv6.address is defined %}
-IPv6 address:   {{ansible_default_ipv6.address}}
+{% if ansible_facts['default_ipv6'].address is defined %}
+IPv6 address:   {{ansible_facts['default_ipv6'].address}}
 {% endif %}
 -------------------------------------------------------------------------------
 

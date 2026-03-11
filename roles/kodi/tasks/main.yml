@@ -3,7 +3,7 @@
 
 - name: Setup Debian
   ansible.builtin.include_tasks: debian.yml
-  when: "kodi_enabled and ansible_os_family|lower == 'debian'"
+  when: "kodi_enabled and ansible_facts['os_family'] | lower == 'debian'"
 
 - name: Configure service
   ansible.builtin.template:

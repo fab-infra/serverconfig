@@ -6,7 +6,7 @@
     name: "{{ otelcol_url }}/v{{ otelcol_version }}/otelcol-contrib_{{ otelcol_version }}_linux_amd64.rpm"
     disable_gpg_check: true
     state: present
-  when: "ansible_architecture == 'x86_64'"
+  when: "ansible_facts['architecture'] == 'x86_64'"
   ignore_errors: "{{ skip_services }}"
 
 - name: Install OpenTelemetry Collector (aarch64)
@@ -14,7 +14,7 @@
     name: "{{ otelcol_url }}/v{{ otelcol_version }}/otelcol-contrib_{{ otelcol_version }}_linux_arm64.rpm"
     disable_gpg_check: true
     state: present
-  when: "ansible_architecture == 'aarch64'"
+  when: "ansible_facts['architecture'] == 'aarch64'"
   ignore_errors: "{{ skip_services }}"
 
 - name: Install OpenTelemetry Collector (armv7l)
@@ -22,5 +22,5 @@
     name: "{{ otelcol_url }}/v{{ otelcol_version }}/otelcol-contrib_{{ otelcol_version }}_linux_armv7.rpm"
     disable_gpg_check: true
     state: present
-  when: "ansible_architecture == 'armv7l'"
+  when: "ansible_facts['architecture'] == 'armv7l'"
   ignore_errors: "{{ skip_services }}"
