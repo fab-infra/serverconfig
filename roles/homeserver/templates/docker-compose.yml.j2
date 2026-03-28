@@ -35,6 +35,50 @@ services:
       - com.centurylinklabs.watchtower.scope=homeserver
 
 {% endif %}
+{% if backuptools_enabled %}
+  # Backup tools
+  # https://github.com/fab-infra/docker-backuptools
+  backuptools:
+    image: ghcr.io/fab-infra/backuptools:opensuse15
+    command: ["/home/backups/backup-files.sh", "/backup/source/files"]
+    restart: never
+    hostname: backuptools
+    user: root:root
+    environment:
+      - BACKUP_BACKEND=fs
+      - BACKUP_DIR=/backup/target
+    volumes:
+{% if adguard_enabled %}
+      - adguard-config:/backup/source/files/adguard-config
+      - adguard-work:/backup/source/files/adguard-work
+{% endif %}
+{% if gazpar2haws_enabled %}
+      - gazpar2haws-config:/backup/source/files/gazpar2haws-config
+{% endif %}
+{% if homeassistant_enabled %}
+      - homeassistant-config:/backup/source/files/homeassistant-config
+{% endif %}
+{% if minidlna_enabled %}
+      - minidlna-db:/backup/source/files/minidlna-db
+{% endif %}
+{% if sickgear_enabled %}
+      - sickgear-config:/backup/source/files/sickgear-config
+{% endif %}
+{% if tado_api_proxy_enabled %}
+      - tado-api-proxy-config:/backup/source/files/tado-api-proxy-config
+{% endif %}
+{% if transmission_enabled %}
+      - transmission-config:/backup/source/files/transmission-config
+{% endif %}
+{% if tvheadend_enabled %}
+      - tvheadend-config:/backup/source/files/tvheadend-config
+{% endif %}
+      - ./www:/backup/source/files/www
+      - ./backup:/backup/target
+    profiles:
+      - backup
+
+{% endif %}
 {% if cec_api_enabled %}
   # CEC REST API
   # https://github.com/fcrespel/cec-api
