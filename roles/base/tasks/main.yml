@@ -66,18 +66,14 @@
     content: |
       [main]
       dns=default
+
+      [global-dns]
+      searches={{ dns_search | default('.') }}
     owner: root
     group: root
     mode: "0644"
   register: nm_dns_config
   when: "nm_config_dir.stat.exists"
-
-- name: Configure resolv.conf (search)
-  ansible.builtin.lineinfile:
-    path: /etc/resolv.conf
-    regexp: "^search"
-    line: "search {{ dns_search }}"
-  when: "dns_search | length > 0"
 
 - name: Check if resolved config file exists
   ansible.builtin.stat:
@@ -98,6 +94,7 @@
     dest: /etc/systemd/resolved.conf.d/99-custom.conf
     content: |
       [Resolve]
+      DNS={{ dns_search | default('.') }}
       DNSStubListener=no
     owner: root
     group: root
