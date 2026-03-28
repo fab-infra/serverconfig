@@ -39,7 +39,7 @@ services:
   # Backup tools
   # https://github.com/fab-infra/docker-backuptools
   backuptools:
-    image: ghcr.io/fab-infra/backuptools:opensuse15
+    image: ghcr.io/fab-infra/backuptools:opensuse16
     command: ["/home/backups/backup-files.sh", "/backup/source/files"]
     restart: never
     hostname: backuptools
@@ -90,7 +90,7 @@ services:
     ports:
       - 127.0.0.1:8000:8000
     devices:
-      - /dev/aocec
+      - {{cec_device}}
     labels:
       - com.centurylinklabs.watchtower.scope=homeserver
 

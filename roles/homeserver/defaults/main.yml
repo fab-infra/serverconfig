@@ -2,6 +2,7 @@
 adguard_enabled: false
 backuptools_enabled: false
 cec_api_enabled: false
+cec_device: /dev/cec0
 dnscrypt_proxy_allowed_ips: ""
 dnscrypt_proxy_allowed_names: ""
 dnscrypt_proxy_blocked_ips: ""
