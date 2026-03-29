@@ -94,8 +94,8 @@
     dest: /etc/systemd/resolved.conf.d/99-custom.conf
     content: |
       [Resolve]
-      DNS={{ dns_search | default('.') }}
       DNSStubListener=no
+      Domains={{ dns_search | default('.') }}
     owner: root
     group: root
     mode: "0644"
