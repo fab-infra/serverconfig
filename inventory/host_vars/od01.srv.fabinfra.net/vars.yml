@@ -3,6 +3,8 @@ adguard_enabled: true
 backuptools_enabled: true
 cec_api_enabled: true
 extra_packages:
+  - fake-hwclock
+  - nextcloud-desktop-cmd
   - ntfs-3g
 firewall_enabled: false
 gazpar2haws_enabled: true
