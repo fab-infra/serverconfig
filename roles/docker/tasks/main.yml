@@ -56,6 +56,13 @@
     state: restarted
   when: "docker_daemon_enabled and docker_daemon_config.changed and not skip_services"
 
+- name: Login to Docker registries
+  ansible.builtin.command:
+    cmd: "docker login --username {{ item.username }} --password-stdin {{ item.registry }}"
+    stdin: "{{ item.password }}"
+  loop: "{{ docker_credentials }}"
+  when: "docker_daemon_enabled and docker_credentials | length > 0"
+
 - name: Install ctop (x86_64)
   ansible.builtin.get_url:
     url: https://github.com/bcicen/ctop/releases/download/v{{ ctop_version }}/ctop-{{ ctop_version }}-linux-amd64
