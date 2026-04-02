@@ -1,5 +1,6 @@
 ---
 adguard_enabled: true
+backuptools_backend: s3
 backuptools_enabled: true
 cec_api_enabled: true
 extra_packages:
