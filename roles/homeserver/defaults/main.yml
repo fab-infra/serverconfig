@@ -1,6 +1,8 @@
 ---
 adguard_enabled: false
+backuptools_backend: "fs"
 backuptools_enabled: false
+backuptools_environment: "{{ vault_backuptools_environment | default([]) }}"
 cec_api_enabled: false
 cec_device: /dev/cec0
 dnscrypt_proxy_allowed_ips: ""

@@ -45,8 +45,12 @@ services:
     hostname: backuptools
     user: root:root
     environment:
-      - BACKUP_BACKEND=fs
+      - HOME=/home/backups
+      - BACKUP_BACKEND={{ backuptools_backend }}
       - BACKUP_DIR=/backup/target
+{% for var in backuptools_environment %}
+      - {{ var }}
+{% endfor %}
     volumes:
 {% if adguard_enabled %}
       - adguard-config:/backup/source/files/adguard-config
