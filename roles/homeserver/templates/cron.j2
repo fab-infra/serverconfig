@@ -1,0 +1,4 @@
+# Home Server cron jobs
+{% if backuptools_enabled %}
+{{ backuptools_schedule }} root docker compose -f {{ homeserver_root_dir }}/docker-compose.yml run --rm backuptools
+{% endif %}

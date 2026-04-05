@@ -49,6 +49,14 @@
     group: root
     mode: "0644"
 
+- name: Configure cron jobs
+  ansible.builtin.template:
+    src: cron.j2
+    dest: "/etc/cron.d/homeserver"
+    owner: root
+    group: root
+    mode: "0644"
+
 - name: Start containers
   ansible.builtin.command:
     cmd: docker compose up -d --remove-orphans
