@@ -46,15 +46,14 @@ extra_packages:
   - fzf
   - gamemode
   - gimp
-  - gimp-plugin-heif
   - git
   - google-chrome-stable
   - google-cloud-cli
   - gparted
   - handbrake-gtk
-  - heif-thumbnailer
   - heimdall
   - helm
+  - inkscape
   - java-11-openjdk-devel
   - java-17-openjdk-devel
   - java-21-openjdk-devel
@@ -75,10 +74,10 @@ extra_packages:
   - maven
   - myrlyn
   - nextcloud-desktop
-  - nodejs20
-  - nvidia-compute-utils-G06
-  - nvidia-drivers-G06
-  - nvidia-utils-G06
+  - nodejs24
+  - nvidia-compute-utils-G07
+  - nvidia-open-driver-G07-signed-kmp-meta
+  - nvidia-userspace-meta-G07
   - obs-studio
   - okteta
   - osc
