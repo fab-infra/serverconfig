@@ -20,6 +20,7 @@ fi
 # Load vault password
 if [ -e "$VAULT_PASSWORD_FILE" ]; then
 	chmod a-x "$VAULT_PASSWORD_FILE"
+	chmod o= "$VAULT_PASSWORD_FILE"
 	export ANSIBLE_VAULT_PASSWORD_FILE=`realpath "$VAULT_PASSWORD_FILE"`
 fi
 
