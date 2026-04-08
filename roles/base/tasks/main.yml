@@ -101,6 +101,19 @@
     mode: "0644"
   when: "resolved_conf.stat.exists"
 
+- name: Check if netconfig config file exists
+  ansible.builtin.stat:
+    path: /etc/sysconfig/network/config
+  register: netconfig_conf
+  ignore_errors: true
+
+- name: Configure netconfig DNS resolver
+  ansible.builtin.lineinfile:
+    path: /etc/sysconfig/network/config
+    regexp: '^NETCONFIG_DNS_STATIC_SEARCHLIST='
+    line: "NETCONFIG_DNS_STATIC_SEARCHLIST=\"{{ dns_search | default('') }}\""
+  when: "netconfig_conf.stat is defined and netconfig_conf.stat.exists"
+
 - name: Configure SSH server
   ansible.builtin.copy:
     dest: /etc/ssh/sshd_config.d/00-custom.conf
