@@ -40,7 +40,7 @@ extra_packages:
   - dislocker
   - dolphin-plugins
   - exif
-  - ffmpeg-6
+  - ffmpeg-7
   - filezilla
   - fprintd-pam
   - fzf
