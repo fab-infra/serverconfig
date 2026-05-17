@@ -1,0 +1,83 @@
+---
+extra_keys:
+  - https://dl.google.com/linux/linux_signing_key.pub
+  - https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+  - https://download.opensuse.org/repositories/home:/sohraun/16.0/repodata/repomd.xml.key
+  - https://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Leap_16.0/repodata/repomd.xml.key
+  - https://rpm.releases.hashicorp.com/gpg
+  - https://packages.microsoft.com/keys/microsoft.asc
+extra_repos:
+  - name: google-chrome
+    description: Google Chrome
+    repo: https://dl.google.com/linux/chrome/rpm/stable/x86_64
+  - name: google-cloud-cli
+    description: Google Cloud CLI
+    repo: https://packages.cloud.google.com/yum/repos/cloud-sdk-el9-x86_64
+  - name: home_sohraun
+    description: sohraun's Home Project
+    repo: https://download.opensuse.org/repositories/home:/sohraun/$releasever/
+  - name: packman
+    description: Packman
+    repo: https://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Leap_$releasever/
+    priority: 90
+  - name: hashicorp
+    description: Hashicorp Stable
+    repo: https://rpm.releases.hashicorp.com/RHEL/9/x86_64/stable
+  - name: vscode
+    description: Visual Studio Code
+    repo: https://packages.microsoft.com/yumrepos/vscode
+extra_packages:
+  - ant
+  - audacity
+  - code
+  - digikam
+  - dislocker
+  - dolphin-plugins
+  - exif
+  - ffmpeg-7
+  - filezilla
+  - fprintd-pam
+  - gimp
+  - git
+  - google-chrome-stable
+  - gparted
+  - handbrake-gtk
+  - java-21-openjdk-devel
+  - keepassxc
+  - kio_kamera
+  - kmymoney
+  - kodi
+  - kodi.binary-addons-pvr.hts
+  - koko
+  - krdc
+  - krfb
+  - libass9
+  - libfprint-2-tod1-broadcom
+  - libheif-ffmpeg
+  - libheif-HEIF
+  - maven
+  - myrlyn
+  - nextcloud-desktop
+  - nodejs24
+  - nvidia-compute-utils-G07
+  - nvidia-open-driver-G07-signed-kmp-meta
+  - nvidia-userspace-meta-G07
+  - obs-studio
+  - okteta
+  - patterns-devel-base-devel_basis
+  - photorec
+  - php-composer2
+  - pipewire-pulseaudio
+  - qphotorec
+  - rdiff
+  - shairport-sync
+  - terraform
+  - testdisk
+  - tpm2.0-tools
+  - v4l2loopback-kmp-default
+  - vban
+  - virtualbox
+  - wireshark
+  - yakuake
+flatpaks:
+  - org.ferdium.Ferdium

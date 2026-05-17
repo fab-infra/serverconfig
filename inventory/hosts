@@ -2,6 +2,7 @@
 od01.srv.fabinfra.net
 rb04.srv.fabinfra.net
 fab-precision3580.home.crespel.me
+fab-recovery.home.crespel.me
 
 [homeserver]
 od01.srv.fabinfra.net
@@ -21,4 +22,5 @@ localhost
 
 [workstation]
 fab-precision3580.home.crespel.me
+fab-recovery.home.crespel.me
 jean-laptop.home.crespel.me
