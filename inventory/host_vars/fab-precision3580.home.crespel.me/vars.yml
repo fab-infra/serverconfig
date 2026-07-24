@@ -40,7 +40,7 @@ extra_packages:
   - dislocker
   - dolphin-plugins
   - exif
-  - ffmpeg-7
+  - ffmpeg-8
   - filezilla
   - fprintd-pam
   - fzf
@@ -54,7 +54,6 @@ extra_packages:
   - heimdall
   - helm
   - inkscape
-  - java-11-openjdk-devel
   - java-17-openjdk-devel
   - java-21-openjdk-devel
   - kdeconnect-kde
@@ -101,6 +100,7 @@ extra_packages:
   - vagrant
   - vban
   - virtualbox
+  - wl-clipboard
   - wireshark
   - yakuake
 extra_services:
