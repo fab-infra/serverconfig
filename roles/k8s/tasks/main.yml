@@ -279,6 +279,43 @@
   when: "kubens_version_check.rc != 0 or kubens_version_check.stdout != kubens_version"
 
 
+### Velero
+
+- name: Check Velero version
+  ansible.builtin.shell: velero version --client-only | grep 'Version' | egrep -o '[0-9.]+'
+  register: velero_version_check
+  check_mode: false
+  ignore_errors: true
+  changed_when: false
+
+- name: Download Velero
+  ansible.builtin.get_url:
+    url: https://github.com/velero-io/velero/releases/download/v{{ velero_version }}/velero-v{{ velero_version }}-linux-amd64.tar.gz
+    dest: /tmp/velero-v{{ velero_version }}-linux-amd64.tar.gz
+    checksum: "{{ velero_checksum }}"
+    owner: root
+    group: root
+    mode: "0644"
+  when: "velero_version_check.rc != 0 or velero_version_check.stdout != velero_version"
+
+- name: Install Velero
+  ansible.builtin.unarchive:
+    src: /tmp/velero-v{{ velero_version }}-linux-amd64.tar.gz
+    dest: /usr/local/bin
+    remote_src: true
+    owner: root
+    group: root
+    mode: "0755"
+    extra_opts: ['--strip-components=1', '--show-stored-names', 'velero-v{{ velero_version }}-linux-amd64/velero']
+  when: "velero_version_check.rc != 0 or velero_version_check.stdout != velero_version"
+
+- name: Delete Velero temporary file
+  ansible.builtin.file:
+    path: /tmp/velero-v{{ velero_version }}-linux-amd64.tar.gz
+    state: absent
+  when: "velero_version_check.rc != 0 or velero_version_check.stdout != velero_version"
+
+
 ### Container tools
 
 - name: Create containers storage directory

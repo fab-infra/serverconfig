@@ -31,3 +31,5 @@ kubens_checksum: "sha256:acc1a9c7f6b722fbe5fad25dd0e784a7335d18436b9c414ab996629
 skip_modprobe: false
 skip_services: false
 skip_sysctl: false
+velero_version: "1.18.2"
+velero_checksum: "sha256:a4e273de70ea2d9555fee7568742ae175fc8746fdb464139edb428cc3abd9705"
