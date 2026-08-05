@@ -64,8 +64,10 @@ extra_packages:
   - kodi.binary-addons-pvr.hts
   - koko
   - krdc
+  - krdp6
   - krfb
   - kubectl
+  - kup-backup
   - libass9
   - libfprint-2-tod1-broadcom
   - libheif-ffmpeg
