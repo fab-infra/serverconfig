@@ -4,9 +4,9 @@ autofs_smb_enabled: true
 extra_keys:
   - https://dl.google.com/linux/linux_signing_key.pub
   - https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+  - https://rpm.releases.hashicorp.com/gpg
   - https://download.opensuse.org/repositories/home:/sohraun/openSUSE_Slowroll/repodata/repomd.xml.key
   - https://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Slowroll/repodata/repomd.xml.key
-  - https://rpm.releases.hashicorp.com/gpg
   - https://packages.microsoft.com/keys/microsoft.asc
 extra_repos:
   - name: google-chrome
@@ -15,16 +15,19 @@ extra_repos:
   - name: google-cloud-cli
     description: Google Cloud CLI
     repo: https://packages.cloud.google.com/yum/repos/cloud-sdk-el9-x86_64
+  - name: hashicorp
+    description: Hashicorp Stable
+    repo: https://rpm.releases.hashicorp.com/RHEL/9/x86_64/stable
   - name: home_sohraun
     description: sohraun's Home Project
     repo: https://download.opensuse.org/repositories/home:/sohraun/openSUSE_Slowroll/
+  - name: microsoft
+    description: Microsoft Production
+    repo: https://packages.microsoft.com/opensuse/16/prod/
   - name: packman
     description: Packman
     repo: https://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Slowroll/
     priority: 90
-  - name: hashicorp
-    description: Hashicorp Stable
-    repo: https://rpm.releases.hashicorp.com/RHEL/9/x86_64/stable
   - name: vscode
     description: Visual Studio Code
     repo: https://packages.microsoft.com/yumrepos/vscode
@@ -39,6 +42,7 @@ extra_packages:
   - digikam
   - dislocker
   - dolphin-plugins
+  - dotnet-sdk-10.0
   - exif
   - ffmpeg-8
   - filezilla
@@ -47,6 +51,7 @@ extra_packages:
   - gamemode
   - gimp
   - git
+  - go
   - google-chrome-stable
   - google-cloud-cli
   - gparted
