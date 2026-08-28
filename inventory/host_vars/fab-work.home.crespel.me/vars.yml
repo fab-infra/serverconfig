@@ -1,0 +1,78 @@
+---
+admin_group_enabled: false
+admin_user_enabled: false
+auto_update_enabled: true
+dns_enabled: false
+extra_repos:
+  - name: 1password
+    uris: https://downloads.1password.com/linux/debian/amd64
+    suites: stable
+    components: main
+    architectures: amd64
+    signed_by: https://downloads.1password.com/linux/keys/1password.asc
+  - name: dbeaver
+    uris: https://dbeaver.io/debs/dbeaver-ce
+    suites: /
+    architectures: amd64
+    signed_by: https://dbeaver.io/debs/dbeaver.gpg.key
+  - name: google-cloud-sdk
+    uris: https://packages.cloud.google.com/apt
+    suites: cloud-sdk
+    components: main
+    architectures: amd64
+    signed_by: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+  - name: hashicorp
+    uris: https://apt.releases.hashicorp.com
+    suites: "{{ ansible_facts['distribution_release'] }}"
+    components: main
+    architectures: amd64
+    signed_by: https://rpm.releases.hashicorp.com/gpg
+  - name: vscode
+    uris: https://packages.microsoft.com/repos/code
+    suites: stable
+    components: main
+    architectures: amd64
+    signed_by: https://packages.microsoft.com/keys/microsoft.asc
+extra_packages:
+  - 1password
+  - ansible-lint
+  - ark
+  - code
+  - dbeaver-ce
+  - deskflow
+  - filelight
+  - filezilla
+  - fzf
+  - git
+  - golang
+  - google-cloud-cli
+  - google-cloud-cli-gke-gcloud-auth-plugin
+  - kde-plasma-desktop
+  - kde-spectacle
+  - keepassxc
+  - koko
+  - kubectl
+  - kubectx
+  - maven
+  - nextcloud-desktop
+  - nodejs
+  - npm
+  - okular
+  - openjdk-21-jdk
+  - plasma-wallpapers-addons
+  - starship
+  - terraform
+  - vault
+  - vim
+  - wireshark
+  - wl-clipboard
+  - yakuake
+  - yq
+firewall_enabled: false
+root_authorized_keys: []
+snaps:
+  - bruno
+  - ferdium
+  - freelens
+  - obsidian
+templates_enabled: false
