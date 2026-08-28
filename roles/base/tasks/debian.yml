@@ -8,9 +8,15 @@
   when: "extra_keys | length > 0"
 
 - name: Install extra repositories
-  ansible.builtin.apt_repository: "{{ item }}"
+  ansible.builtin.deb822_repository: "{{ item }}"
   loop: "{{ extra_repos }}"
   when: "extra_repos | length > 0"
+  register: extra_repos_result
+
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: true
+  when: "extra_repos_result.changed"
 
 - name: Install base packages
   ansible.builtin.apt:

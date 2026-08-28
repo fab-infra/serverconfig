@@ -1,18 +1,19 @@
 ---
 # Tasks for Debian
 
-- name: Install Docker repository key
-  ansible.builtin.get_url:
-    url: https://download.docker.com/linux/{{ ansible_facts['distribution'] | lower }}/gpg
-    dest: /etc/apt/keyrings/docker.asc
-    owner: root
-    group: root
-    mode: "0644"
-
 - name: Install Docker repository
-  ansible.builtin.apt_repository:
-    repo: deb [signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/{{ ansible_facts['distribution'] | lower }} {{ ansible_facts['distribution_release'] }} stable
-    filename: docker
+  ansible.builtin.deb822_repository:
+    name: docker
+    uris: https://download.docker.com/linux/{{ ansible_facts['distribution'] | lower }}
+    suites: "{{ ansible_facts['distribution_release'] }}"
+    components: stable
+    signed_by: https://download.docker.com/linux/{{ ansible_facts['distribution'] | lower }}/gpg
+  register: docker_repo_result
+
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: true
+  when: "docker_repo_result.changed"
 
 - name: Install packages
   ansible.builtin.apt:

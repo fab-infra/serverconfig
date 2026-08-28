@@ -20,6 +20,13 @@
   loop: "{{ flatpaks }}"
   when: "flatpaks | length > 0"
 
+- name: Install Snaps
+  community.general.snap:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ snaps }}"
+  when: "snaps | length > 0"
+
 - name: Configure mount points
   ansible.posix.mount:
     path: "{{ item.path }}"
@@ -207,7 +214,7 @@
     group: root
     mode: "0755"
   with_community.general.filetree: ../templates
-  when: "item.state == 'directory'"
+  when: "templates_enabled and item.state == 'directory'"
 
 - name: Process template files
   ansible.builtin.template:
@@ -217,7 +224,7 @@
     group: root
     mode: "0644"
   with_community.general.filetree: ../templates
-  when: "item.state == 'file'"
+  when: "templates_enabled and item.state == 'file'"
 
 - name: Enable extra services
   ansible.builtin.service:

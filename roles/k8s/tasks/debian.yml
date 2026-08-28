@@ -1,31 +1,26 @@
 ---
 # Tasks for Debian
 
-- name: Install Kubernetes repository key
-  ansible.builtin.get_url:
-    url: https://pkgs.k8s.io/core:/stable:/v{{ k8s_version_minor }}/deb/Release.key
-    dest: /etc/apt/keyrings/kubernetes.asc
-    owner: root
-    group: root
-    mode: "0644"
-
 - name: Install Kubernetes repository
-  ansible.builtin.apt_repository:
-    repo: deb [signed-by=/etc/apt/keyrings/kubernetes.asc] https://pkgs.k8s.io/core:/stable:/v{{ k8s_version_minor }}/deb/ /
-    filename: kubernetes
-
-- name: Install CRI-O repository key
-  ansible.builtin.get_url:
-    url: https://download.opensuse.org/repositories/isv:/cri-o:/stable:/v{{ k8s_version_minor }}/deb/Release.key
-    dest: /etc/apt/keyrings/cri-o.asc
-    owner: root
-    group: root
-    mode: "0644"
+  ansible.builtin.deb822_repository:
+    name: kubernetes
+    uris: https://pkgs.k8s.io/core:/stable:/v{{ k8s_version_minor }}/deb/
+    suites: /
+    signed_by: https://pkgs.k8s.io/core:/stable:/v{{ k8s_version_minor }}/deb/Release.key
+  register: k8s_repo_result
 
 - name: Install CRI-O repository
-  ansible.builtin.apt_repository:
-    repo: deb [signed-by=/etc/apt/keyrings/cri-o.asc] https://download.opensuse.org/repositories/isv:/cri-o:/stable:/v{{ k8s_version_minor }}/deb/ /
-    filename: cri-o
+  ansible.builtin.deb822_repository:
+    name: cri-o
+    uris: https://download.opensuse.org/repositories/isv:/cri-o:/stable:/v{{ k8s_version_minor }}/deb/
+    suites: /
+    signed_by: https://download.opensuse.org/repositories/isv:/cri-o:/stable:/v{{ k8s_version_minor }}/deb/Release.key
+  register: crio_repo_result
+
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: true
+  when: "k8s_repo_result.changed or crio_repo_result.changed"
 
 - name: Install packages
   ansible.builtin.apt:

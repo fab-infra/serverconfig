@@ -1,16 +1,4 @@
 services:
-  # Ansible on Debian 12
-  # docker compose run --rm debian12 [args ...]
-  debian12:
-    image: serverconfig:debian12
-    build:
-      context: .
-      args:
-        BASE_IMAGE: debian:12
-    hostname: localhost
-    volumes:
-      - '.:/serverconfig'
-
   # Ansible on Debian 13
   # docker compose run --rm debian13 [args ...]
   debian13:
@@ -59,14 +47,14 @@ services:
     volumes:
       - '.:/serverconfig'
 
-  # Ansible on Ubuntu 22.04
-  # docker compose run --rm ubuntu2204 [args ...]
-  ubuntu2204:
-    image: serverconfig:ubuntu2204
+  # Ansible on Ubuntu 26.04
+  # docker compose run --rm ubuntu2604 [args ...]
+  ubuntu2604:
+    image: serverconfig:ubuntu2604
     build:
       context: .
       args:
-        BASE_IMAGE: ubuntu:22.04
+        BASE_IMAGE: ubuntu:26.04
     hostname: localhost
     volumes:
       - '.:/serverconfig'
