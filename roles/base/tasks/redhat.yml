@@ -41,7 +41,6 @@
       - jq
       - lsof
       - netcat
-      - openssh-server
       - postfix
       - psmisc
       - python3-pip

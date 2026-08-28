@@ -39,14 +39,16 @@
 - name: Create sysadmin group
   ansible.builtin.group:
     name: sysadmin
+  when: "admin_group_enabled"
 
 - name: Create admin user
   ansible.builtin.user:
     name: admin
     group: users
-    groups: [sysadmin]
+    groups: "{{ ['sysadmin'] if admin_group_enabled else omit }}"
     home: /home/admin
     comment: "System Admin"
+  when: "admin_user_enabled"
 
 - name: Create extra groups
   ansible.builtin.group:
@@ -66,6 +68,7 @@
   ansible.builtin.stat:
     path: /etc/NetworkManager/conf.d
   register: nm_config_dir
+  when: "dns_enabled"
 
 - name: Configure NetworkManager DNS resolver
   ansible.builtin.copy:
@@ -80,12 +83,13 @@
     group: root
     mode: "0644"
   register: nm_dns_config
-  when: "nm_config_dir.stat.exists"
+  when: "dns_enabled and nm_config_dir.stat.exists"
 
 - name: Check if resolved config file exists
   ansible.builtin.stat:
     path: /etc/systemd/resolved.conf
   register: resolved_conf
+  when: "dns_enabled"
 
 - name: Create resolved config directory
   ansible.builtin.file:
@@ -94,7 +98,7 @@
     owner: root
     group: root
     mode: "0755"
-  when: "resolved_conf.stat.exists"
+  when: "dns_enabled and resolved_conf.stat.exists"
 
 - name: Configure resolved DNS resolver
   ansible.builtin.copy:
@@ -106,20 +110,21 @@
     owner: root
     group: root
     mode: "0644"
-  when: "resolved_conf.stat.exists"
+  when: "dns_enabled and resolved_conf.stat.exists"
 
 - name: Check if netconfig config file exists
   ansible.builtin.stat:
     path: /etc/sysconfig/network/config
   register: netconfig_conf
   ignore_errors: true
+  when: "dns_enabled"
 
 - name: Configure netconfig DNS resolver
   ansible.builtin.lineinfile:
     path: /etc/sysconfig/network/config
     regexp: '^NETCONFIG_DNS_STATIC_SEARCHLIST='
     line: "NETCONFIG_DNS_STATIC_SEARCHLIST=\"{{ dns_search | default('') }}\""
-  when: "netconfig_conf.stat is defined and netconfig_conf.stat.exists"
+  when: "dns_enabled and netconfig_conf.stat is defined and netconfig_conf.stat.exists"
 
 - name: Configure SSH server
   ansible.builtin.copy:
@@ -130,6 +135,7 @@
     owner: root
     group: root
     mode: "0644"
+  when: "templates_enabled"
 
 - name: Configure SSH authorized keys
   ansible.posix.authorized_key:

@@ -1,8 +1,11 @@
 ---
+admin_group_enabled: true
+admin_user_enabled: true
 auto_update_enabled: true
 autofs_enabled: false
 autofs_smb_enabled: false
 autofs_smb_credentials: "{{ vault_autofs_smb_credentials | default({}) }}"
+dns_enabled: true
 dns_search: srv.fabinfra.net fabinfra.net
 extra_groups: []
 extra_users: []
