@@ -6,6 +6,7 @@
 # Script variables
 SCRIPT_DIR=`dirname "$0"`
 VAULT_PASSWORD_FILE="$SCRIPT_DIR/vault.password"
+INVENTORY_HOSTNAME="${INVENTORY_HOSTNAME:-$(hostname -f)}"
 
 # Check env
 if ! command -v ansible-playbook >/dev/null 2>&1; then
@@ -26,7 +27,7 @@ fi
 
 # Run playbook
 pushd "$SCRIPT_DIR" >/dev/null 2>&1
-ansible-playbook -i "inventory" -c "local" -l `hostname -f` "$@" "serverconfig.yml"
+ansible-playbook -i "inventory" -c "local" -l "$INVENTORY_HOSTNAME" "$@" "serverconfig.yml"
 RET=$?
 popd >/dev/null 2>&1
 
