@@ -1,5 +1,5 @@
 ---
-docker_daemon_enabled: false
+docker_enabled: false
 extra_keys:
   - https://download.opensuse.org/repositories/home:/sohraun/{{ ansible_facts['distribution_version'] }}/repodata/repomd.xml.key
   - https://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Leap_{{ ansible_facts['distribution_version'] }}/repodata/repomd.xml.key

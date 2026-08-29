@@ -3,15 +3,15 @@
 
 - name: Setup RedHat
   ansible.builtin.include_tasks: redhat.yml
-  when: "docker_daemon_enabled and ansible_facts['os_family'] | lower == 'redhat'"
+  when: "docker_enabled and ansible_facts['os_family'] | lower == 'redhat'"
 
 - name: Setup Debian
   ansible.builtin.include_tasks: debian.yml
-  when: "docker_daemon_enabled and ansible_facts['os_family'] | lower == 'debian'"
+  when: "docker_enabled and ansible_facts['os_family'] | lower == 'debian'"
 
 - name: Setup SUSE
   ansible.builtin.include_tasks: suse.yml
-  when: "docker_daemon_enabled and ansible_facts['os_family'] | lower == 'suse'"
+  when: "docker_enabled and ansible_facts['os_family'] | lower == 'suse'"
 
 - name: Create Docker storage directory
   ansible.builtin.file:
@@ -20,7 +20,7 @@
     group: root
     mode: "0700"
     state: directory
-  when: "docker_daemon_enabled"
+  when: "docker_enabled and docker_daemon_enabled"
 
 - name: Create Docker config directory
   ansible.builtin.file:
@@ -29,7 +29,7 @@
     owner: root
     group: root
     mode: "0755"
-  when: "docker_daemon_enabled"
+  when: "docker_enabled and docker_daemon_enabled"
 
 - name: Configure Docker daemon
   ansible.builtin.template:
@@ -39,14 +39,14 @@
     group: root
     mode: "0644"
   register: docker_daemon_config
-  when: "docker_daemon_enabled"
+  when: "docker_enabled and docker_daemon_enabled"
 
 - name: Stop Docker daemon
   ansible.builtin.service:
     name: docker
     enabled: false
     state: stopped
-  when: "not docker_daemon_enabled and not skip_services"
+  when: "docker_enabled and not docker_daemon_enabled and not skip_services"
   ignore_errors: true
 
 - name: Start Docker daemon
@@ -54,7 +54,7 @@
     name: docker
     enabled: true
     state: restarted
-  when: "docker_daemon_enabled and docker_daemon_config.changed and not skip_services"
+  when: "docker_enabled and docker_daemon_enabled and docker_daemon_config.changed and not skip_services"
 
 - name: Login to Docker registries
   ansible.builtin.command:
@@ -62,7 +62,7 @@
     stdin: "{{ item.password }}"
   no_log: true
   loop: "{{ docker_credentials }}"
-  when: "docker_daemon_enabled and docker_credentials | length > 0"
+  when: "docker_enabled and docker_daemon_enabled and docker_credentials | length > 0"
 
 - name: Install ctop (x86_64)
   ansible.builtin.get_url:
@@ -72,7 +72,7 @@
     owner: root
     group: root
     mode: "0755"
-  when: "docker_daemon_enabled and ansible_facts['architecture'] == 'x86_64'"
+  when: "docker_enabled and ansible_facts['architecture'] == 'x86_64'"
 
 - name: Install ctop (aarch64)
   ansible.builtin.get_url:
@@ -82,7 +82,7 @@
     owner: root
     group: root
     mode: "0755"
-  when: "docker_daemon_enabled and ansible_facts['architecture'] == 'aarch64'"
+  when: "docker_enabled and ansible_facts['architecture'] == 'aarch64'"
 
 - name: Install ctop (armv7l)
   ansible.builtin.get_url:
@@ -92,4 +92,4 @@
     owner: root
     group: root
     mode: "0755"
-  when: "docker_daemon_enabled and ansible_facts['architecture'] == 'armv7l'"
+  when: "docker_enabled and ansible_facts['architecture'] == 'armv7l'"

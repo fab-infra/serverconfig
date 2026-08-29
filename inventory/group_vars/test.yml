@@ -1,6 +1,6 @@
 ---
 dns_search: ""
-docker_daemon_enabled: true
+docker_enabled: true
 firewall_enabled: false
 otelcol_enabled: true
 openvpn_client_enabled: true

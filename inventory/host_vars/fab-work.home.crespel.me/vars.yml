@@ -3,6 +3,7 @@ admin_group_enabled: false
 admin_user_enabled: false
 auto_update_enabled: true
 dns_enabled: false
+docker_daemon_enabled: false
 extra_repos:
   - name: 1password
     uris: https://downloads.1password.com/linux/debian/amd64

@@ -1,5 +1,5 @@
 ---
-docker_daemon_enabled: false
+docker_enabled: false
 firewall_enabled: false
 kodi_group: pi
 kodi_user: pi

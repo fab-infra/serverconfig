@@ -5,5 +5,6 @@ ctop_checksum_aarch64: "sha256:d8d91e0fea53a8c78fa81192f078272e5a92f0ea6c4f0e38e
 ctop_checksum_armv7l: "sha256:47375f029ea9e2c55d28d993396816d10d5a3e9761664a5c1b8aaab3c83f6593"
 docker_credentials: "{{ vault_docker_credentials | default([]) }}"
 docker_daemon_enabled: true
+docker_enabled: true
 docker_storage_dir: "/home/apps/docker"
 skip_services: false
