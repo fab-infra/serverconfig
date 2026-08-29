@@ -126,6 +126,11 @@
     line: "NETCONFIG_DNS_STATIC_SEARCHLIST=\"{{ dns_search | default('') }}\""
   when: "dns_enabled and netconfig_conf.stat is defined and netconfig_conf.stat.exists"
 
+- name: Check if SSH config directory exists
+  ansible.builtin.stat:
+    path: /etc/ssh/sshd_config.d
+  register: sshd_config_dir
+
 - name: Configure SSH server
   ansible.builtin.copy:
     dest: /etc/ssh/sshd_config.d/00-custom.conf
@@ -135,7 +140,7 @@
     owner: root
     group: root
     mode: "0644"
-  when: "templates_enabled"
+  when: "sshd_config_dir.stat.exists"
 
 - name: Configure SSH authorized keys
   ansible.posix.authorized_key:
