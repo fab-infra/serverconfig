@@ -48,6 +48,7 @@ extra_packages:
   - golang
   - google-cloud-cli
   - google-cloud-cli-gke-gcloud-auth-plugin
+  - kcalc
   - kde-plasma-desktop
   - kde-spectacle
   - keepassxc
