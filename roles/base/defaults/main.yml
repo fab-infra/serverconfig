@@ -19,7 +19,7 @@ mounts: []
 skip_services: false
 skip_sysctl: false
 snaps: []
-sysctl_fs_inotify_max_user_instances: "8192"
+sysctl_fs_inotify_max_user_instances: "16384"
 sysctl_vm_max_map_count: "1048576"
 sysctl_vm_swappiness: "10"
 templates_enabled: true
